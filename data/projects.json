@@ -1,0 +1,202 @@
+{
+  "snapshotDate": "2026-07-30",
+  "timezone": "Asia/Shanghai",
+  "notes": [
+    "Package versions and publication times were checked against the npm registry.",
+    "Repository activity was cross-checked with GitHub commit feeds.",
+    "Star counts are intentionally omitted because the GitHub anonymous API was rate-limited during research."
+  ],
+  "projects": [
+    {
+      "name": "Reveal.js",
+      "category": "runtime",
+      "license": "MIT",
+      "package": "reveal.js",
+      "latestVersion": "6.0.1",
+      "latestPublishedAt": "2026-04-11T07:20:54.553Z",
+      "repositoryActivityObservedAt": "2026-05-21T19:20:15Z",
+      "website": "https://revealjs.com/",
+      "repository": "https://github.com/hakimel/reveal.js",
+      "recommendation": "primary-runtime-poc"
+    },
+    {
+      "name": "Slidev",
+      "category": "authoring-toolchain",
+      "license": "MIT",
+      "package": "@slidev/cli",
+      "latestVersion": "52.18.0",
+      "latestPublishedAt": "2026-07-14T03:11:52.208Z",
+      "repositoryActivityObservedAt": "2026-07-22T01:50:02Z",
+      "website": "https://sli.dev/",
+      "repository": "https://github.com/slidevjs/slidev",
+      "recommendation": "study-toolchain-and-authoring-ux"
+    },
+    {
+      "name": "Marp CLI",
+      "category": "compiler-exporter",
+      "license": "MIT",
+      "package": "@marp-team/marp-cli",
+      "latestVersion": "4.5.0",
+      "latestPublishedAt": "2026-07-17T23:07:09.399Z",
+      "repositoryActivityObservedAt": "2026-07-18T04:58:08Z",
+      "website": "https://marp.app/",
+      "repository": "https://github.com/marp-team/marp-cli",
+      "recommendation": "study-compiler-and-export-pipeline"
+    },
+    {
+      "name": "Shower",
+      "category": "runtime",
+      "license": "MIT",
+      "package": "@shower/core",
+      "latestVersion": "3.6.0",
+      "latestPublishedAt": "2026-07-07T10:28:44.896Z",
+      "repositoryActivityObservedAt": "2026-07-27T19:33:01Z",
+      "website": "https://shwr.me/",
+      "repository": "https://github.com/shower/shower",
+      "recommendation": "secondary-runtime-reference"
+    },
+    {
+      "name": "Spectacle",
+      "category": "react-runtime",
+      "license": "MIT",
+      "package": "spectacle",
+      "latestVersion": "10.2.3",
+      "latestPublishedAt": "2025-10-10T16:30:52.797Z",
+      "repositoryActivityObservedAt": "2026-04-12T05:35:51Z",
+      "website": "https://formidable.com/open-source/spectacle/",
+      "repository": "https://github.com/FormidableLabs/spectacle",
+      "recommendation": "study-react-component-api"
+    },
+    {
+      "name": "Strut",
+      "category": "visual-editor",
+      "license": "AGPL-3.0",
+      "package": null,
+      "latestVersion": null,
+      "latestPublishedAt": null,
+      "repositoryActivityObservedAt": "2026-07-24T15:47:48Z",
+      "website": "https://strut.io/",
+      "repository": "https://github.com/tantaman/Strut",
+      "recommendation": "study-editor-and-product-architecture-license-review-required"
+    },
+    {
+      "name": "impress.js",
+      "category": "spatial-runtime",
+      "license": "MIT",
+      "package": "impress.js",
+      "latestVersion": "1.1.0",
+      "latestPublishedAt": "2020-04-12T14:39:33.809Z",
+      "repositoryActivityObservedAt": "2026-07-23T07:05:15Z",
+      "website": "https://impress.js.org/",
+      "repository": "https://github.com/impress/impress.js",
+      "recommendation": "study-spatial-navigation-only"
+    },
+    {
+      "name": "remark slideshow",
+      "category": "markdown-runtime",
+      "license": "MIT",
+      "package": null,
+      "latestVersion": null,
+      "latestPublishedAt": null,
+      "repositoryActivityObservedAt": "2023-06-27T07:58:08Z",
+      "website": "https://remarkjs.com/",
+      "repository": "https://github.com/gnab/remark",
+      "recommendation": "lightweight-reference"
+    },
+    {
+      "name": "WebSlides",
+      "category": "html-css-framework",
+      "license": "MIT",
+      "package": "webslides",
+      "latestVersion": "1.5.0",
+      "latestPublishedAt": "2019-05-14T18:11:25.106Z",
+      "repositoryActivityObservedAt": "2020-09-05T20:55:37Z",
+      "website": "https://webslides.tv/",
+      "repository": "https://github.com/webslides/WebSlides",
+      "recommendation": "historical-style-reference"
+    },
+    {
+      "name": "Bespoke.js",
+      "category": "micro-runtime",
+      "license": "MIT",
+      "package": "bespoke",
+      "latestVersion": "1.1.0",
+      "latestPublishedAt": "2015-09-24T21:24:14.885Z",
+      "repositoryActivityObservedAt": "2020-09-08T20:46:53Z",
+      "website": "https://github.com/markdalgleish/bespoke.js",
+      "repository": "https://github.com/markdalgleish/bespoke.js",
+      "recommendation": "historical-plugin-reference"
+    },
+    {
+      "name": "Fusuma",
+      "category": "authoring-toolchain",
+      "license": "MIT",
+      "package": "fusuma",
+      "latestVersion": "2.8.4",
+      "latestPublishedAt": "2021-05-15T01:03:37.428Z",
+      "repositoryActivityObservedAt": null,
+      "website": "https://github.com/hiroppy/fusuma",
+      "repository": "https://github.com/hiroppy/fusuma",
+      "recommendation": "historical-reference"
+    }
+  ],
+  "components": [
+    {
+      "name": "Moveable",
+      "purpose": "element transforms and guidelines",
+      "license": "MIT",
+      "website": "https://daybrush.com/moveable/",
+      "repository": "https://github.com/daybrush/moveable"
+    },
+    {
+      "name": "Selecto",
+      "purpose": "marquee and multi-selection",
+      "license": "MIT",
+      "website": "https://daybrush.com/selecto/",
+      "repository": "https://github.com/daybrush/selecto"
+    },
+    {
+      "name": "Tiptap",
+      "purpose": "rich-text editing",
+      "license": "MIT core",
+      "website": "https://tiptap.dev/",
+      "repository": "https://github.com/ueberdosis/tiptap"
+    },
+    {
+      "name": "GrapesJS",
+      "purpose": "embeddable visual web builder",
+      "license": "BSD-3-Clause",
+      "latestVersion": "0.23.3",
+      "latestPublishedAt": "2026-07-24T08:30:05.863Z",
+      "website": "https://grapesjs.com/",
+      "repository": "https://github.com/GrapesJS/grapesjs"
+    },
+    {
+      "name": "Konva",
+      "purpose": "canvas scene graph",
+      "license": "MIT",
+      "latestVersion": "10.3.0",
+      "latestPublishedAt": "2026-04-30T20:23:09.955Z",
+      "website": "https://konvajs.org/",
+      "repository": "https://github.com/konvajs/konva"
+    },
+    {
+      "name": "Fabric.js",
+      "purpose": "canvas object model",
+      "license": "MIT",
+      "latestVersion": "7.4.0",
+      "latestPublishedAt": "2026-05-18T18:36:25.365Z",
+      "website": "https://fabricjs.com/",
+      "repository": "https://github.com/fabricjs/fabric.js"
+    },
+    {
+      "name": "PptxGenJS",
+      "purpose": "element-level PowerPoint generation",
+      "license": "MIT",
+      "latestVersion": "4.0.1",
+      "latestPublishedAt": "2025-06-26T00:05:27.597Z",
+      "website": "https://gitbrent.github.io/PptxGenJS/",
+      "repository": "https://github.com/gitbrent/PptxGenJS"
+    }
+  ]
+}
