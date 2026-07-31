@@ -1,0 +1,21 @@
+{
+  "$schema": "../packages/schema/src/deck.schema.json",
+  "schemaVersion": 1,
+  "id": "hpe-starter",
+  "title": "HPE Starter",
+  "size": { "width": 1280, "height": 720 },
+  "theme": "theme.css",
+  "slides": [
+    {
+      "id": "intro",
+      "file": "slides/intro.slide.vue",
+      "title": "HPE",
+      "maxStep": 1
+    },
+    {
+      "id": "architecture",
+      "file": "slides/architecture.slide.vue",
+      "title": "Architecture"
+    }
+  ]
+}

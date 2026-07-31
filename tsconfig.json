@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/schema" },
+    { "path": "packages/runtime-core" },
+    { "path": "packages/runtime-browser" },
+    { "path": "packages/renderer-vue" },
+    { "path": "packages/compiler" },
+    { "path": "packages/checker" },
+    { "path": "packages/cli" }
+  ]
+}

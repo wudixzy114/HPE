@@ -1,0 +1,27 @@
+{
+  "name": "@hpe/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "deck": "./dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "@hpe/checker": "0.1.0",
+    "@hpe/compiler": "0.1.0",
+    "@hpe/schema": "0.1.0",
+    "commander": "15.0.0"
+  }
+}

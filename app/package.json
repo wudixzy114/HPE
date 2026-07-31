@@ -1,0 +1,26 @@
+{
+  "name": "@hpe/app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@hpe/renderer-vue": "0.1.0",
+    "@hpe/runtime-browser": "0.1.0",
+    "@hpe/runtime-core": "0.1.0",
+    "@hpe/schema": "0.1.0",
+    "vue": "3.5.40"
+  },
+  "devDependencies": {
+    "@hpe/compiler": "0.1.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@vitejs/plugin-vue": "6.0.8",
+    "tailwindcss": "4.3.3",
+    "vite": "8.2.0"
+  }
+}
