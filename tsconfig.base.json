@@ -17,6 +17,25 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
+    "paths": {
+      "@hpe/schema": ["./packages/schema/src/index.ts"],
+      "@hpe/schema/validate": ["./packages/schema/src/validate.ts"],
+      "@hpe/runtime-core": ["./packages/runtime-core/src/index.ts"],
+      "@hpe/runtime-core/timeline": ["./packages/runtime-core/src/timeline.ts"],
+      "@hpe/runtime-core/slide-state": [
+        "./packages/runtime-core/src/slide-state.ts"
+      ],
+      "@hpe/runtime-browser": ["./packages/runtime-browser/src/index.ts"],
+      "@hpe/runtime-browser/sync": ["./packages/runtime-browser/src/sync.ts"],
+      "@hpe/renderer-vue": ["./packages/renderer-vue/src/index.ts"],
+      "@hpe/compiler": ["./packages/compiler/src/index.ts"],
+      "@hpe/compiler/vite": ["./packages/compiler/src/vite.ts"],
+      "@hpe/compiler/highlight": ["./packages/compiler/src/highlight.ts"],
+      "@hpe/compiler/render": ["./packages/compiler/src/render.ts"],
+      "@hpe/checker": ["./packages/checker/src/index.ts"],
+      "@hpe/checker/playwright": ["./packages/checker/src/playwright.ts"],
+      "@hpe/cli": ["./packages/cli/src/index.ts"]
+    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,

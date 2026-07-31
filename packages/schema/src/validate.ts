@@ -19,6 +19,7 @@ export const slideEntrySchema = z.object({
   file: safeRelativePath,
   title: z.string().min(1).optional(),
   maxStep: z.number().int().nonnegative().optional(),
+  durationMs: z.number().int().nonnegative().optional(),
 });
 
 export const deckManifestSchema = z

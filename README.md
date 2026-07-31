@@ -36,6 +36,8 @@ npm exec deck -- render
 
 所有跨模块调用只允许经过包的公开 `exports`。依赖规则由 `dependency-cruiser` 在 `npm run check` 中强制执行；浏览器同步、Shiki、Vite 渲染和 Playwright 都是独立子路径，未引用就不会进入相应 bundle。
 
+核心状态机只包含翻页所需的最小状态。确定性时间线与声明式可检查状态分别通过 `@hpe/runtime-core/timeline` 和 `@hpe/runtime-core/slide-state` 显式引入；静态 deck 不会把这些实现打进运行时 bundle。
+
 ## 当前结论
 
 - 播放内核优先研究 [Reveal.js](https://revealjs.com/)，它的浏览器运行时、演讲者视图、插件机制和打印链路最完整。

@@ -15,7 +15,7 @@ const manifest: DeckManifest = {
   size: { width: 1280, height: 720 },
   theme: "theme.css",
   slides: [
-    { id: "one", file: "slides/one.slide.vue", maxStep: 1 },
+    { id: "one", file: "slides/one.slide.vue", maxStep: 1, durationMs: 1000 },
     { id: "two", file: "slides/two.slide.vue" },
   ],
 };
@@ -38,5 +38,12 @@ describe("deck state", () => {
     engine.dispatch({ type: "PREVIOUS" });
     engine.dispatch({ type: "NEXT" });
     expect(listener).toHaveBeenCalledOnce();
+  });
+
+  it("rejects unknown slide identifiers", () => {
+    const engine = createDeckEngine(manifest);
+    expect(() => engine.dispatch({ type: "GOTO", slideId: "missing" })).toThrow(
+      "Unknown slide",
+    );
   });
 });

@@ -13,6 +13,7 @@ export interface SlideEntry {
   readonly file: string;
   readonly title?: string;
   readonly maxStep?: number;
+  readonly durationMs?: number;
 }
 
 export interface DeckManifest {

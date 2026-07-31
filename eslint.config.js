@@ -56,6 +56,16 @@ export default tseslint.config(
     files: ["vitest.config.ts"],
   },
   {
+    files: ["packages/**/*.test.ts"],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+        project: ["./tsconfig.tests.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
     files: ["**/*.vue"],
     languageOptions: {
       parser: vueParser,

@@ -10,6 +10,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./timeline": {
+      "types": "./dist/timeline.d.ts",
+      "import": "./dist/timeline.js"
+    },
+    "./slide-state": {
+      "types": "./dist/slide-state.d.ts",
+      "import": "./dist/slide-state.js"
     }
   },
   "scripts": {

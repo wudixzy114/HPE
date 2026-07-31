@@ -30,7 +30,8 @@
           "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
           "file": { "$ref": "#/$defs/safePath" },
           "title": { "type": "string", "minLength": 1 },
-          "maxStep": { "type": "integer", "minimum": 0 }
+          "maxStep": { "type": "integer", "minimum": 0 },
+          "durationMs": { "type": "integer", "minimum": 0 }
         }
       }
     }

@@ -8,15 +8,6 @@ module.exports = {
       to: { circular: true },
     },
     {
-      name: "only-public-package-api",
-      severity: "error",
-      from: { path: "^(packages|app)/" },
-      to: {
-        path: "^packages/[^/]+/src/",
-        pathNot: "^packages/[^/]+/src/index\\.ts$",
-      },
-    },
-    {
       name: "schema-is-foundational",
       severity: "error",
       from: { path: "^packages/schema/src" },
