@@ -6,6 +6,8 @@ import {
   bindBrowserControls,
   type BrowserControls,
 } from "@hpe/runtime-browser";
+import type { BrowserBinding } from "@hpe/runtime-browser/keyboard";
+import { bindUrlState } from "@hpe/runtime-browser/url";
 import type { DeckEngine, DeckEvent } from "@hpe/runtime-core";
 import { manifest, slides } from "virtual:hpe-deck";
 
@@ -14,6 +16,7 @@ const { state } = provideDeckEngine(props.engine);
 const currentSlide = computed(() => slides[state.value.slideId]);
 const scale = ref(1);
 let controls: BrowserControls | undefined;
+let urlBinding: BrowserBinding | undefined;
 
 function resize(): void {
   scale.value = Math.min(
@@ -24,6 +27,7 @@ function resize(): void {
 
 onMounted(() => {
   controls = bindBrowserControls(props.engine);
+  urlBinding = bindUrlState(props.engine);
   resize();
   window.addEventListener("resize", resize, { passive: true });
   (
@@ -37,6 +41,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   controls?.destroy();
+  urlBinding?.destroy();
   window.removeEventListener("resize", resize);
 });
 

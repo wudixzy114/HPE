@@ -38,6 +38,8 @@ npm exec deck -- render
 
 核心状态机只包含翻页所需的最小状态。确定性时间线与声明式可检查状态分别通过 `@hpe/runtime-core/timeline` 和 `@hpe/runtime-core/slide-state` 显式引入；静态 deck 不会把这些实现打进运行时 bundle。
 
+浏览器层同样提供 `keyboard`、`touch`、`fullscreen`、`url`、`timeline` 与 `sync` 子路径。标准播放器使用键盘、触摸、全屏和 `#slide=<id>&step=<n>&mode=<mode>` 深链接；嵌入场景可以只组合需要的适配器。跨窗口同步仅传递 slide/step，窗口本地的 fullscreen 与 mode 不会互相污染。
+
 ## 当前结论
 
 - 播放内核优先研究 [Reveal.js](https://revealjs.com/)，它的浏览器运行时、演讲者视图、插件机制和打印链路最完整。

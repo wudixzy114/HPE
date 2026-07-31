@@ -11,6 +11,26 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./keyboard": {
+      "types": "./dist/keyboard.d.ts",
+      "import": "./dist/keyboard.js"
+    },
+    "./fullscreen": {
+      "types": "./dist/fullscreen.d.ts",
+      "import": "./dist/fullscreen.js"
+    },
+    "./touch": {
+      "types": "./dist/touch.d.ts",
+      "import": "./dist/touch.js"
+    },
+    "./url": {
+      "types": "./dist/url.d.ts",
+      "import": "./dist/url.js"
+    },
+    "./timeline": {
+      "types": "./dist/timeline.d.ts",
+      "import": "./dist/timeline.js"
+    },
     "./sync": {
       "types": "./dist/sync.d.ts",
       "import": "./dist/sync.js"
