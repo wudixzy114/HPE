@@ -30,7 +30,7 @@ import type {
   TimelineController,
   TimelineDriver,
 } from "@hpe/runtime-core/timeline";
-import { manifest, slides } from "virtual:hpe-deck";
+import { manifest, slides, sources } from "virtual:hpe-deck";
 
 import OverviewView from "./components/OverviewView.vue";
 import PrintView from "./components/PrintView.vue";
@@ -52,6 +52,7 @@ interface BrowserInspectionPort {
   getSlideState(): ReturnType<SlideStateStore["getSnapshot"]>;
   getSlideStateScenarios(): ReturnType<typeof enumerateSlideStateScenarios>;
   setSlideStateScenario(values: SlideStateValues): void;
+  getSourceMap(): (typeof sources)[string] | undefined;
 }
 
 const props = defineProps<AppProps>();
@@ -178,6 +179,7 @@ onMounted(() => {
     setSlideStateScenario: (values) => {
       props.slideState.setScenario(values);
     },
+    getSourceMap: () => sources[props.engine.getSnapshot().slideId],
   };
   (window as unknown as { __HPE__: BrowserInspectionPort }).__HPE__ =
     inspectionPort;

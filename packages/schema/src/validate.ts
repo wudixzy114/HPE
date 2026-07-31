@@ -36,6 +36,7 @@ export const deckManifestSchema = z
   })
   .superRefine((deck, context) => {
     const seen = new Set<string>();
+    const files = new Set<string>();
     for (const [index, slide] of deck.slides.entries()) {
       if (seen.has(slide.id)) {
         context.addIssue({
@@ -45,6 +46,14 @@ export const deckManifestSchema = z
         });
       }
       seen.add(slide.id);
+      if (files.has(slide.file)) {
+        context.addIssue({
+          code: "custom",
+          path: ["slides", index, "file"],
+          message: `duplicate slide file: ${slide.file}`,
+        });
+      }
+      files.add(slide.file);
     }
   });
 

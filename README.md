@@ -42,6 +42,8 @@ npm exec deck -- render
 
 标准播放器已内置 overview、speaker view（当前页、下一页、讲稿、计时与远程翻页）、全页打印以及 timeline 控制。按 `O` 打开总览，按 `S` 打开演讲者窗口，按 `F` 切换全屏；演讲者窗口通过 `BroadcastChannel` 同步导航、timeline 和已声明的页面交互状态，同时保持自己的 speaker mode。
 
+编译器会在构建前验证 SFC 契约、静态 Tailwind class、重复 `data-node`、本地资源和 theme，并导出 node 到源码行列的映射。`<ShikiCode lang="typescript" code="..." />` 会在 Vite 编译阶段转换为静态高亮 HTML；Shiki、语法 grammar 与 TextMate runtime 不会进入浏览器产物。
+
 ## 当前结论
 
 - 播放内核优先研究 [Reveal.js](https://revealjs.com/)，它的浏览器运行时、演讲者视图、插件机制和打印链路最完整。

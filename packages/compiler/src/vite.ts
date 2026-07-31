@@ -2,6 +2,7 @@ import { normalizePath } from "vite";
 import type { Plugin } from "vite";
 
 import { compileDeck } from "./index.js";
+import { transformCodeBlocks } from "./code-block.js";
 
 const VIRTUAL_ID = "virtual:hpe-deck";
 const RESOLVED_ID = `\0${VIRTUAL_ID}`;
@@ -38,9 +39,17 @@ export function hpeDeck(options: HpeVitePluginOptions = {}): Plugin {
         `export const manifest = ${JSON.stringify(deck.manifest)};`,
         `export const slides = {${entries.join(",")}};`,
         `export const notes = ${JSON.stringify(Object.fromEntries(deck.slides.map((slide) => [slide.id, slide.notes])))};`,
+        `export const sources = ${JSON.stringify(
+          Object.fromEntries(
+            deck.slides.map((slide) => [
+              slide.id,
+              { source: slide.source, nodes: slide.nodes },
+            ]),
+          ),
+        )};`,
       ].join("\n");
     },
-    transform(_code, id) {
+    async transform(_code, id) {
       if (
         id.includes(".vue?") &&
         (id.includes("type=notes") || id.includes("blockType=notes"))
@@ -55,6 +64,9 @@ export function hpeDeck(options: HpeVitePluginOptions = {}): Plugin {
             mappings: "",
           },
         };
+      }
+      if (id.endsWith(".slide.vue")) {
+        return (await transformCodeBlocks(_code, id)) ?? undefined;
       }
       return undefined;
     },

@@ -17,6 +17,11 @@
       "id": "architecture",
       "file": "slides/architecture.slide.vue",
       "title": "Architecture"
+    },
+    {
+      "id": "code",
+      "file": "slides/code.slide.vue",
+      "title": "Compile-time code"
     }
   ]
 }
