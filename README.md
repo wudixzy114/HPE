@@ -44,6 +44,8 @@ npm exec deck -- render
 
 编译器会在构建前验证 SFC 契约、静态 Tailwind class、重复 `data-node`、本地资源和 theme，并导出 node 到源码行列的映射。`<ShikiCode lang="typescript" code="..." />` 会在 Vite 编译阶段转换为静态高亮 HTML；Shiki、语法 grammar 与 TextMate runtime 不会进入浏览器产物。
 
+Playwright 检查器会遍历 slide、step、声明交互状态和 timeline 检查点的笛卡尔积，并检查画布尺寸/scroll overflow、节点越界、文本裁切、图片与媒体、最小字号、颜色对比度、安全区以及显式 `data-layout` 重叠。启用截图时同时输出 raw、带源码节点标记的 annotated 图、contact sheet、HTML 报告和 JSON 协议；状态组合默认硬限制为 512，避免 CI 失控。
+
 ## 当前结论
 
 - 播放内核优先研究 [Reveal.js](https://revealjs.com/)，它的浏览器运行时、演讲者视图、插件机制和打印链路最完整。

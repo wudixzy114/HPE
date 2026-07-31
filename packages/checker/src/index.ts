@@ -14,6 +14,9 @@ export interface DeckDiagnostic {
   readonly severity: DiagnosticSeverity;
   readonly message: string;
   readonly slideId?: string;
+  readonly stateId?: string;
+  readonly step?: number;
+  readonly timelineMs?: number;
   readonly nodeId?: string;
   readonly source?: SourceLocation;
   readonly bounds?: Bounds;
@@ -21,23 +24,49 @@ export interface DeckDiagnostic {
   readonly screenshot?: string;
 }
 
+export type ArtifactType =
+  | "raw-screenshot"
+  | "annotated-screenshot"
+  | "contact-sheet"
+  | "html-report"
+  | "json-report";
+
+export interface CheckArtifact {
+  readonly type: ArtifactType;
+  readonly path: string;
+  readonly slideId?: string;
+  readonly stateId?: string;
+}
+
 export interface CheckReport {
   readonly version: 1;
   readonly generatedAt: string;
+  readonly statesChecked: number;
   readonly diagnostics: readonly DeckDiagnostic[];
+  readonly artifacts: readonly CheckArtifact[];
   readonly summary: Readonly<Record<DiagnosticSeverity, number>>;
+}
+
+export interface CreateCheckReportOptions {
+  readonly generatedAt?: Date;
+  readonly statesChecked?: number;
+  readonly artifacts?: readonly CheckArtifact[];
 }
 
 export function createCheckReport(
   diagnostics: readonly DeckDiagnostic[],
-  generatedAt = new Date(),
+  options: CreateCheckReportOptions | Date = {},
 ): CheckReport {
+  const normalized: CreateCheckReportOptions =
+    options instanceof Date ? { generatedAt: options } : options;
   const summary = { error: 0, warning: 0, info: 0 };
   for (const diagnostic of diagnostics) summary[diagnostic.severity] += 1;
   return {
     version: 1,
-    generatedAt: generatedAt.toISOString(),
+    generatedAt: (normalized.generatedAt ?? new Date()).toISOString(),
+    statesChecked: normalized.statesChecked ?? 0,
     diagnostics,
+    artifacts: normalized.artifacts ?? [],
     summary,
   };
 }
