@@ -9,8 +9,8 @@
     "app"
   ],
   "scripts": {
-    "build": "tsc -b && npm run build -w @hpe/app",
-    "build:packages": "tsc -b",
+    "build": "npm run build:packages && npm run build -w @hpe/app",
+    "build:packages": "tsc -b && npm run bin:chmod -w @hpe/cli",
     "boundaries": "dependency-cruiser packages/*/src app/src --config .dependency-cruiser.cjs",
     "check": "npm run format:check && npm run lint && npm run boundaries && npm run typecheck && npm test && npm run build",
     "clean": "rimraf packages/*/dist packages/*/*.tsbuildinfo app/dist app/*.tsbuildinfo coverage artifacts",

@@ -40,6 +40,8 @@ npm exec deck -- render
 
 浏览器层同样提供 `keyboard`、`touch`、`fullscreen`、`url`、`timeline` 与 `sync` 子路径。标准播放器使用键盘、触摸、全屏和 `#slide=<id>&step=<n>&mode=<mode>` 深链接；嵌入场景可以只组合需要的适配器。跨窗口同步仅传递 slide/step，窗口本地的 fullscreen 与 mode 不会互相污染。
 
+标准播放器已内置 overview、speaker view（当前页、下一页、讲稿、计时与远程翻页）、全页打印以及 timeline 控制。按 `O` 打开总览，按 `S` 打开演讲者窗口，按 `F` 切换全屏；演讲者窗口通过 `BroadcastChannel` 同步导航、timeline 和已声明的页面交互状态，同时保持自己的 speaker mode。
+
 ## 当前结论
 
 - 播放内核优先研究 [Reveal.js](https://revealjs.com/)，它的浏览器运行时、演讲者视图、插件机制和打印链路最完整。

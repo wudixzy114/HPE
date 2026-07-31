@@ -15,7 +15,8 @@
     }
   },
   "scripts": {
-    "build": "tsc -b",
+    "bin:chmod": "node -e \"require('node:fs').chmodSync('dist/bin.js', 0o755)\"",
+    "build": "tsc -b && npm run bin:chmod",
     "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {

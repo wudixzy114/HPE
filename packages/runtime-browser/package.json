@@ -31,6 +31,10 @@
       "types": "./dist/timeline.d.ts",
       "import": "./dist/timeline.js"
     },
+    "./presentation-sync": {
+      "types": "./dist/presentation-sync.d.ts",
+      "import": "./dist/presentation-sync.js"
+    },
     "./sync": {
       "types": "./dist/sync.d.ts",
       "import": "./dist/sync.js"

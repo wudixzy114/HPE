@@ -37,8 +37,15 @@
       "@hpe/runtime-browser/timeline": [
         "./packages/runtime-browser/src/timeline.ts"
       ],
+      "@hpe/runtime-browser/presentation-sync": [
+        "./packages/runtime-browser/src/presentation-sync.ts"
+      ],
       "@hpe/runtime-browser/sync": ["./packages/runtime-browser/src/sync.ts"],
       "@hpe/renderer-vue": ["./packages/renderer-vue/src/index.ts"],
+      "@hpe/renderer-vue/timeline": ["./packages/renderer-vue/src/timeline.ts"],
+      "@hpe/renderer-vue/slide-state": [
+        "./packages/renderer-vue/src/slide-state.ts"
+      ],
       "@hpe/compiler": ["./packages/compiler/src/index.ts"],
       "@hpe/compiler/vite": ["./packages/compiler/src/vite.ts"],
       "@hpe/compiler/highlight": ["./packages/compiler/src/highlight.ts"],

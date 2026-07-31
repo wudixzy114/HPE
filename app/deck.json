@@ -10,7 +10,8 @@
       "id": "intro",
       "file": "slides/intro.slide.vue",
       "title": "HPE",
-      "maxStep": 1
+      "maxStep": 1,
+      "durationMs": 1200
     },
     {
       "id": "architecture",

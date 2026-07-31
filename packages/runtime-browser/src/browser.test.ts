@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { createDeckEngine } from "@hpe/runtime-core";
+import { createSlideStateStore } from "@hpe/runtime-core/slide-state";
+import { createTimelineController } from "@hpe/runtime-core/timeline";
 
 import type { BroadcastChannelPort } from "./sync.js";
 import {
@@ -9,6 +11,7 @@ import {
   type FullscreenDocument,
 } from "./fullscreen.js";
 import { bindKeyboardNavigation, type BrowserEventTarget } from "./keyboard.js";
+import { createPresentationSync } from "./presentation-sync.js";
 import { createBroadcastSync } from "./sync.js";
 import { bindTouchNavigation } from "./touch.js";
 import { createBrowserTimelineClock } from "./timeline.js";
@@ -70,15 +73,16 @@ class FakeUrlHost extends FakeEventTarget implements UrlHost {
 class FakeBroadcastBus {
   private readonly channels = new Set<FakeBroadcastChannel>();
 
-  public create = (): BroadcastChannelPort => {
-    const channel = new FakeBroadcastChannel(this);
+  public create = (name: string): BroadcastChannelPort => {
+    const channel = new FakeBroadcastChannel(this, name);
     this.channels.add(channel);
     return channel;
   };
 
   public send(sender: FakeBroadcastChannel, data: unknown): void {
     for (const channel of this.channels) {
-      if (channel !== sender) channel.receive(data);
+      if (channel !== sender && channel.name === sender.name)
+        channel.receive(data);
     }
   }
 
@@ -92,7 +96,10 @@ class FakeBroadcastChannel implements BroadcastChannelPort {
     (event: MessageEvent<unknown>) => void
   >();
 
-  public constructor(private readonly bus: FakeBroadcastBus) {}
+  public constructor(
+    private readonly bus: FakeBroadcastBus,
+    public readonly name: string,
+  ) {}
 
   public postMessage(message: unknown): void {
     this.bus.send(this, message);
@@ -265,6 +272,52 @@ describe("BroadcastChannel navigation sync", () => {
     expect(speaker.getSnapshot()).toMatchObject({ step: 1, mode: "speaker" });
     presenter.dispatch({ type: "SET_FULLSCREEN", fullscreen: true });
     expect(speaker.getSnapshot().fullscreen).toBe(false);
+    presenterSync.destroy();
+    speakerSync.destroy();
+  });
+
+  it("synchronizes optional timeline and declared slide state for a follower", () => {
+    const presenter = createDeckEngine(manifest);
+    const speaker = createDeckEngine(manifest);
+    const presenterTimeline = createTimelineController(1000);
+    const speakerTimeline = createTimelineController(1000);
+    const presenterState = createSlideStateStore(presenter);
+    const speakerState = createSlideStateStore(speaker);
+    presenterState.register({
+      key: "focus",
+      initial: "core",
+      inspect: ["core", "tools"],
+    });
+    speakerState.register({
+      key: "focus",
+      initial: "core",
+      inspect: ["core", "tools"],
+    });
+    const bus = new FakeBroadcastBus();
+    const presenterSync = createPresentationSync(presenter, "deck", {
+      role: "presenter",
+      source: "presenter",
+      channelFactory: bus.create,
+      timeline: presenterTimeline,
+      slideState: presenterState,
+    });
+    const speakerSync = createPresentationSync(speaker, "deck", {
+      role: "follower",
+      source: "speaker",
+      channelFactory: bus.create,
+      timeline: speakerTimeline,
+      slideState: speakerState,
+    });
+    speakerSync.requestSnapshot();
+    presenterTimeline.dispatch({ type: "SEEK", timeMs: 500 });
+    presenterTimeline.dispatch({ type: "SET_PLAYING", playing: true });
+    presenterState.set("focus", "tools");
+    expect(speakerTimeline.getSnapshot()).toEqual({
+      timeMs: 500,
+      playing: true,
+      durationMs: 1000,
+    });
+    expect(speakerState.getSnapshot().values).toEqual({ focus: "tools" });
     presenterSync.destroy();
     speakerSync.destroy();
   });

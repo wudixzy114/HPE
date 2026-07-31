@@ -19,6 +19,14 @@
           browser and checker adapters.
         </p>
       </Step>
+      <Timeline v-slot="{ progress }" :to="1200">
+        <div class="mt-10 h-1 w-80 overflow-hidden rounded-full bg-slate-800">
+          <div
+            class="h-full origin-left bg-emerald-300"
+            :style="{ transform: `scaleX(${progress})` }"
+          />
+        </div>
+      </Timeline>
     </div>
   </Slide>
 </template>
