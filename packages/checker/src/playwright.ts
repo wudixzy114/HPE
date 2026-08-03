@@ -32,6 +32,8 @@ export interface PlaywrightCheckOptions {
   readonly minimumFontSize?: number;
   readonly safeArea?: number;
   readonly maxStates?: number;
+  readonly slideIds?: readonly string[];
+  readonly stateMode?: "all" | "default";
 }
 
 interface RuntimeScenario {
@@ -113,6 +115,23 @@ export async function checkWithPlaywright(
   }
   await mkdir(outputDir, { recursive: true });
   await cleanupCheckArtifacts(outputDir);
+  const selectedSlides =
+    options.slideIds === undefined
+      ? options.manifest.slides
+      : options.manifest.slides.filter((slide) =>
+          options.slideIds?.includes(slide.id),
+        );
+  if (selectedSlides.length === 0) {
+    throw new Error("No slides matched the requested selection");
+  }
+  const missingSlides =
+    options.slideIds?.filter(
+      (slideId) =>
+        !options.manifest.slides.some((slide) => slide.id === slideId),
+    ) ?? [];
+  if (missingSlides.length > 0) {
+    throw new Error(`Unknown slide selection: ${missingSlides.join(", ")}`);
+  }
   const diagnostics: DeckDiagnostic[] = [];
   const artifacts: CheckArtifact[] = [];
   const browser = await chromium.launch({ headless: true });
@@ -166,7 +185,7 @@ export async function checkWithPlaywright(
       runtime.dispatch({ type: "SET_MODE", mode: "inspect" });
     });
 
-    for (const slide of options.manifest.slides) {
+    for (const slide of selectedSlides) {
       await page.evaluate((slideId) => {
         const runtime = (window as unknown as { __HPE__?: BrowserRuntime })
           .__HPE__;
@@ -190,15 +209,21 @@ export async function checkWithPlaywright(
           sourceMap: runtime.getSourceMap(),
         };
       });
-      const scenarios =
+      const allScenarios =
         runtimeData.scenarios.length > 0
           ? runtimeData.scenarios
           : [{ id: "default", values: {} }];
-      const steps = Array.from(
+      const allSteps = Array.from(
         { length: (slide.maxStep ?? 0) + 1 },
         (_, index) => index,
       );
-      const times = timelineCheckpoints(slide.durationMs);
+      const allTimes = timelineCheckpoints(slide.durationMs);
+      const scenarios =
+        options.stateMode === "default"
+          ? allScenarios.slice(0, 1)
+          : allScenarios;
+      const steps = options.stateMode === "default" ? [0] : allSteps;
+      const times = options.stateMode === "default" ? [0] : allTimes;
       const stateCount = scenarios.length * steps.length * times.length;
       if (statesChecked + stateCount > maximumStates) {
         diagnostics.push({

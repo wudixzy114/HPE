@@ -22,6 +22,8 @@ npm exec deck -- notes set architecture --file notes.md
 npm exec deck -- render
 ```
 
+`inspect`/`screenshot` 默认会自行构建并启动临时预览，无需预先运行开发服务器。结构命令受文件锁保护，修改后自动执行完整编译，失败会回滚；删除的页面进入 `.hpe/trash`。完整命令、JSON 协议和退出码见 [CLI contract](docs/cli.md)。
+
 ## 模块边界
 
 | 包                     | 唯一职责                     | 可替换边界               |
@@ -56,6 +58,7 @@ Playwright 检查器会遍历 slide、step、声明交互状态和 timeline 检�
 ## 文档
 
 - [已采纳的架构方案](docs/architecture.md)
+- [CLI 命令与事务协议](docs/cli.md)
 - [开源项目调研与技术建议](docs/open-source-landscape.md)
 - [项目元数据快照](data/projects.json)
 

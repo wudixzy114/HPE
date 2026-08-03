@@ -32,7 +32,15 @@ function restrictedImports(packages) {
 }
 
 export default tseslint.config(
-  { ignores: ["**/dist/**", "**/coverage/**", "node_modules/**"] },
+  {
+    ignores: [
+      "**/dist/**",
+      "**/coverage/**",
+      "**/.hpe/**",
+      "artifacts/**",
+      "node_modules/**",
+    ],
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked.map((config) => ({
     ...config,

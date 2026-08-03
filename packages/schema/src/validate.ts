@@ -24,6 +24,7 @@ export const slideEntrySchema = z.object({
 
 export const deckManifestSchema = z
   .object({
+    $schema: z.string().min(1).optional(),
     schemaVersion: z.literal(CURRENT_SCHEMA_VERSION),
     id: z.string().regex(/^[a-z][a-z0-9-]*$/),
     title: z.string().min(1),

@@ -17,6 +17,7 @@ export interface SlideEntry {
 }
 
 export interface DeckManifest {
+  readonly $schema?: string;
   readonly schemaVersion: typeof CURRENT_SCHEMA_VERSION;
   readonly id: string;
   readonly title: string;
