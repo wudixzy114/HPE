@@ -20,6 +20,7 @@ No feature phase should require adding an undeclared production dependency. Opti
 | Module | Stable port / public entrypoint | May depend on |
 | --- | --- | --- |
 | `@hpe/schema` | `DeckManifest`, JSON Schema, `validateDeckManifest` | Zod only |
+| `@hpe/theme` | `ThemeDefinition`, `defineTheme` | no package dependencies |
 | `@hpe/runtime-core` | `DeckEngine` | schema types |
 | `@hpe/runtime-core/timeline` | `TimelineController`, injected `TimelineClock` | minimal core port |
 | `@hpe/runtime-core/slide-state` | `SlideStateStore` | minimal core port |
@@ -30,6 +31,8 @@ No feature phase should require adding an undeclared production dependency. Opti
 | `@hpe/cli` | `DeckRepository` transactional application service | public compiler/schema ports |
 
 Consumers must import declared package `exports`; importing another package's `src` is prohibited by ESLint and dependency-cruiser. Replacing a module means implementing the same port and changing composition at the application boundary—core reducers and document files do not change.
+
+Boundary analysis includes package sources, the application shell, authored slides, and theme modules.
 
 ## Required gates
 

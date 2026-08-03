@@ -6,6 +6,7 @@ import process from "node:process";
 const root = resolve(import.meta.dirname, "..");
 const packages = [
   "schema",
+  "theme",
   "runtime-core",
   "runtime-browser",
   "renderer-vue",

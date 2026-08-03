@@ -1,27 +1,265 @@
 {
   "$schema": "../packages/schema/src/deck.schema.json",
   "schemaVersion": 1,
-  "id": "hpe-starter",
-  "title": "HPE Starter",
-  "size": { "width": 1280, "height": 720 },
-  "theme": "theme.css",
+  "id": "claude-code-architecture",
+  "title": "Claude Code 的五块拼图",
+  "size": {
+    "width": 1600,
+    "height": 900
+  },
+  "theme": {
+    "entry": "themes/claude-code/theme.ts"
+  },
   "slides": [
     {
-      "id": "intro",
-      "file": "slides/intro.slide.vue",
-      "title": "HPE",
-      "maxStep": 1,
-      "durationMs": 1200
+      "id": "slide-00",
+      "file": "slides/slide-00.slide.vue",
+      "title": "Claude Code 的五块拼图 架构 · 循环 · 记忆 · 权限 · 扩展"
     },
     {
-      "id": "architecture",
-      "file": "slides/architecture.slide.vue",
-      "title": "Architecture"
+      "id": "slide-01",
+      "file": "slides/slide-01.slide.vue",
+      "title": "整体分五层：模型只出主意，runtime 才真把事办了"
     },
     {
-      "id": "code",
-      "file": "slides/code.slide.vue",
-      "title": "Compile-time code"
+      "id": "slide-02",
+      "file": "slides/slide-02.slide.vue",
+      "title": "五个入口怎么汇到一套核心？谁是核心、谁是插件？"
+    },
+    {
+      "id": "slide-03",
+      "file": "slides/slide-03.slide.vue",
+      "title": "这么大一坨，凭什么启动不慢、终端不卡？"
+    },
+    {
+      "id": "slide-04",
+      "file": "slides/slide-04.slide.vue",
+      "title": "应用：一次任务卡住，先在哪一层找原因？"
+    },
+    {
+      "id": "slide-05",
+      "file": "slides/slide-05.slide.vue",
+      "title": "点一下，看它一轮一轮把活干完"
+    },
+    {
+      "id": "slide-06",
+      "file": "slides/slide-06.slide.vue",
+      "title": "贴源码：那个\"一轮一轮\"的循环长什么样"
+    },
+    {
+      "id": "slide-07",
+      "file": "slides/slide-07.slide.vue",
+      "title": "配置读哪些、谁盖谁、改完要不要重启？"
+    },
+    {
+      "id": "slide-08",
+      "file": "slides/slide-08.slide.vue",
+      "title": "项目指令：不只分层，还能「改到某类文件才生效」"
+    },
+    {
+      "id": "slide-09",
+      "file": "slides/slide-09.slide.vue",
+      "title": "应用：把规矩写进配置文件（给你可抄的样例）"
+    },
+    {
+      "id": "slide-10",
+      "file": "slides/slide-10.slide.vue",
+      "title": "上下文窗口里装了什么"
+    },
+    {
+      "id": "slide-11",
+      "file": "slides/slide-11.slide.vue",
+      "title": "一轮上下文，是按什么顺序组装起来的？"
+    },
+    {
+      "id": "slide-12",
+      "file": "slides/slide-12.slide.vue",
+      "title": "工具结果太长怎么办？"
+    },
+    {
+      "id": "slide-13",
+      "file": "slides/slide-13.slide.vue",
+      "title": "压缩不是一下全压——五道工序按顺序过，只有最后一道调模型"
+    },
+    {
+      "id": "slide-14",
+      "file": "slides/slide-14.slide.vue",
+      "title": "压缩不是一下子全压——是五道工序按顺序过"
+    },
+    {
+      "id": "slide-15",
+      "file": "slides/slide-15.slide.vue",
+      "title": "聊太长会变差吗？会。那我能怎么管？"
+    },
+    {
+      "id": "slide-16",
+      "file": "slides/slide-16.slide.vue",
+      "title": "记忆不只一个 CLAUDE.md——到底有几种、存哪"
+    },
+    {
+      "id": "slide-17",
+      "file": "slides/slide-17.slide.vue",
+      "title": "会话记忆：它怎么自己记笔记，能写多少"
+    },
+    {
+      "id": "slide-18",
+      "file": "slides/slide-18.slide.vue",
+      "title": "整段对话存哪、断了怎么原样接回来"
+    },
+    {
+      "id": "slide-19",
+      "file": "slides/slide-19.slide.vue",
+      "title": "应用：上下文快满了，我该怎么手动管？"
+    },
+    {
+      "id": "slide-20",
+      "file": "slides/slide-20.slide.vue",
+      "title": "权限不是弹窗，是按风险分档放行"
+    },
+    {
+      "id": "slide-21",
+      "file": "slides/slide-21.slide.vue",
+      "title": "一条命令，要过哪几道关"
+    },
+    {
+      "id": "slide-22",
+      "file": "slides/slide-22.slide.vue",
+      "title": "贴源码：一轮多个工具调用，是怎么分发的"
+    },
+    {
+      "id": "slide-23",
+      "file": "slides/slide-23.slide.vue",
+      "title": "贴源码：那个决定分发的标记，默认是什么？"
+    },
+    {
+      "id": "slide-24",
+      "file": "slides/slide-24.slide.vue",
+      "title": "四种模式（其实六种），各免问什么"
+    },
+    {
+      "id": "slide-25",
+      "file": "slides/slide-25.slide.vue",
+      "title": "auto 模式那个\"后台分类器\"，到底怎么审你"
+    },
+    {
+      "id": "slide-26",
+      "file": "slides/slide-26.slide.vue",
+      "title": "我配的规则，谁盖谁、什么时候生效"
+    },
+    {
+      "id": "slide-27",
+      "file": "slides/slide-27.slide.vue",
+      "title": "改一处配置，七条命令的结局一起重算"
+    },
+    {
+      "id": "slide-28",
+      "file": "slides/slide-28.slide.vue",
+      "title": "一条 Bash 命令，是被拆开来判的"
+    },
+    {
+      "id": "slide-29",
+      "file": "slides/slide-29.slide.vue",
+      "title": "\"删根目录\"拦得住，那\"删一个文件\"呢？"
+    },
+    {
+      "id": "slide-30",
+      "file": "slides/slide-30.slide.vue",
+      "title": "这轮授的权，换个对话/子代理/Hook 还算数吗？"
+    },
+    {
+      "id": "slide-31",
+      "file": "slides/slide-31.slide.vue",
+      "title": "应用：怎么把权限配到既不烦人又不失控？"
+    },
+    {
+      "id": "slide-32",
+      "file": "slides/slide-32.slide.vue",
+      "title": "四种扩展点，一句话先分清"
+    },
+    {
+      "id": "slide-33",
+      "file": "slides/slide-33.slide.vue",
+      "title": "为什么是四种扩展，不合成一种？看\"上下文成本\"这条轴"
+    },
+    {
+      "id": "slide-34",
+      "file": "slides/slide-34.slide.vue",
+      "title": "Hook：那些\"能用却没人知道\"的生命周期点"
+    },
+    {
+      "id": "slide-35",
+      "file": "slides/slide-35.slide.vue",
+      "title": "Hook 到底是干什么的？为什么要用它？"
+    },
+    {
+      "id": "slide-36",
+      "file": "slides/slide-36.slide.vue",
+      "title": "怎么给我的 Claude Code 加 Hook？三步"
+    },
+    {
+      "id": "slide-37",
+      "file": "slides/slide-37.slide.vue",
+      "title": "Hook 到底拿来干嘛？六个真实场景"
+    },
+    {
+      "id": "slide-38",
+      "file": "slides/slide-38.slide.vue",
+      "title": "Skill 到底怎么写？最小就是一个目录 + 一个文件"
+    },
+    {
+      "id": "slide-39",
+      "file": "slides/slide-39.slide.vue",
+      "title": "MCP：一条命令，把外部系统接成工具"
+    },
+    {
+      "id": "slide-40",
+      "file": "slides/slide-40.slide.vue",
+      "title": "自己写一个 MCP：让它多出一个专属工具"
+    },
+    {
+      "id": "slide-41",
+      "file": "slides/slide-41.slide.vue",
+      "title": "自己打一个 Plugin：把一整套打包分发"
+    },
+    {
+      "id": "slide-42",
+      "file": "slides/slide-42.slide.vue",
+      "title": "那到底怎么自定义我的 Claude Code？"
+    },
+    {
+      "id": "slide-43",
+      "file": "slides/slide-43.slide.vue",
+      "title": "个人、团队、公司：三层配置怎么分工"
+    },
+    {
+      "id": "slide-44",
+      "file": "slides/slide-44.slide.vue",
+      "title": "团队的 git 规则，和我个人的配置怎么共存？"
+    },
+    {
+      "id": "slide-45",
+      "file": "slides/slide-45.slide.vue",
+      "title": "应用：怎么给自己的 Claude Code 接上团队的东西？"
+    },
+    {
+      "id": "slide-46",
+      "file": "slides/slide-46.slide.vue",
+      "title": "多 Agent：子 Agent 怎么起、上下文怎么不打架"
+    },
+    {
+      "id": "slide-47",
+      "file": "slides/slide-47.slide.vue",
+      "title": "贴源码：一个 Fork 是怎么\"复制上下文\"的"
+    },
+    {
+      "id": "slide-48",
+      "file": "slides/slide-48.slide.vue",
+      "title": "多 Agent：什么时候真该拆，怎么定义自己的子 Agent"
+    },
+    {
+      "id": "slide-49",
+      "file": "slides/slide-49.slide.vue",
+      "title": "它厉害的地方，不在某一句神秘的 Prompt"
     }
   ]
 }

@@ -12,6 +12,7 @@ const executable = resolve(
 const excluded = [
   "hpe",
   "@hpe/schema",
+  "@hpe/theme",
   "@hpe/runtime-core",
   "@hpe/runtime-browser",
   "@hpe/renderer-vue",

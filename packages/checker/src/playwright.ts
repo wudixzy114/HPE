@@ -56,7 +56,7 @@ interface BrowserRuntime {
   seekTimeline(timeMs: number): void;
   getSlideStateScenarios(): readonly RuntimeScenario[];
   setSlideStateScenario(values: RuntimeScenario["values"]): void;
-  getSourceMap(): RuntimeSourceMap | undefined;
+  getSourceMap(): Promise<RuntimeSourceMap | undefined>;
 }
 
 interface ActiveContext {
@@ -199,14 +199,14 @@ export async function checkWithPlaywright(
             .slideId === slideId,
         slide.id,
       );
-      const runtimeData = await page.evaluate(() => {
+      const runtimeData = await page.evaluate(async () => {
         const runtime = (window as unknown as { __HPE__?: BrowserRuntime })
           .__HPE__;
         if (!runtime)
           throw new Error("HPE browser inspection port is not available");
         return {
           scenarios: runtime.getSlideStateScenarios(),
-          sourceMap: runtime.getSourceMap(),
+          sourceMap: await runtime.getSourceMap(),
         };
       });
       const allScenarios =

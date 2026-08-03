@@ -36,6 +36,7 @@
 ```text
 packages/
   schema/          页面契约、deck manifest、JSON Schema
+  theme/           类型安全主题契约、布局角色和 AI 设计指导
   runtime-core/    纯 TypeScript 状态机、事件、步骤、时间线
   runtime-browser/ 键盘、全屏、URL、BroadcastChannel
   renderer-vue/    Vue 页面挂载、卸载和运行时上下文

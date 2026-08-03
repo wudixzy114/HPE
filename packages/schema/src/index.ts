@@ -16,13 +16,19 @@ export interface SlideEntry {
   readonly durationMs?: number;
 }
 
+export interface ThemeModuleRef {
+  readonly entry: string;
+}
+
+export type ThemeRef = string | ThemeModuleRef;
+
 export interface DeckManifest {
   readonly $schema?: string;
   readonly schemaVersion: typeof CURRENT_SCHEMA_VERSION;
   readonly id: string;
   readonly title: string;
   readonly size: SlideSize;
-  readonly theme: string;
+  readonly theme: ThemeRef;
   readonly slides: readonly SlideEntry[];
 }
 

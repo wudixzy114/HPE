@@ -1,23 +1,25 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { gzipSync } from "node:zlib";
 import process from "node:process";
+import { gzipSync } from "node:zlib";
 
 const root = resolve(import.meta.dirname, "..");
 const assets = resolve(root, "app", "dist", "assets");
 const files = readdirSync(assets);
 const javascript = files.filter((file) => file.endsWith(".js"));
 const styles = files.filter((file) => file.endsWith(".css"));
-if (javascript.length !== 1)
-  throw new Error(
-    `Expected one application JS chunk, received ${javascript.length}`,
-  );
-if (styles.length !== 1)
+if (styles.length !== 1) {
   throw new Error(
     `Expected one application CSS chunk, received ${styles.length}`,
   );
+}
 
-const js = readFileSync(resolve(assets, javascript[0]), "utf8");
+const html = readFileSync(resolve(root, "app", "dist", "index.html"), "utf8");
+const entryFile = html.match(
+  /<script[^>]+src="(?:\.\/|\/)assets\/([^"]+\.js)"/u,
+)?.[1];
+if (!entryFile) throw new Error("Unable to resolve the production entry chunk");
+const entry = readFileSync(resolve(assets, entryFile), "utf8");
 const css = readFileSync(resolve(assets, styles[0]), "utf8");
 const forbidden = [
   "createHighlighter",
@@ -27,15 +29,41 @@ const forbidden = [
   "commander",
 ];
 for (const marker of forbidden) {
-  if (js.includes(marker))
-    throw new Error(`Browser bundle contains tooling-only marker: ${marker}`);
+  const containing = javascript.find((file) =>
+    readFileSync(resolve(assets, file), "utf8").includes(marker),
+  );
+  if (containing) {
+    throw new Error(
+      `Browser chunk ${containing} contains tooling-only marker: ${marker}`,
+    );
+  }
 }
-const jsGzip = gzipSync(js).byteLength;
+
+const jsGzip = gzipSync(entry).byteLength;
 const cssGzip = gzipSync(css).byteLength;
-if (jsGzip > 45 * 1024)
-  throw new Error(`Browser JS gzip budget exceeded: ${jsGzip} bytes`);
-if (cssGzip > 8 * 1024)
+if (jsGzip > 45 * 1024) {
+  throw new Error(`Browser entry JS gzip budget exceeded: ${jsGzip} bytes`);
+}
+if (cssGzip > 16 * 1024) {
   throw new Error(`Browser CSS gzip budget exceeded: ${cssGzip} bytes`);
+}
+const slideChunks = javascript.filter((file) =>
+  /^slide-\d+\.slide-/u.test(file),
+);
+if (slideChunks.length !== 50) {
+  throw new Error(
+    `Expected 50 lazy slide chunks, received ${slideChunks.length}`,
+  );
+}
+if (entry.includes("全场地基") || entry.includes('"nodes":{')) {
+  throw new Error("Initial entry eagerly embeds speaker notes or source maps");
+}
+if (!javascript.some((file) => file.startsWith("notes-"))) {
+  throw new Error("Speaker notes were not isolated into an optional chunk");
+}
+if (!javascript.some((file) => file.startsWith("sources-"))) {
+  throw new Error("Source maps were not isolated into an optional chunk");
+}
 
 const coreIndex = readFileSync(
   resolve(root, "packages/runtime-core/dist/index.js"),
@@ -63,13 +91,21 @@ if (/^import .*@hpe\/(?:checker|compiler)/mu.test(cliProgram)) {
   );
 }
 
-const mapFile = `${javascript[0]}.map`;
-const sourceMap = JSON.parse(readFileSync(resolve(assets, mapFile), "utf8"));
-if (
-  !sourceMap.sources.some((source) => source.includes("slides/code.slide.vue"))
-) {
-  throw new Error("Production source map does not retain slide sources");
+const sourceMaps = files
+  .filter((file) => file.endsWith(".js.map"))
+  .map((file) => JSON.parse(readFileSync(resolve(assets, file), "utf8")));
+for (const expected of [
+  "slides/slide-00.slide.vue",
+  "slides/slide-49.slide.vue",
+]) {
+  if (
+    !sourceMaps.some((sourceMap) =>
+      sourceMap.sources.some((source) => source.includes(expected)),
+    )
+  ) {
+    throw new Error(`Production source maps do not retain ${expected}`);
+  }
 }
 process.stdout.write(
-  `bundle contracts verified (JS ${jsGzip} B gzip, CSS ${cssGzip} B gzip)\n`,
+  `bundle contracts verified (entry JS ${jsGzip} B gzip, CSS ${cssGzip} B gzip, ${slideChunks.length} lazy slides)\n`,
 );

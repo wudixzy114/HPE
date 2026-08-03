@@ -13,6 +13,7 @@
     "src/**/*.ts",
     "src/**/*.vue",
     "slides/**/*.vue",
+    "themes/**/*.ts",
     "vite.config.ts"
   ]
 }

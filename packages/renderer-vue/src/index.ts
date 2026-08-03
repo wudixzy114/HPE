@@ -40,13 +40,20 @@ export function useDeck(): DeckVueContext {
 
 export const Slide = defineComponent({
   name: "HpeSlide",
-  setup(_props, { slots }) {
-    return () =>
-      h(
+  inheritAttrs: false,
+  setup(_props, { attrs, slots }) {
+    return () => {
+      const { class: inheritedClass, ...rest } = attrs;
+      return h(
         "section",
-        { class: "hpe-slide", "data-hpe-slide": "" },
+        {
+          ...rest,
+          class: ["hpe-slide", inheritedClass],
+          "data-hpe-slide": "",
+        },
         slots.default?.(),
       );
+    };
   },
 });
 

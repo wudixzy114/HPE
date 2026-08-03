@@ -32,7 +32,10 @@ export const deckManifestSchema = z
       width: z.number().int().positive(),
       height: z.number().int().positive(),
     }),
-    theme: safeRelativePath,
+    theme: z.union([
+      safeRelativePath,
+      z.object({ entry: safeRelativePath }).strict(),
+    ]),
     slides: z.array(slideEntrySchema).min(1),
   })
   .superRefine((deck, context) => {

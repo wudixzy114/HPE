@@ -1,0 +1,30 @@
+{
+  "name": "@hpe/theme",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Type-safe, AI-friendly theme contracts for HPE presentations",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wudixzy114/HPE.git",
+    "directory": "packages/theme"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --noEmit"
+  }
+}

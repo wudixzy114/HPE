@@ -1,0 +1,13 @@
+:root {
+  --hpe-color-bg: #ffffff;
+  --hpe-color-surface: #f4f7f6;
+  --hpe-color-text: #172026;
+  --hpe-color-muted: #506068;
+  --hpe-color-accent: #007c73;
+  --hpe-font-sans: Arial, sans-serif;
+}
+
+.hpe-slide {
+  color: var(--hpe-color-text);
+  background: var(--hpe-color-bg);
+}

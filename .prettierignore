@@ -3,6 +3,8 @@ dist
 coverage
 artifacts
 .hpe
+.playwright-cli
+app/content/*.md
 package-lock.json
 data/projects.json
 docs/*.md

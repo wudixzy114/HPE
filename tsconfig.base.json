@@ -20,6 +20,7 @@
     "paths": {
       "@hpe/schema": ["./packages/schema/src/index.ts"],
       "@hpe/schema/validate": ["./packages/schema/src/validate.ts"],
+      "@hpe/theme": ["./packages/theme/src/index.ts"],
       "@hpe/runtime-core": ["./packages/runtime-core/src/index.ts"],
       "@hpe/runtime-core/timeline": ["./packages/runtime-core/src/timeline.ts"],
       "@hpe/runtime-core/slide-state": [

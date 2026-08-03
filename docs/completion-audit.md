@@ -11,6 +11,7 @@ This audit maps every committed first-phase requirement in [`architecture.md`](a
 | `<notes lang="md">` extraction | compiler `CompiledSlide.notes` | compiler test extracts notes without executing slide code; speaker E2E displays them |
 | Stable manifest order and slide IDs | schema + `DeckRepository` | CLI create/move/rename/delete transaction tests |
 | Versioned schema from day one | `schemaVersion`, Zod contract, packaged JSON Schema | validation in every compile/mutation; package test verifies JSON export |
+| Typed AI-friendly themes | `@hpe/theme`, `theme.ts` modules and CSS imports | theme invariant tests, compiler contract tests, runtime canvas assertion and rendered preview |
 | Stable `data-node` source mapping | compiler template AST analysis + virtual `sources` | compiler location assertion and browser E2E `getSourceMap()` assertion |
 | Static Tailwind class scanning | compiler class-expression validation | compiler rejects concatenated class fixture |
 | Theme, scoped CSS and deterministic CSS layers | `app/theme.css`, Vue scoped styles | production build + browser visual checks |
@@ -24,7 +25,7 @@ This audit maps every committed first-phase requirement in [`architecture.md`](a
 | Vue only maps ports to reactive context | `@hpe/renderer-vue/*` | dependency rules and full-player E2E |
 | Compiler/checker/CLI remain outside player runtime | separate workspace packages and dynamic CLI imports | `scripts/verify-bundle.mjs` rejects tooling markers/eager imports |
 | Optional timeline and inspectable state cost nothing when unused | independent core/renderer/browser subpaths | bundle contract ensures minimal entrypoints do not reference optional modules |
-| Every package can be independently packed/replaced | explicit `exports`, peer boundaries | `npm run test:packages` runs npm pack, publint and ESM type-resolution analysis for all seven packages |
+| Every package can be independently packed/replaced | explicit `exports`, peer boundaries | `npm run test:packages` runs npm pack, publint and ESM type-resolution analysis for all eight packages |
 
 ## Playback and author experience
 
@@ -35,13 +36,13 @@ This audit maps every committed first-phase requirement in [`architecture.md`](a
 | Browser fullscreen | fullscreen adapter and toolbar | injected-port unit test |
 | URL state | stable hash serialization/binding | URL adapter unit tests and deep-link E2E |
 | Page number and progress | standard player | production visual inspection |
-| Overview | isolated preview engines | E2E verifies three previews and no state pollution |
+| Overview | isolated preview engines | E2E verifies 50 previews and no state pollution |
 | Speaker view | current/next/notes/timer/controls | same-context multi-page E2E |
 | Cross-window state | navigation + optional feature channels | unit and E2E prove step/timeline/declared-state sync while mode/fullscreen remain local |
-| Compile-time code highlighting | `ShikiCode` compiler transform | transform test, rendered-code E2E, bundle tooling exclusion |
+| Compile-time code highlighting | `ShikiCode` compiler transform | transform test and bundle tooling exclusion |
 | Deterministic timeline | injected clock/controller and Vue provider | clock unit tests, speaker synchronization E2E |
 | Inspectable interaction state | declaration store and `useSlideState` | combination-limit tests and all-scenario checker traversal |
-| Printing and static HTML | print view + Vite renderer | E2E asserts three-page PDF; `deck render` produces static output |
+| Printing and static HTML | print view + Vite renderer | E2E asserts 50-page PDF at manifest size; `deck render` produces static output |
 
 ## AI/CLI automation
 
@@ -65,7 +66,7 @@ This audit maps every committed first-phase requirement in [`architecture.md`](a
 | Resource/runtime/console failures | request, pageerror, console, image/media checks | checker code paths + missing-image fixture |
 | Font size, contrast and safe area | computed-style checks | failure fixture detects all three classes |
 | Explicit layout overlap heuristic | `data-layout` pair checks | failure fixture detects overlap warning |
-| Every step/state/timeline checkpoint | bounded Cartesian traversal | sample deck checks 10 deterministic states; managed CLI state selection E2E |
+| Every step/state/timeline checkpoint | bounded Cartesian traversal | migrated deck checks 88 deterministic states; managed CLI state selection E2E |
 | Raw and annotated screenshots | isolated overlay capture | overlay cleanup assertion and real screenshot command |
 | Contact sheet, HTML and JSON reports | artifact/report writers | CLI/checker execution and artifact protocol |
 | Diagnostics map to SFC locations | compiler source map joined by node ID | report fields and source-map E2E |

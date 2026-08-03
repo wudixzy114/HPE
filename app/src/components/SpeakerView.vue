@@ -3,7 +3,8 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 import { useDeck } from "@hpe/renderer-vue";
 import type { DeckEngine } from "@hpe/runtime-core";
-import { manifest, notes, slides } from "virtual:hpe-deck";
+import { manifest, slides } from "virtual:hpe-deck";
+import { notes } from "virtual:hpe-deck/notes";
 
 import ScaledFrame from "./ScaledFrame.vue";
 import SlidePreview from "./SlidePreview.vue";

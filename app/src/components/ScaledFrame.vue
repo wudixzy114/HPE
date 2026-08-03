@@ -44,6 +44,14 @@ onBeforeUnmount(() => observer?.disconnect());
     :class="{ 'hpe-scaled-frame--fixed': !fit }"
     role="group"
     :aria-label="label"
+    :style="
+      fit
+        ? undefined
+        : {
+            width: `${manifest.size.width}px`,
+            height: `${manifest.size.height}px`,
+          }
+    "
   >
     <div
       class="hpe-scaled-frame__canvas"

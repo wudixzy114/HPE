@@ -14,6 +14,12 @@ module.exports = {
       to: { path: "^packages/(runtime|renderer|compiler|checker|cli)" },
     },
     {
+      name: "theme-contract-is-foundational",
+      severity: "error",
+      from: { path: "^packages/theme/src" },
+      to: { path: "^packages/(runtime|renderer|compiler|checker|cli|schema)" },
+    },
+    {
       name: "core-is-platform-free",
       severity: "error",
       from: { path: "^packages/runtime-core/src" },

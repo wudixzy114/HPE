@@ -37,6 +37,8 @@ export default tseslint.config(
       "**/dist/**",
       "**/coverage/**",
       "**/.hpe/**",
+      ".playwright-cli/**",
+      ".agents/skills/**/assets/**",
       "artifacts/**",
       "node_modules/**",
     ],
@@ -117,12 +119,30 @@ export default tseslint.config(
   },
   {
     files: ["app/slides/**/*.vue"],
-    rules: { "vue/multi-word-component-names": "off" },
+    rules: {
+      "no-irregular-whitespace": "off",
+      "vue/multiline-html-element-content-newline": "off",
+      "vue/multi-word-component-names": "off",
+    },
   },
   {
     files: ["packages/schema/src/**/*.ts"],
     rules: {
       "no-restricted-imports": restrictedImports([
+        "@hpe/runtime-core",
+        "@hpe/runtime-browser",
+        "@hpe/renderer-vue",
+        "@hpe/compiler",
+        "@hpe/checker",
+        "@hpe/cli",
+      ]),
+    },
+  },
+  {
+    files: ["packages/theme/src/**/*.ts"],
+    rules: {
+      "no-restricted-imports": restrictedImports([
+        "@hpe/schema",
         "@hpe/runtime-core",
         "@hpe/runtime-browser",
         "@hpe/renderer-vue",

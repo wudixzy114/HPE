@@ -25,6 +25,11 @@ export interface TemplateAnalysis {
   readonly issues: readonly CompilationIssue[];
 }
 
+export interface TemplateLocationOffset {
+  readonly line: number;
+  readonly column: number;
+}
+
 const ASSET_ATTRIBUTES = new Map<string, ReadonlySet<string>>([
   ["img", new Set(["src", "srcset"])],
   ["video", new Set(["src", "poster"])],
@@ -39,8 +44,16 @@ const ASSET_ATTRIBUTES = new Map<string, ReadonlySet<string>>([
 function sourceLocation(
   file: string,
   node: { loc: { start: { line: number; column: number } } },
+  offset: TemplateLocationOffset,
 ): SourceLocation {
-  return { file, line: node.loc.start.line, column: node.loc.start.column };
+  return {
+    file,
+    line: node.loc.start.line + offset.line - 1,
+    column:
+      node.loc.start.line === 1
+        ? node.loc.start.column + offset.column - 1
+        : node.loc.start.column,
+  };
 }
 
 export function walkTemplateElements(
@@ -130,6 +143,7 @@ function validateClassBinding(
   property: DirectiveNode,
   file: string,
   slideId: string,
+  offset: TemplateLocationOffset,
 ): CompilationIssue | undefined {
   const expression =
     property.exp?.type === NodeTypes.SIMPLE_EXPRESSION
@@ -140,7 +154,7 @@ function validateClassBinding(
       code: "DYNAMIC_CLASS_UNSCANNABLE",
       message: "Class bindings must enumerate every Tailwind class statically",
       slideId,
-      source: sourceLocation(file, property),
+      source: sourceLocation(file, property, offset),
     };
   }
   try {
@@ -154,7 +168,7 @@ function validateClassBinding(
     message:
       "Class bindings may use static strings, arrays, objects or conditionals; concatenation and computed classes are forbidden",
     slideId,
-    source: sourceLocation(file, property),
+    source: sourceLocation(file, property, offset),
   };
 }
 
@@ -170,6 +184,7 @@ export function analyzeTemplate(
   root: RootNode,
   file: string,
   slideId: string,
+  offset: TemplateLocationOffset = { line: 1, column: 1 },
 ): TemplateAnalysis {
   const nodes: Record<string, SourceLocation> = {};
   const assets: TemplateAssetReference[] = [];
@@ -185,17 +200,17 @@ export function analyzeTemplate(
           code: "NODE_ID_EMPTY",
           message: "data-node must contain a stable identifier",
           slideId,
-          source: sourceLocation(file, dataNode),
+          source: sourceLocation(file, dataNode, offset),
         });
       } else if (nodes[id]) {
         issues.push({
           code: "NODE_ID_DUPLICATE",
           message: `Duplicate data-node identifier: ${id}`,
           slideId,
-          source: sourceLocation(file, dataNode),
+          source: sourceLocation(file, dataNode, offset),
         });
       } else {
-        nodes[id] = sourceLocation(file, dataNode);
+        nodes[id] = sourceLocation(file, dataNode, offset);
       }
     }
 
@@ -209,17 +224,17 @@ export function analyzeTemplate(
           message:
             "v-bind object spreads are forbidden on slide layout elements",
           slideId,
-          source: sourceLocation(file, property),
+          source: sourceLocation(file, property, offset),
         });
       } else if (argument === "data-node") {
         issues.push({
           code: "NODE_ID_DYNAMIC",
           message: "data-node must be a static attribute",
           slideId,
-          source: sourceLocation(file, property),
+          source: sourceLocation(file, property, offset),
         });
       } else if (argument === "class") {
-        const issue = validateClassBinding(property, file, slideId);
+        const issue = validateClassBinding(property, file, slideId, offset);
         if (issue) issues.push(issue);
       }
     }
@@ -228,7 +243,7 @@ export function analyzeTemplate(
     if (style?.value) {
       inlineStyles.push({
         value: style.value.content,
-        source: sourceLocation(file, style.value),
+        source: sourceLocation(file, style.value, offset),
       });
     }
 
@@ -245,7 +260,7 @@ export function analyzeTemplate(
             message:
               "Layout assets must use static paths so they can be validated and bundled",
             slideId,
-            source: sourceLocation(file, property),
+            source: sourceLocation(file, property, offset),
           });
         }
       }
@@ -257,7 +272,10 @@ export function analyzeTemplate(
             ? splitSrcset(attribute.value.content)
             : [attribute.value.content];
         for (const value of values) {
-          assets.push({ value, source: sourceLocation(file, attribute) });
+          assets.push({
+            value,
+            source: sourceLocation(file, attribute, offset),
+          });
         }
       }
     }

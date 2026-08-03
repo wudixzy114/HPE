@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 
 import { transformCodeBlocks } from "./code-block.js";
 import { compileDeck, DeckCompilationError } from "./index.js";
+import { validateDeckManifest } from "@hpe/schema/validate";
 
 async function createDeck(slideSource: string): Promise<string> {
   const root = await mkdtemp(join(tmpdir(), "hpe-compiler-"));
@@ -31,6 +32,60 @@ async function createDeck(slideSource: string): Promise<string> {
 }
 
 describe("compileDeck", () => {
+  it("accepts an AI-friendly TypeScript theme module and validates its CSS assets", async () => {
+    const root = await createDeck(
+      '<template><h1 data-node="title">Theme</h1></template>',
+    );
+    const manifest = validateDeckManifest(
+      JSON.parse(await readFile(join(root, "deck.json"), "utf8")) as unknown,
+    );
+    const themedManifest = {
+      ...manifest,
+      theme: { entry: "themes/custom/theme.ts" },
+    };
+    await mkdir(join(root, "themes", "custom"), { recursive: true });
+    await writeFile(
+      join(root, "themes", "custom", "theme.ts"),
+      `import { defineTheme } from "@hpe/theme";\nimport "./theme.css";\nexport default defineTheme({ id: "custom", name: "Custom", description: "Custom", canvas: { width: 1280, height: 720, aspectRatio: "16:9" }, colors: {}, typography: {}, spacing: { edge: 64 }, layouts: [{ id: "content", description: "Content", useFor: ["content"] }], ai: { visualObjective: "Clear", density: "medium", motif: "Grid", prefer: [], avoid: [], contentRules: [] } });\n`,
+    );
+    await writeFile(
+      join(root, "themes", "custom", "theme.css"),
+      ":root { --accent: #007c73; }\n",
+    );
+    await writeFile(join(root, "deck.json"), JSON.stringify(themedManifest));
+    const deck = await compileDeck(root);
+    expect(deck.themeAbsoluteFile.endsWith("themes/custom/theme.ts")).toBe(
+      true,
+    );
+  });
+
+  it("rejects theme modules that bypass the typed defineTheme contract", async () => {
+    const root = await createDeck("<template><h1>Theme</h1></template>");
+    const manifest = validateDeckManifest(
+      JSON.parse(await readFile(join(root, "deck.json"), "utf8")) as unknown,
+    );
+    await mkdir(join(root, "themes", "invalid"), { recursive: true });
+    await writeFile(
+      join(root, "themes", "invalid", "theme.ts"),
+      `import "./theme.css";\nexport default {};\n`,
+    );
+    await writeFile(join(root, "themes", "invalid", "theme.css"), ":root {}\n");
+    await writeFile(
+      join(root, "deck.json"),
+      JSON.stringify({
+        ...manifest,
+        theme: { entry: "themes/invalid/theme.ts" },
+      }),
+    );
+    const error = await compileDeck(root).catch((caught: unknown) => caught);
+    expect(error).toBeInstanceOf(DeckCompilationError);
+    expect((error as DeckCompilationError).issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: "THEME_DEFINE_CALL_MISSING" }),
+      ]),
+    );
+  });
+
   it("extracts notes, source locations and verified assets without executing slide code", async () => {
     const root = await createDeck(`<template>
   <img data-node="hero" src="./assets/logo.svg" />
@@ -62,6 +117,19 @@ describe("compileDeck", () => {
         }),
       ]),
     );
+  });
+
+  it("accepts static class maps across concurrent compiler loads", async () => {
+    const root = await createDeck(`<template>
+  <div :class="{ active: selected, muted: !selected }">Valid</div>
+</template>
+<script setup lang="ts">const selected = true</script>`);
+    const decks = await Promise.all([
+      compileDeck(root),
+      compileDeck(root),
+      compileDeck(root),
+    ]);
+    expect(decks.every((deck) => deck.slides.length === 1)).toBe(true);
   });
 
   it("rejects missing assets and duplicate node identifiers together", async () => {

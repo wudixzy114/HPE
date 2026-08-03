@@ -16,6 +16,7 @@
     "@hpe/runtime-browser": "0.1.0",
     "@hpe/runtime-core": "0.1.0",
     "@hpe/schema": "0.1.0",
+    "@hpe/theme": "0.1.0",
     "vue": "3.5.40"
   },
   "devDependencies": {

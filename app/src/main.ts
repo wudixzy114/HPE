@@ -10,9 +10,20 @@ import {
   createTimelineController,
   createTimelineDriver,
 } from "@hpe/runtime-core/timeline";
-import { manifest } from "virtual:hpe-deck";
+import { manifest, theme } from "virtual:hpe-deck";
 
 import App from "./App.vue";
+
+if (
+  theme &&
+  (theme.canvas.width !== manifest.size.width ||
+    theme.canvas.height !== manifest.size.height)
+) {
+  throw new Error(
+    `Theme ${theme.id} declares ${theme.canvas.width}x${theme.canvas.height}, ` +
+      `but deck ${manifest.id} declares ${manifest.size.width}x${manifest.size.height}`,
+  );
+}
 
 const engine = createDeckEngine(manifest);
 const timeline = createTimelineController();
