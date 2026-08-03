@@ -162,4 +162,33 @@ describe("CLI protocol", () => {
       error: { code: "DECK_INVALID" },
     });
   });
+
+  it("keeps commander usage errors inside the JSON protocol", async () => {
+    let stdout = "";
+    let stderr = "";
+    const io: CliIO = {
+      stdout: {
+        write: (value) => {
+          stdout += String(value);
+          return true;
+        },
+      },
+      stderr: {
+        write: (value) => {
+          stderr += String(value);
+          return true;
+        },
+      },
+    };
+    const exitCode = await runCli(
+      ["node", "deck", "--json", "unknown-command"],
+      io,
+    );
+    expect(exitCode).toBeGreaterThan(0);
+    expect(stdout).toBe("");
+    expect(JSON.parse(stderr)).toMatchObject({
+      ok: false,
+      error: { code: "COMMAND_FAILED" },
+    });
+  });
 });

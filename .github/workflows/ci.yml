@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
+      - name: Use the pinned npm release
+        run: npm install --global npm@11.16.0
+      - name: Install locked dependencies
+        run: npm ci
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+      - name: Install Chromium and system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Static, unit and production gates
+        run: npm run check
+      - name: Coverage ratchet
+        run: npm run test:coverage
+      - name: Package and public API contracts
+        run: npm run test:packages
+      - name: Zero-cost browser bundle contracts
+        run: npm run test:bundle
+      - name: Browser and managed CLI E2E
+        run: npm run test:e2e
+      - name: Dependency audit
+        run: npm audit
+      - name: Production license policy
+        run: npm run test:licenses
+      - name: Upload browser evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-evidence
+          path: |
+            playwright-report
+            test-results
+            artifacts
+          if-no-files-found: ignore
+          retention-days: 7

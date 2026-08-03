@@ -1,4 +1,11 @@
-import { mkdir, open, readFile, rm, type FileHandle } from "node:fs/promises";
+import {
+  mkdir,
+  open,
+  readFile,
+  rm,
+  stat,
+  type FileHandle,
+} from "node:fs/promises";
 import { hostname } from "node:os";
 import { dirname } from "node:path";
 
@@ -9,6 +16,8 @@ interface LockRecord {
   readonly hostname: string;
   readonly createdAt: string;
 }
+
+const STALE_LOCK_MS = 30 * 60 * 1000;
 
 function processIsAlive(pid: number): boolean {
   try {
@@ -21,6 +30,8 @@ function processIsAlive(pid: number): boolean {
 
 async function staleLock(path: string): Promise<boolean> {
   try {
+    const information = await stat(path);
+    if (Date.now() - information.mtimeMs > STALE_LOCK_MS) return true;
     const record = JSON.parse(
       await readFile(path, "utf8"),
     ) as Partial<LockRecord>;

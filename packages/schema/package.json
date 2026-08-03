@@ -1,11 +1,21 @@
 {
   "name": "@hpe/schema",
   "version": "0.1.0",
+  "private": true,
+  "description": "Versioned manifest contracts and validation for HPE decks",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wudixzy114/HPE.git",
+    "directory": "packages/schema"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist",
-    "src/deck.schema.json"
+    "dist"
   ],
   "exports": {
     ".": {
@@ -16,10 +26,11 @@
       "types": "./dist/validate.d.ts",
       "import": "./dist/validate.js"
     },
-    "./deck.schema.json": "./src/deck.schema.json"
+    "./deck.schema.json": "./dist/deck.schema.json"
   },
   "scripts": {
-    "build": "tsc -b",
+    "assets": "node -e \"require('node:fs').copyFileSync('src/deck.schema.json', 'dist/deck.schema.json')\"",
+    "build": "tsc -b && npm run assets",
     "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {

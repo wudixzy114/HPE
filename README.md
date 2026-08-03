@@ -1,6 +1,6 @@
 # HPE · HTML Presentation Engine
 
-TypeScript 驱动、AI 友好、模块可替换的 HTML 演示引擎。仓库已经从技术调研进入可运行骨架阶段。
+TypeScript 驱动、AI 友好、模块可替换的 HTML 演示引擎。第一阶段产品链路已经覆盖制稿、编译、播放、演讲者视图、打印、确定性检查和事务式自动化。
 
 ## 快速开始
 
@@ -8,6 +8,7 @@ TypeScript 驱动、AI 友好、模块可替换的 HTML 演示引擎。仓库已
 npm install
 npm run dev
 npm run check
+npm run verify
 ```
 
 CLI 在 workspace 安装后可通过 `npm exec deck -- ...` 使用：
@@ -48,17 +49,16 @@ npm exec deck -- render
 
 Playwright 检查器会遍历 slide、step、声明交互状态和 timeline 检查点的笛卡尔积，并检查画布尺寸/scroll overflow、节点越界、文本裁切、图片与媒体、最小字号、颜色对比度、安全区以及显式 `data-layout` 重叠。启用截图时同时输出 raw、带源码节点标记的 annotated 图、contact sheet、HTML 报告和 JSON 协议；状态组合默认硬限制为 512，避免 CI 失控。
 
-## 当前结论
+## 范围边界
 
-- 播放内核优先研究 [Reveal.js](https://revealjs.com/)，它的浏览器运行时、演讲者视图、插件机制和打印链路最完整。
-- 面向开发者的完整产品形态优先研究 [Slidev](https://sli.dev/)；Markdown 到多格式产物的编译链路优先研究 [Marp](https://marp.app/)。
-- 如果目标包含类似 PowerPoint 的可视化编辑器，优先研究 [Strut](https://strut.io/) 的交互和数据模型，但其 AGPL-3.0 许可证不适合未经评估直接嵌入闭源产品。
-- 目前没有一个宽松许可证项目同时成熟覆盖“可视化编辑、播放、协作、HTML/PDF/PPTX 高保真导出”。合理路线是组合成熟组件，并保持自己的文档模型。
+当前交付对应 [架构方案](docs/architecture.md) 定义的第一阶段。可视化拖拽编辑、多人协作、PowerPoint 导入和高保真可编辑 PPTX 导出明确不在本阶段承诺内；这些能力不会以空接口或隐藏运行时成本预埋。
 
 ## 文档
 
 - [已采纳的架构方案](docs/architecture.md)
 - [CLI 命令与事务协议](docs/cli.md)
+- [开发、模块替换与发布门禁](docs/development.md)
+- [第一阶段逐项完成审计](docs/completion-audit.md)
 - [开源项目调研与技术建议](docs/open-source-landscape.md)
 - [项目元数据快照](data/projects.json)
 

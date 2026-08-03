@@ -74,6 +74,16 @@ export default tseslint.config(
     },
   },
   {
+    files: ["tests/**/*.ts", "playwright.config.ts"],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+        project: ["./tsconfig.tests.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
     files: ["**/*.vue"],
     languageOptions: {
       parser: vueParser,

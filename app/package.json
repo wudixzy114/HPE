@@ -2,6 +2,8 @@
   "name": "@hpe/app",
   "version": "0.1.0",
   "private": true,
+  "description": "Reference HPE presentation application",
+  "license": "UNLICENSED",
   "type": "module",
   "scripts": {
     "build": "vite build",

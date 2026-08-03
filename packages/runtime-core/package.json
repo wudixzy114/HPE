@@ -1,6 +1,17 @@
 {
   "name": "@hpe/runtime-core",
   "version": "0.1.0",
+  "private": true,
+  "description": "Platform-neutral state, timeline and inspectable-state ports for HPE",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wudixzy114/HPE.git",
+    "directory": "packages/runtime-core"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [

@@ -1,6 +1,17 @@
 {
   "name": "@hpe/renderer-vue",
   "version": "0.1.0",
+  "private": true,
+  "description": "Vue rendering adapter and presentation primitives for HPE",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wudixzy114/HPE.git",
+    "directory": "packages/renderer-vue"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [

@@ -1,6 +1,17 @@
 {
   "name": "@hpe/compiler",
   "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic Vue SFC compiler and Vite adapter for HPE decks",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wudixzy114/HPE.git",
+    "directory": "packages/compiler"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [

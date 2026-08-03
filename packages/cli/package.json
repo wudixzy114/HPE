@@ -1,6 +1,17 @@
 {
   "name": "@hpe/cli",
   "version": "0.1.0",
+  "private": true,
+  "description": "Transactional CLI and automation boundary for HPE decks",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wudixzy114/HPE.git",
+    "directory": "packages/cli"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
   "type": "module",
   "files": [
     "dist"
