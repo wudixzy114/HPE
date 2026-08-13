@@ -492,6 +492,25 @@
     touch-action: none;
   }
 
+  .hpe-annotation-cursor {
+    position: absolute;
+    z-index: 6;
+    width: 16px;
+    height: 16px;
+    border: 2px solid;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 92%),
+      0 1px 5px rgb(0 0 0 / 42%);
+  }
+
+  .hpe-annotation-cursor--highlighter {
+    width: 34px;
+    height: 34px;
+  }
+
   .hpe-annotation-dock {
     position: fixed;
     z-index: 24;

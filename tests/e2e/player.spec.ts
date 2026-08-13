@@ -236,6 +236,9 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
   expect(bounds).not.toBeNull();
   if (!bounds) throw new Error("Annotation canvas has no bounds");
   await page.mouse.move(bounds.x + 200, bounds.y + 200);
+  const annotationCursor = page.locator(".hpe-annotation-cursor");
+  await expect(annotationCursor).toBeVisible();
+  await expect(annotationCursor).toHaveClass(/hpe-annotation-cursor--pen/u);
   await page.mouse.down();
   await page.mouse.move(bounds.x + 420, bounds.y + 280, { steps: 12 });
   await page.mouse.up();
@@ -264,6 +267,11 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
   );
   await page.keyboard.press("c");
   await page.mouse.move(bounds.x + 260, bounds.y + 320);
+  await expect(annotationCursor).toBeVisible();
+  await expect(annotationCursor).toHaveClass(
+    /hpe-annotation-cursor--highlighter/u,
+  );
+  await expect(annotationCursor).toHaveCSS("width", "34px");
   await page.mouse.down();
   await page.mouse.move(bounds.x + 620, bounds.y + 320, { steps: 18 });
   await page.mouse.up();
@@ -288,6 +296,25 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
   );
   expect(medianAlpha).toBeGreaterThan(40);
   expect(medianAlpha).toBeLessThan(150);
+  const alphaSamples = await annotationCanvas.evaluate(
+    (canvas: HTMLCanvasElement, offsets) => {
+      const context = canvas.getContext("2d");
+      if (!context) return [];
+      const bounds = canvas.getBoundingClientRect();
+      const y = Math.round((offsets.y / bounds.height) * canvas.height);
+      return Array.from({ length: 9 }, (_, index) => {
+        const offsetX =
+          offsets.startX + ((offsets.endX - offsets.startX) * (index + 1)) / 10;
+        const x = Math.round((offsetX / bounds.width) * canvas.width);
+        return context.getImageData(x, y, 1, 1).data[3] ?? 0;
+      });
+    },
+    { startX: 260, endX: 620, y: 320 },
+  );
+  expect(Math.min(...alphaSamples)).toBeGreaterThan(40);
+  expect(
+    Math.max(...alphaSamples) - Math.min(...alphaSamples),
+  ).toBeLessThanOrEqual(1);
   await page.keyboard.press("Escape");
   await expect(page.locator("html")).not.toHaveAttribute(
     "data-hpe-annotation-active",
