@@ -36,7 +36,7 @@ This audit maps every committed first-phase requirement in [`architecture.md`](a
 | Browser fullscreen | fullscreen adapter and toolbar | injected-port unit test |
 | URL state | stable hash serialization/binding | URL adapter unit tests and deep-link E2E |
 | Page number and progress | standard player | production visual inspection |
-| Flicker-free lazy navigation | retained displayed slide, target-module commit and previous/next-two prefetch | throttled-network E2E proves the stage never becomes empty while an unprefetched chunk is delayed |
+| Flicker-free lazy navigation | painted double buffers, target-module commit and previous/next-two prefetch | throttled-network and buffer-swap E2E prove the stage never becomes empty and slide layers have no transition animation |
 | Overview | isolated preview engines | E2E verifies 50 previews and no state pollution |
 | Speaker view | current/next/notes/timer/controls | same-context multi-page E2E |
 | Cross-window state | navigation + optional feature channels | unit and E2E prove step/timeline/declared-state sync while mode/fullscreen remain local |

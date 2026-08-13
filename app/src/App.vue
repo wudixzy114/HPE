@@ -59,6 +59,12 @@ interface AppProps {
   readonly unbindTimeline: () => void;
 }
 
+interface DisplayedSlide {
+  readonly id: string;
+  readonly index: number;
+  readonly component: Component;
+}
+
 interface BrowserInspectionPort {
   dispatch(event: DeckEvent): void;
   getState(): ReturnType<DeckEngine["getSnapshot"]>;
@@ -75,7 +81,11 @@ const props = defineProps<AppProps>();
 const { state } = provideDeckEngine(props.engine);
 const timelineContext = provideTimeline(props.timeline);
 provideSlideStateStore(props.slideState);
-const displayedSlide = shallowRef<Component>();
+const slideLayers = shallowRef<
+  readonly [DisplayedSlide | undefined, DisplayedSlide | undefined]
+>([undefined, undefined]);
+const activeSlideLayer = ref<0 | 1>(0);
+const stagingSlideLayer = ref<0 | 1>();
 const displayedSlideId = ref(state.value.slideId);
 const displayedSlideIndex = ref(state.value.slideIndex);
 const currentEntry = computed(() => manifest.slides[displayedSlideIndex.value]);
@@ -112,6 +122,23 @@ function prefetchAdjacentSlides(index: number): void {
   prefetchSlide(index + 2);
 }
 
+function setSlideLayer(layer: 0 | 1, slide: DisplayedSlide): void {
+  const next = [...slideLayers.value] as [
+    DisplayedSlide | undefined,
+    DisplayedSlide | undefined,
+  ];
+  next[layer] = slide;
+  slideLayers.value = next;
+}
+
+async function waitForPaint(): Promise<void> {
+  await new Promise<void>((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => resolve());
+    });
+  });
+}
+
 async function displaySlide(slideId: string): Promise<void> {
   const loader = slideLoaders[slideId];
   if (!loader) {
@@ -126,7 +153,30 @@ async function displaySlide(slideId: string): Promise<void> {
     if (sequence !== slideLoadSequence) return;
     const index = manifest.slides.findIndex((entry) => entry.id === slideId);
     if (index < 0) throw new Error(`Unknown slide: ${slideId}`);
-    displayedSlide.value = markRaw(module.default);
+    const slide: DisplayedSlide = {
+      id: slideId,
+      index,
+      component: markRaw(module.default),
+    };
+    const hasDisplayedSlide = slideLayers.value[activeSlideLayer.value];
+    if (!hasDisplayedSlide) {
+      setSlideLayer(activeSlideLayer.value, slide);
+      displayedSlideId.value = slideId;
+      displayedSlideIndex.value = index;
+      await nextTick();
+      prefetchAdjacentSlides(index);
+      return;
+    }
+
+    const targetLayer: 0 | 1 = activeSlideLayer.value === 0 ? 1 : 0;
+    setSlideLayer(targetLayer, slide);
+    stagingSlideLayer.value = targetLayer;
+    await nextTick();
+    await waitForPaint();
+    if (sequence !== slideLoadSequence) return;
+
+    activeSlideLayer.value = targetLayer;
+    stagingSlideLayer.value = undefined;
     displayedSlideId.value = slideId;
     displayedSlideIndex.value = index;
     await nextTick();
@@ -362,14 +412,23 @@ watchEffect(() => {
         transform: `scale(${scale})`,
       }"
     >
-      <Transition name="hpe-slide-switch" mode="in-out">
+      <div
+        v-for="(layer, layerIndex) in slideLayers"
+        :key="layerIndex"
+        class="hpe-slide-layer"
+        :class="{
+          'hpe-slide-layer--active': layerIndex === activeSlideLayer,
+          'hpe-slide-layer--staging': layerIndex === stagingSlideLayer,
+        }"
+        :aria-hidden="layerIndex !== activeSlideLayer"
+      >
         <component
-          :is="displayedSlide"
-          v-if="displayedSlide"
-          :key="displayedSlideId"
-          :data-slide-id="displayedSlideId"
+          :is="layer.component"
+          v-if="layer"
+          :key="layer.id"
+          :data-slide-id="layer.id"
         />
-      </Transition>
+      </div>
       <output v-if="slideLoadError" class="hpe-slide-load-error" role="alert">
         页面加载失败：{{ slideLoadError }}
       </output>

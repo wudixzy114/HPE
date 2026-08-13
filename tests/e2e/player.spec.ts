@@ -94,6 +94,34 @@ test("keeps the previous slide visible while an unprefetched slide chunk loads",
   );
 });
 
+test("switches prefetched slides through painted buffers without animation", async ({
+  page,
+}) => {
+  await page.goto("/#slide=slide-00&step=0&mode=present");
+  await expect(
+    page.locator(".hpe-slide-layer--active [data-slide-id=slide-00]"),
+  ).toBeVisible();
+
+  await page.evaluate(() =>
+    window.__HPE__.dispatch({ type: "GOTO", slideId: "slide-01" }),
+  );
+  await expect(
+    page.locator(".hpe-slide-layer--active [data-slide-id=slide-01]"),
+  ).toBeVisible();
+  await expect(
+    page.locator(".hpe-slide-layer:not(.hpe-slide-layer--active)"),
+  ).toHaveAttribute("aria-hidden", "true");
+  expect(
+    await page
+      .locator(".hpe-slide-layer")
+      .evaluateAll((layers) =>
+        layers.every(
+          (layer) => getComputedStyle(layer).transitionDuration === "0s",
+        ),
+      ),
+  ).toBe(true);
+});
+
 test("ignores a stale slide chunk after rapid navigation", async ({ page }) => {
   await page.route("**/slide-10.slide-*.js", async (route) => {
     await page.waitForTimeout(700);

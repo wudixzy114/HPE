@@ -46,19 +46,31 @@
     position: absolute;
     overflow: hidden;
     background: var(--hpe-slide-background, var(--hpe-color-bg));
+    isolation: isolate;
     transform-origin: center;
   }
 
-  .hpe-slide-switch-enter-active,
-  .hpe-slide-switch-leave-active {
+  .hpe-slide-layer {
     position: absolute;
     inset: 0;
-    transition: opacity 120ms ease-out;
+    z-index: 0;
+    visibility: hidden;
+    pointer-events: none;
+    contain: layout paint;
+    will-change: opacity;
   }
 
-  .hpe-slide-switch-enter-from,
-  .hpe-slide-switch-leave-to {
-    opacity: 0;
+  .hpe-slide-layer--active {
+    z-index: 1;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hpe-slide-layer--staging {
+    z-index: 2;
+    visibility: visible;
+    opacity: 0.001;
   }
 
   .hpe-slide-load-error {
@@ -482,9 +494,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hpe-step,
-  .hpe-progress,
-  .hpe-slide-switch-enter-active,
-  .hpe-slide-switch-leave-active {
+  .hpe-progress {
     transition: none;
   }
 }
