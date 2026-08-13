@@ -33,7 +33,11 @@ export async function captureAnnotatedSlide(
   path: string,
   safeArea: number,
 ): Promise<void> {
-  const slide = page.locator("[data-hpe-slide]").first();
+  const markedSlide = page.locator("[data-hpe-active-slide]");
+  const slide =
+    (await markedSlide.count()) > 0
+      ? markedSlide.first()
+      : page.locator("[data-hpe-slide]").first();
   await slide.evaluate(
     (root, input) => {
       root.querySelector("[data-hpe-annotation]")?.remove();

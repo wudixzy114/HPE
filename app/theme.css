@@ -93,21 +93,63 @@
     top: 14px;
     left: 50%;
     display: flex;
-    gap: 6px;
-    padding: 6px;
+    align-items: center;
+    max-width: 44px;
+    padding: 5px;
+    overflow: hidden;
     border: 1px solid rgb(71 85 105 / 55%);
     border-radius: 12px;
-    opacity: 0.25;
+    opacity: 0.55;
     background: rgb(9 11 16 / 88%);
     box-shadow: 0 12px 36px rgb(0 0 0 / 35%);
     transform: translateX(-50%);
-    transition: opacity 160ms ease;
+    transition:
+      max-width 180ms ease,
+      opacity 160ms ease;
     backdrop-filter: blur(12px);
   }
 
   .hpe-toolbar:hover,
   .hpe-toolbar:focus-within {
+    max-width: min(860px, calc(100vw - 32px));
     opacity: 1;
+  }
+
+  .hpe-toolbar__handle {
+    display: grid;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    color: var(--hpe-color-muted);
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    user-select: none;
+  }
+
+  .hpe-toolbar__actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    max-width: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(6px);
+    transition:
+      max-width 180ms ease,
+      opacity 120ms ease,
+      transform 180ms ease,
+      visibility 0s linear 180ms;
+  }
+
+  .hpe-toolbar:hover .hpe-toolbar__actions,
+  .hpe-toolbar:focus-within .hpe-toolbar__actions {
+    max-width: 800px;
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0s;
   }
 
   .hpe-toolbar button,
@@ -122,8 +164,40 @@
   }
 
   .hpe-toolbar button {
+    flex: 0 0 auto;
     padding: 7px 10px;
     font-size: 12px;
+  }
+
+  .hpe-toolbar button:disabled {
+    opacity: 0.38;
+    cursor: default;
+  }
+
+  .hpe-toolbar .hpe-toolbar__button--active {
+    border-color: var(--hpe-color-accent);
+    color: #172026;
+    background: var(--hpe-color-accent);
+  }
+
+  .hpe-toolbar__colors {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .hpe-toolbar button.hpe-toolbar__color {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 2px solid rgb(255 255 255 / 48%);
+    border-radius: 50%;
+    background: var(--hpe-pen-color);
+  }
+
+  .hpe-toolbar button.hpe-toolbar__color--active {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px var(--hpe-pen-color);
   }
 
   .hpe-toolbar button:hover,
@@ -433,18 +507,19 @@
     white-space: pre-wrap;
   }
 
-  .hpe-spotlight {
-    position: fixed;
-    z-index: 35;
-    top: -28px;
-    left: -28px;
-    width: 56px;
-    height: 56px;
-    border: 2px solid rgb(23 32 38 / 80%);
-    border-radius: 50%;
+  .hpe-annotation-canvas {
+    position: absolute;
+    z-index: 5;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
-    background: rgb(229 170 49 / 32%);
-    box-shadow: 0 0 0 6px rgb(229 170 49 / 12%);
+  }
+
+  .hpe-annotation-canvas--active {
+    pointer-events: auto;
+    cursor: crosshair;
+    touch-action: none;
   }
 }
 
@@ -467,7 +542,7 @@
   .hpe-overview,
   .hpe-speaker,
   .hpe-notes-overlay,
-  .hpe-spotlight,
+  .hpe-annotation-canvas,
   .hpe-progress,
   .hpe-page-number,
   .hpe-toolbar {

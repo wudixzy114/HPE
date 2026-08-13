@@ -1,7 +1,7 @@
 import { mkdir } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 
-import { chromium } from "playwright";
+import { chromium, type Locator, type Page } from "playwright";
 
 import type { DeckManifest, SourceLocation } from "@hpe/schema";
 
@@ -76,6 +76,13 @@ function safeFilename(value: string): string {
 
 function reportPath(absolutePath: string): string {
   return relative(process.cwd(), absolutePath).replaceAll("\\", "/");
+}
+
+async function activeSlideLocator(page: Page): Promise<Locator> {
+  const markedSlide = page.locator("[data-hpe-active-slide]");
+  return (await markedSlide.count()) > 0
+    ? markedSlide.first()
+    : page.locator("[data-hpe-slide]").first();
 }
 
 function timelineCheckpoints(
@@ -193,12 +200,12 @@ export async function checkWithPlaywright(
           throw new Error("HPE browser inspection port is not available");
         runtime.dispatch({ type: "GOTO", slideId });
       }, slide.id);
-      await page.waitForFunction(
-        (slideId) =>
-          document.querySelector<HTMLElement>("[data-hpe-slide]")?.dataset
-            .slideId === slideId,
-        slide.id,
-      );
+      await page.waitForFunction((slideId) => {
+        const slide =
+          document.querySelector<HTMLElement>("[data-hpe-active-slide]") ??
+          document.querySelector<HTMLElement>("[data-hpe-slide]");
+        return slide?.dataset.slideId === slideId;
+      }, slide.id);
       const runtimeData = await page.evaluate(async () => {
         const runtime = (window as unknown as { __HPE__?: BrowserRuntime })
           .__HPE__;
@@ -281,20 +288,18 @@ export async function checkWithPlaywright(
               minimumFontSize: options.minimumFontSize ?? 16,
               safeArea,
             };
-            const findings = await page
-              .locator("[data-hpe-slide]")
-              .first()
-              .evaluate(runBrowserChecks, checkOptions);
+            const slideElement = await activeSlideLocator(page);
+            const findings = await slideElement.evaluate(
+              runBrowserChecks,
+              checkOptions,
+            );
             const stem = `${String(statesChecked + 1).padStart(4, "0")}-${safeFilename(
               slide.id,
             )}-${safeFilename(stateId)}`;
             let annotatedPath: string | undefined;
             if (screenshots) {
               const rawPath = resolve(outputDir, `${stem}.raw.png`);
-              await page
-                .locator("[data-hpe-slide]")
-                .first()
-                .screenshot({ path: rawPath });
+              await slideElement.screenshot({ path: rawPath });
               artifacts.push({
                 type: "raw-screenshot",
                 path: reportPath(rawPath),

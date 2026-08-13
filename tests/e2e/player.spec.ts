@@ -209,20 +209,63 @@ test("speaker view synchronizes interactive Vue state while preserving its local
   await speaker.close();
 });
 
-test("notes, spotlight, Home and End preserve the legacy presentation affordances", async ({
+test("toolbar collapses until hovered and the pen annotates then clears on navigation", async ({
   page,
 }) => {
   await page.goto("/#slide=slide-05&step=0&mode=present");
+  const toolbar = page.locator(".hpe-toolbar");
+  const toolbarActions = page.locator(".hpe-toolbar__actions");
+  await expect(toolbarActions).toHaveCSS("visibility", "hidden");
+  await toolbar.hover();
+  await expect(toolbarActions).toHaveCSS("visibility", "visible");
+
   await page.keyboard.press("n");
   await expect(page.locator(".hpe-notes-overlay")).toContainText("全场地基");
-  await page.keyboard.press("h");
-  await page.mouse.move(500, 300);
-  await expect(page.locator(".hpe-spotlight")).toBeVisible();
+  await page.keyboard.press("n");
+
+  await page.keyboard.press("p");
+  const annotationCanvas = page.locator(".hpe-annotation-canvas");
+  await expect(annotationCanvas).toHaveClass(/hpe-annotation-canvas--active/u);
+  const bounds = await annotationCanvas.boundingBox();
+  expect(bounds).not.toBeNull();
+  if (!bounds) throw new Error("Annotation canvas has no bounds");
+  await page.mouse.move(bounds.x + 200, bounds.y + 200);
+  await page.mouse.down();
+  await page.mouse.move(bounds.x + 420, bounds.y + 280, { steps: 12 });
+  await page.mouse.up();
+  expect(
+    await annotationCanvas.evaluate((canvas: HTMLCanvasElement) => {
+      const context = canvas.getContext("2d");
+      if (!context) return 0;
+      const pixels = context.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+      ).data;
+      let painted = 0;
+      for (let index = 3; index < pixels.length; index += 4) {
+        if (pixels[index] !== 0) painted += 1;
+      }
+      return painted;
+    }),
+  ).toBeGreaterThan(0);
 
   await page.keyboard.press("End");
   await expect
     .poll(() => page.evaluate(() => window.__HPE__.getState().slideId))
     .toBe("slide-49");
+  await expect
+    .poll(() =>
+      annotationCanvas.evaluate((canvas: HTMLCanvasElement) => {
+        const context = canvas.getContext("2d");
+        if (!context) return false;
+        return context
+          .getImageData(0, 0, canvas.width, canvas.height)
+          .data.every((channel) => channel === 0);
+      }),
+    )
+    .toBe(true);
   await page.keyboard.press("Home");
   await expect
     .poll(() => page.evaluate(() => window.__HPE__.getState().slideId))

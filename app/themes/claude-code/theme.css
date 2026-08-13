@@ -33,13 +33,7 @@
   right: 24px;
   bottom: 18px;
   left: auto;
-  opacity: 0.32;
   transform: none;
-}
-
-.hpe-toolbar:hover,
-.hpe-toolbar:focus-within {
-  opacity: 1;
 }
 
 .hpe-page-number {

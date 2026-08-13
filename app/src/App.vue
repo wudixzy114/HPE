@@ -38,6 +38,8 @@ import type {
 import type { SlideSourceMap } from "@hpe/compiler";
 import { manifest, slideLoaders, theme } from "virtual:hpe-deck";
 
+import AnnotationCanvas from "./components/AnnotationCanvas.vue";
+
 const OverviewView = defineAsyncComponent(
   () => import("./components/OverviewView.vue"),
 );
@@ -96,9 +98,10 @@ const slideLoadError = ref<string>();
 const overview = ref(false);
 const printMode = ref(false);
 const notesOpen = ref(false);
-const spotlight = ref(false);
-const pointerX = ref(0);
-const pointerY = ref(0);
+const annotationActive = ref(false);
+const annotationColor = ref("#ef4444");
+const annotationHasDrawing = ref(false);
+const annotationClearVersion = ref(0);
 let controls: BrowserControls | undefined;
 let urlBinding: BrowserBinding | undefined;
 let sync: DeckSync | undefined;
@@ -193,6 +196,7 @@ async function displaySlide(slideId: string): Promise<void> {
 watch(
   () => state.value.slideId,
   (slideId) => {
+    clearAnnotations();
     void displaySlide(slideId);
   },
   { immediate: true },
@@ -213,6 +217,20 @@ function isInteractiveTarget(target: EventTarget | null): boolean {
   );
 }
 
+function clearAnnotations(): void {
+  annotationClearVersion.value += 1;
+  annotationHasDrawing.value = false;
+}
+
+function toggleAnnotation(): void {
+  annotationActive.value = !annotationActive.value;
+}
+
+function openOverview(): void {
+  annotationActive.value = false;
+  overview.value = true;
+}
+
 function onApplicationKey(event: KeyboardEvent): void {
   if (
     event.defaultPrevented ||
@@ -223,7 +241,9 @@ function onApplicationKey(event: KeyboardEvent): void {
   ) {
     return;
   }
-  if (event.key === "Escape" && overview.value) {
+  if (event.key === "Escape" && annotationActive.value) {
+    annotationActive.value = false;
+  } else if (event.key === "Escape" && overview.value) {
     overview.value = false;
   } else if (event.key === "Escape" && notesOpen.value) {
     notesOpen.value = false;
@@ -231,7 +251,8 @@ function onApplicationKey(event: KeyboardEvent): void {
     event.key.toLowerCase() === "o" &&
     state.value.mode !== "speaker"
   ) {
-    overview.value = !overview.value;
+    if (overview.value) overview.value = false;
+    else openOverview();
   } else if (
     event.key.toLowerCase() === "s" &&
     state.value.mode !== "speaker"
@@ -241,8 +262,8 @@ function onApplicationKey(event: KeyboardEvent): void {
     void toggleFullscreen();
   } else if (event.key.toLowerCase() === "n") {
     notesOpen.value = !notesOpen.value;
-  } else if (event.key.toLowerCase() === "h") {
-    spotlight.value = !spotlight.value;
+  } else if (event.key.toLowerCase() === "p") {
+    toggleAnnotation();
   } else if (event.key === "Home") {
     const first = manifest.slides[0];
     if (first) props.engine.dispatch({ type: "GOTO", slideId: first.id });
@@ -250,11 +271,6 @@ function onApplicationKey(event: KeyboardEvent): void {
     const last = manifest.slides.at(-1);
     if (last) props.engine.dispatch({ type: "GOTO", slideId: last.id });
   }
-}
-
-function onPointerMove(event: PointerEvent): void {
-  pointerX.value = event.clientX;
-  pointerY.value = event.clientY;
 }
 
 function openSpeakerView(): void {
@@ -320,7 +336,6 @@ onMounted(() => {
   resize();
   window.addEventListener("resize", resize, { passive: true });
   window.addEventListener("keydown", onApplicationKey);
-  window.addEventListener("pointermove", onPointerMove, { passive: true });
   window.addEventListener("beforeprint", onBeforePrint);
   window.addEventListener("afterprint", onAfterPrint);
   const inspectionPort: BrowserInspectionPort = {
@@ -361,7 +376,6 @@ onBeforeUnmount(() => {
   props.engine.destroy();
   window.removeEventListener("resize", resize);
   window.removeEventListener("keydown", onApplicationKey);
-  window.removeEventListener("pointermove", onPointerMove);
   window.removeEventListener("beforeprint", onBeforePrint);
   window.removeEventListener("afterprint", onAfterPrint);
   delete (window as unknown as { __HPE__?: BrowserInspectionPort }).__HPE__;
@@ -427,61 +441,106 @@ watchEffect(() => {
           v-if="layer"
           :key="layer.id"
           :data-slide-id="layer.id"
+          :data-hpe-active-slide="
+            layerIndex === activeSlideLayer ? '' : undefined
+          "
         />
       </div>
       <output v-if="slideLoadError" class="hpe-slide-load-error" role="alert">
         页面加载失败：{{ slideLoadError }}
       </output>
+      <AnnotationCanvas
+        v-if="state.mode !== 'inspect'"
+        :active="annotationActive"
+        :color="annotationColor"
+        :clear-version="annotationClearVersion"
+        :width="manifest.size.width"
+        :height="manifest.size.height"
+        @drawing-change="annotationHasDrawing = $event"
+      />
     </div>
     <nav
       v-if="state.mode !== 'inspect'"
       class="hpe-toolbar"
       aria-label="Presentation tools"
+      tabindex="0"
     >
-      <button
-        type="button"
-        title="Previous slide"
-        @click="props.engine.dispatch({ type: 'PREVIOUS' })"
-      >
-        ←
-      </button>
-      <button
-        type="button"
-        title="Next slide"
-        @click="props.engine.dispatch({ type: 'NEXT' })"
-      >
-        →
-      </button>
-      <button type="button" title="Overview (O)" @click="overview = true">
-        Overview
-      </button>
-      <button type="button" title="Notes (N)" @click="notesOpen = !notesOpen">
-        Notes
-      </button>
-      <button
-        type="button"
-        title="Spotlight (H)"
-        @click="spotlight = !spotlight"
-      >
-        Spotlight
-      </button>
-      <button type="button" title="Speaker view (S)" @click="openSpeakerView">
-        Speaker
-      </button>
-      <button type="button" title="Fullscreen (F)" @click="toggleFullscreen()">
-        Fullscreen
-      </button>
-      <button type="button" title="Print all slides" @click="printDeck">
-        Print
-      </button>
-      <button
-        v-if="currentEntry?.durationMs !== undefined"
-        type="button"
-        :title="timelinePlaying ? 'Pause timeline' : 'Play timeline'"
-        @click="toggleTimeline"
-      >
-        {{ timelinePlaying ? "Pause" : "Play" }}
-      </button>
+      <span class="hpe-toolbar__handle" aria-hidden="true">
+        {{ annotationActive ? "✎" : "•••" }}
+      </span>
+      <div class="hpe-toolbar__actions">
+        <button
+          type="button"
+          title="Previous slide"
+          @click="props.engine.dispatch({ type: 'PREVIOUS' })"
+        >
+          ←
+        </button>
+        <button
+          type="button"
+          title="Next slide"
+          @click="props.engine.dispatch({ type: 'NEXT' })"
+        >
+          →
+        </button>
+        <button type="button" title="Overview (O)" @click="openOverview">
+          Overview
+        </button>
+        <button type="button" title="Notes (N)" @click="notesOpen = !notesOpen">
+          Notes
+        </button>
+        <button
+          type="button"
+          title="Pen (P)"
+          :aria-pressed="annotationActive"
+          :class="{ 'hpe-toolbar__button--active': annotationActive }"
+          @click="toggleAnnotation"
+        >
+          Pen
+        </button>
+        <div class="hpe-toolbar__colors" aria-label="Pen color">
+          <button
+            v-for="color in ['#ef4444', '#e5aa31', '#14b8a6']"
+            :key="color"
+            type="button"
+            class="hpe-toolbar__color"
+            :class="{ 'hpe-toolbar__color--active': annotationColor === color }"
+            :style="{ '--hpe-pen-color': color }"
+            :aria-label="`Use ${color} pen`"
+            :aria-pressed="annotationColor === color"
+            @click="annotationColor = color"
+          />
+        </div>
+        <button
+          type="button"
+          title="Clear annotations"
+          :disabled="!annotationHasDrawing"
+          @click="clearAnnotations"
+        >
+          Clear
+        </button>
+        <button type="button" title="Speaker view (S)" @click="openSpeakerView">
+          Speaker
+        </button>
+        <button
+          type="button"
+          title="Fullscreen (F)"
+          @click="toggleFullscreen()"
+        >
+          Fullscreen
+        </button>
+        <button type="button" title="Print all slides" @click="printDeck">
+          Print
+        </button>
+        <button
+          v-if="currentEntry?.durationMs !== undefined"
+          type="button"
+          :title="timelinePlaying ? 'Pause timeline' : 'Play timeline'"
+          @click="toggleTimeline"
+        >
+          {{ timelinePlaying ? "Pause" : "Play" }}
+        </button>
+      </div>
     </nav>
     <div
       class="hpe-progress"
@@ -499,12 +558,5 @@ watchEffect(() => {
     :slide-id="state.slideId"
     @close-notes="notesOpen = false"
   />
-  <div
-    v-if="state.mode !== 'inspect' && state.mode !== 'speaker' && spotlight"
-    class="hpe-spotlight"
-    aria-hidden="true"
-    :style="{ transform: `translate(${pointerX}px, ${pointerY}px)` }"
-  />
-
   <PrintView v-if="printMode" />
 </template>
