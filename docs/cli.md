@@ -9,6 +9,18 @@
 --json                  Emit one machine-readable JSON value
 ```
 
+## Selecting a deck in the shared player
+
+The player shell is independent from deck content. Development, production builds and previews accept the same deck-root switch:
+
+```bash
+npm run dev -- --deck-root ./presentations/product-launch
+npm run build -- --deck-root ./presentations/product-launch
+npm run preview -- --deck-root ./presentations/product-launch
+```
+
+When omitted, `--deck-root` defaults to `app`, the bundled example deck. A selected deck owns only `deck.json`, `slides/`, `themes/` and `assets/`; it does not copy or modify the player shell. The compiler and dev server allow source files from that root while keeping manifest, theme, asset and slide validation scoped to it.
+
 `--json` may appear before or after a subcommand. Successful JSON responses include `ok: true` where the command has a natural response envelope. Errors always use:
 
 ```json

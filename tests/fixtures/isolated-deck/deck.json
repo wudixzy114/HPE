@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "isolated-release-check",
+  "title": "Isolated release check",
+  "size": { "width": 1280, "height": 720 },
+  "theme": { "entry": "themes/release/theme.ts" },
+  "slides": [
+    {
+      "id": "intro",
+      "file": "slides/intro.slide.vue",
+      "title": "Independent deck root"
+    }
+  ]
+}

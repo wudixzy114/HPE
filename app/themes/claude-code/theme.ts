@@ -1,6 +1,5 @@
 import { defineTheme } from "@hpe/theme";
 
-import "../../theme.css";
 import "./legacy.css";
 import "./demos.css";
 import "./theme.css";

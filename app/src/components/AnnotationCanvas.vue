@@ -3,6 +3,7 @@ import { onBeforeUnmount, ref, watch } from "vue";
 
 const props = defineProps<{
   active: boolean;
+  tool: "pen" | "highlighter";
   color: string;
   clearVersion: number;
   width: number;
@@ -42,10 +43,12 @@ function drawSegment(from: Point, to: Point, pressure: number): void {
   const drawingContext = context();
   if (!drawingContext) return;
   drawingContext.strokeStyle = props.color;
-  drawingContext.globalAlpha = 0.92;
+  drawingContext.globalAlpha = props.tool === "highlighter" ? 0.34 : 0.92;
+  drawingContext.globalCompositeOperation = "source-over";
   drawingContext.lineCap = "round";
   drawingContext.lineJoin = "round";
-  drawingContext.lineWidth = 9 * Math.max(0.72, pressure || 0.5);
+  drawingContext.lineWidth =
+    (props.tool === "highlighter" ? 34 : 9) * Math.max(0.72, pressure || 0.5);
   drawingContext.beginPath();
   drawingContext.moveTo(from.x, from.y);
   drawingContext.lineTo(to.x, to.y);

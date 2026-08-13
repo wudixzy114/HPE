@@ -99,6 +99,7 @@ const overview = ref(false);
 const printMode = ref(false);
 const notesOpen = ref(false);
 const annotationActive = ref(false);
+const annotationTool = ref<"pen" | "highlighter">("pen");
 const annotationColor = ref("#ef4444");
 const annotationHasDrawing = ref(false);
 const annotationClearVersion = ref(0);
@@ -222,8 +223,14 @@ function clearAnnotations(): void {
   annotationHasDrawing.value = false;
 }
 
-function toggleAnnotation(): void {
-  annotationActive.value = !annotationActive.value;
+function selectAnnotationTool(tool: "pen" | "highlighter"): void {
+  if (annotationActive.value && annotationTool.value === tool) {
+    annotationActive.value = false;
+    return;
+  }
+  annotationTool.value = tool;
+  annotationColor.value = tool === "highlighter" ? "#fde047" : "#ef4444";
+  annotationActive.value = true;
 }
 
 function openOverview(): void {
@@ -263,7 +270,11 @@ function onApplicationKey(event: KeyboardEvent): void {
   } else if (event.key.toLowerCase() === "n") {
     notesOpen.value = !notesOpen.value;
   } else if (event.key.toLowerCase() === "p") {
-    toggleAnnotation();
+    selectAnnotationTool("pen");
+  } else if (event.key.toLowerCase() === "h") {
+    selectAnnotationTool("highlighter");
+  } else if (event.key.toLowerCase() === "c" && annotationHasDrawing.value) {
+    clearAnnotations();
   } else if (event.key === "Home") {
     const first = manifest.slides[0];
     if (first) props.engine.dispatch({ type: "GOTO", slideId: first.id });
@@ -378,6 +389,8 @@ onBeforeUnmount(() => {
   window.removeEventListener("keydown", onApplicationKey);
   window.removeEventListener("beforeprint", onBeforePrint);
   window.removeEventListener("afterprint", onAfterPrint);
+  document.documentElement.removeAttribute("data-hpe-annotation-active");
+  delete document.documentElement.dataset.hpeAnnotationTool;
   delete (window as unknown as { __HPE__?: BrowserInspectionPort }).__HPE__;
 });
 
@@ -402,6 +415,13 @@ watchEffect(() => {
   );
   document.documentElement.dataset.hpeStep = String(state.value.step);
   document.documentElement.dataset.hpeMode = state.value.mode;
+  document.documentElement.toggleAttribute(
+    "data-hpe-annotation-active",
+    annotationActive.value,
+  );
+  document.documentElement.dataset.hpeAnnotationTool = annotationActive.value
+    ? annotationTool.value
+    : "off";
 });
 </script>
 
@@ -452,6 +472,7 @@ watchEffect(() => {
       <AnnotationCanvas
         v-if="state.mode !== 'inspect'"
         :active="annotationActive"
+        :tool="annotationTool"
         :color="annotationColor"
         :clear-version="annotationClearVersion"
         :width="manifest.size.width"
@@ -465,9 +486,7 @@ watchEffect(() => {
       aria-label="Presentation tools"
       tabindex="0"
     >
-      <span class="hpe-toolbar__handle" aria-hidden="true">
-        {{ annotationActive ? "✎" : "•••" }}
-      </span>
+      <span class="hpe-toolbar__handle" aria-hidden="true">•••</span>
       <div class="hpe-toolbar__actions">
         <button
           type="button"
@@ -488,36 +507,6 @@ watchEffect(() => {
         </button>
         <button type="button" title="Notes (N)" @click="notesOpen = !notesOpen">
           Notes
-        </button>
-        <button
-          type="button"
-          title="Pen (P)"
-          :aria-pressed="annotationActive"
-          :class="{ 'hpe-toolbar__button--active': annotationActive }"
-          @click="toggleAnnotation"
-        >
-          Pen
-        </button>
-        <div class="hpe-toolbar__colors" aria-label="Pen color">
-          <button
-            v-for="color in ['#ef4444', '#e5aa31', '#14b8a6']"
-            :key="color"
-            type="button"
-            class="hpe-toolbar__color"
-            :class="{ 'hpe-toolbar__color--active': annotationColor === color }"
-            :style="{ '--hpe-pen-color': color }"
-            :aria-label="`Use ${color} pen`"
-            :aria-pressed="annotationColor === color"
-            @click="annotationColor = color"
-          />
-        </div>
-        <button
-          type="button"
-          title="Clear annotations"
-          :disabled="!annotationHasDrawing"
-          @click="clearAnnotations"
-        >
-          Clear
         </button>
         <button type="button" title="Speaker view (S)" @click="openSpeakerView">
           Speaker
@@ -542,6 +531,66 @@ watchEffect(() => {
         </button>
       </div>
     </nav>
+    <aside
+      v-if="state.mode !== 'inspect'"
+      class="hpe-annotation-dock"
+      :class="{ 'hpe-annotation-dock--active': annotationActive }"
+      aria-label="Annotation tools"
+    >
+      <button
+        type="button"
+        title="Pen (P)"
+        :aria-pressed="annotationActive && annotationTool === 'pen'"
+        :class="{
+          'hpe-annotation-dock__tool--active':
+            annotationActive && annotationTool === 'pen',
+        }"
+        @click="selectAnnotationTool('pen')"
+      >
+        <span aria-hidden="true">✎</span>
+        Pen
+      </button>
+      <button
+        type="button"
+        title="Highlighter (H)"
+        :aria-pressed="annotationActive && annotationTool === 'highlighter'"
+        :class="{
+          'hpe-annotation-dock__tool--active':
+            annotationActive && annotationTool === 'highlighter',
+        }"
+        @click="selectAnnotationTool('highlighter')"
+      >
+        <span aria-hidden="true">▰</span>
+        Highlight
+      </button>
+      <div v-if="annotationActive" class="hpe-annotation-dock__options">
+        <div class="hpe-annotation-dock__colors" aria-label="Annotation color">
+          <button
+            v-for="color in annotationTool === 'highlighter'
+              ? ['#fde047', '#86efac', '#67e8f9']
+              : ['#ef4444', '#e5aa31', '#14b8a6']"
+            :key="color"
+            type="button"
+            class="hpe-annotation-dock__color"
+            :class="{
+              'hpe-annotation-dock__color--active': annotationColor === color,
+            }"
+            :style="{ '--hpe-annotation-color': color }"
+            :aria-label="`Use ${color}`"
+            :aria-pressed="annotationColor === color"
+            @click="annotationColor = color"
+          />
+        </div>
+        <button
+          type="button"
+          title="Clear annotations (C)"
+          :disabled="!annotationHasDrawing"
+          @click="clearAnnotations"
+        >
+          Clear
+        </button>
+      </div>
+    </aside>
     <div
       class="hpe-progress"
       :style="{

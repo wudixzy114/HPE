@@ -1,0 +1,13 @@
+.isolated-release-slide {
+  display: grid;
+  align-content: center;
+  gap: 28px;
+  padding: 72px;
+  color: #102a43;
+  background: #f0f4f8;
+}
+
+.isolated-release-slide h1,
+.isolated-release-slide p {
+  margin: 0;
+}

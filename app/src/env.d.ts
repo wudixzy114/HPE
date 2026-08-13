@@ -30,3 +30,5 @@ declare module "virtual:hpe-deck/sources" {
 
   export const sources: Readonly<Record<string, SlideSourceMap>>;
 }
+
+declare module "virtual:hpe-player-styles.css";

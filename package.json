@@ -11,24 +11,26 @@
     "app"
   ],
   "scripts": {
-    "build": "npm run build:packages && npm run build -w @hpe/app",
+    "build": "npm run build:packages && node scripts/run-deck.mjs build",
     "build:packages": "tsc -b && npm run assets -w @hpe/schema && npm run bin:chmod -w @hpe/cli",
     "boundaries": "dependency-cruiser packages/*/src app/src app/slides app/themes --config .dependency-cruiser.cjs",
     "check": "npm run format:check && npm run lint && npm run boundaries && npm run typecheck && npm test && npm run build",
     "clean": "rimraf packages/*/dist packages/*/*.tsbuildinfo app/dist app/*.tsbuildinfo coverage artifacts",
-    "dev": "npm run dev -w @hpe/app",
+    "dev": "node scripts/run-deck.mjs dev",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --max-warnings 0",
     "postinstall": "playwright install chromium",
+    "preview": "node scripts/run-deck.mjs preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "npm run build && playwright test",
+    "test:isolation": "node scripts/verify-deck-isolation.mjs",
     "test:bundle": "npm run build && node scripts/verify-bundle.mjs",
     "test:licenses": "node scripts/verify-licenses.mjs",
     "test:packages": "npm run build:packages && node scripts/verify-packages.mjs",
     "typecheck": "tsc -b && tsc -p tsconfig.tests.json && npm run typecheck -w @hpe/app",
-    "verify": "npm run check && npm run test:coverage && npm run test:packages && npm run test:bundle && npm run test:e2e && npm run test:licenses && npm audit"
+    "verify": "npm run check && npm run test:coverage && npm run test:packages && npm run test:bundle && npm run test:isolation && npm run test:e2e && npm run test:licenses && npm audit"
   },
   "engines": {
     "node": ">=22.12"

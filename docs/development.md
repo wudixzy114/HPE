@@ -17,6 +17,8 @@ No feature phase should require adding an undeclared production dependency. Opti
 
 Large decks keep each page in an independent lazy chunk. After a page commits, the player prefetches the previous page and the next two pages. Navigation mounts the target into an inactive paint buffer, waits for the browser to paint it, and then swaps buffers without animation. A failed chunk leaves the previous page visible and exposes an accessible error instead of a blank frame.
 
+Presentation annotations are a player capability rather than deck content. `P` selects/toggles the pen, `H` selects/toggles the translucent highlighter, `C` clears the current page and `Escape` exits annotation mode. The pointer is hidden across the slide stage while either annotation tool is active and remains visible over player controls. Annotations clear automatically on navigation and are excluded from print output.
+
 ## Module replacement contract
 
 | Module | Stable port / public entrypoint | May depend on |

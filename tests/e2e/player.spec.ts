@@ -215,6 +215,7 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
   await page.goto("/#slide=slide-05&step=0&mode=present");
   const toolbar = page.locator(".hpe-toolbar");
   const toolbarActions = page.locator(".hpe-toolbar__actions");
+  await expect(page.locator(".hpe-annotation-dock")).toBeVisible();
   await expect(toolbarActions).toHaveCSS("visibility", "hidden");
   await toolbar.hover();
   await expect(toolbarActions).toHaveCSS("visibility", "visible");
@@ -226,6 +227,11 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
   await page.keyboard.press("p");
   const annotationCanvas = page.locator(".hpe-annotation-canvas");
   await expect(annotationCanvas).toHaveClass(/hpe-annotation-canvas--active/u);
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-hpe-annotation-tool",
+    "pen",
+  );
+  await expect(page.locator(".hpe-stage")).toHaveCSS("cursor", "none");
   const bounds = await annotationCanvas.boundingBox();
   expect(bounds).not.toBeNull();
   if (!bounds) throw new Error("Annotation canvas has no bounds");
@@ -250,6 +256,43 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
       return painted;
     }),
   ).toBeGreaterThan(0);
+
+  await page.keyboard.press("h");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-hpe-annotation-tool",
+    "highlighter",
+  );
+  await page.keyboard.press("c");
+  await page.mouse.move(bounds.x + 260, bounds.y + 320);
+  await page.mouse.down();
+  await page.mouse.move(bounds.x + 620, bounds.y + 320, { steps: 18 });
+  await page.mouse.up();
+  const medianAlpha = await annotationCanvas.evaluate(
+    (canvas: HTMLCanvasElement) => {
+      const context = canvas.getContext("2d");
+      if (!context) return 0;
+      const pixels = context.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+      ).data;
+      const painted: number[] = [];
+      for (let index = 3; index < pixels.length; index += 4) {
+        const alpha = pixels[index] ?? 0;
+        if (alpha > 0) painted.push(alpha);
+      }
+      painted.sort((left, right) => left - right);
+      return painted[Math.floor(painted.length / 2)] ?? 0;
+    },
+  );
+  expect(medianAlpha).toBeGreaterThan(40);
+  expect(medianAlpha).toBeLessThan(150);
+  await page.keyboard.press("Escape");
+  await expect(page.locator("html")).not.toHaveAttribute(
+    "data-hpe-annotation-active",
+  );
+  await page.keyboard.press("h");
 
   await page.keyboard.press("End");
   await expect

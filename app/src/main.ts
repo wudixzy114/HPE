@@ -11,6 +11,7 @@ import {
   createTimelineDriver,
 } from "@hpe/runtime-core/timeline";
 import { manifest, theme } from "virtual:hpe-deck";
+import "virtual:hpe-player-styles.css";
 
 import App from "./App.vue";
 

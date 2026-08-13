@@ -45,11 +45,14 @@ packages/
   cli/             创建、移动、删除、检查和渲染命令
 
 app/
-  deck.json        文稿元数据和页面顺序
-  theme.css        全局主题、字体和 CSS Variables
+  src/             通用播放器壳，不包含具体文稿内容
+  theme.css        播放器基础 UI 与 Tailwind 入口
+  deck.json        默认示例文稿元数据和页面顺序
   slides/          每页一个 .slide.vue 文件
   assets/          图片、字体、音视频等资源
 ```
+
+播放器壳与文稿根目录可独立选择。`--deck-root` 指向任意包含 `deck.json`、`slides/`、`themes/` 和 `assets/` 的目录；默认值 `app` 只是仓库自带示例。切换文稿不修改播放器源码，也不共享 manifest、页面状态、主题或资源命名空间。
 
 依赖方向保持单向：
 

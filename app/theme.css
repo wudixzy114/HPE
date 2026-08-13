@@ -1,6 +1,3 @@
-@import "tailwindcss";
-@source './slides';
-
 @layer theme {
   :root {
     --hpe-color-bg: #090b10;
@@ -172,32 +169,6 @@
   .hpe-toolbar button:disabled {
     opacity: 0.38;
     cursor: default;
-  }
-
-  .hpe-toolbar .hpe-toolbar__button--active {
-    border-color: var(--hpe-color-accent);
-    color: #172026;
-    background: var(--hpe-color-accent);
-  }
-
-  .hpe-toolbar__colors {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-  }
-
-  .hpe-toolbar button.hpe-toolbar__color {
-    width: 22px;
-    height: 22px;
-    padding: 0;
-    border: 2px solid rgb(255 255 255 / 48%);
-    border-radius: 50%;
-    background: var(--hpe-pen-color);
-  }
-
-  .hpe-toolbar button.hpe-toolbar__color--active {
-    border-color: #fff;
-    box-shadow: 0 0 0 2px var(--hpe-pen-color);
   }
 
   .hpe-toolbar button:hover,
@@ -518,9 +489,87 @@
 
   .hpe-annotation-canvas--active {
     pointer-events: auto;
-    cursor: crosshair;
     touch-action: none;
   }
+
+  .hpe-annotation-dock {
+    position: fixed;
+    z-index: 24;
+    right: 24px;
+    bottom: 64px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid rgb(71 85 105 / 65%);
+    border-radius: 12px;
+    color: var(--hpe-color-text);
+    background: rgb(9 11 16 / 92%);
+    box-shadow: 0 12px 36px rgb(0 0 0 / 32%);
+    backdrop-filter: blur(12px);
+  }
+
+  .hpe-annotation-dock button {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    min-height: 32px;
+    padding: 6px 9px;
+    border: 1px solid rgb(71 85 105 / 70%);
+    border-radius: 8px;
+    color: var(--hpe-color-text);
+    background: rgb(30 41 59 / 78%);
+    font: 12px/1 var(--hpe-font-sans);
+    cursor: pointer;
+  }
+
+  .hpe-annotation-dock button:hover,
+  .hpe-annotation-dock button:focus-visible {
+    border-color: var(--hpe-color-accent);
+    outline: none;
+  }
+
+  .hpe-annotation-dock button:disabled {
+    opacity: 0.38;
+    cursor: default;
+  }
+
+  .hpe-annotation-dock .hpe-annotation-dock__tool--active {
+    border-color: var(--hpe-color-accent);
+    color: #172026;
+    background: var(--hpe-color-accent);
+  }
+
+  .hpe-annotation-dock__options,
+  .hpe-annotation-dock__colors {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .hpe-annotation-dock__options {
+    padding-left: 5px;
+    border-left: 1px solid rgb(71 85 105 / 65%);
+  }
+
+  .hpe-annotation-dock button.hpe-annotation-dock__color {
+    width: 23px;
+    min-height: 23px;
+    padding: 0;
+    border: 2px solid rgb(255 255 255 / 48%);
+    border-radius: 50%;
+    background: var(--hpe-annotation-color);
+  }
+
+  .hpe-annotation-dock button.hpe-annotation-dock__color--active {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px var(--hpe-annotation-color);
+  }
+}
+
+html[data-hpe-annotation-active] .hpe-stage,
+html[data-hpe-annotation-active] .hpe-stage * {
+  cursor: none !important;
 }
 
 @media print {
@@ -545,7 +594,8 @@
   .hpe-annotation-canvas,
   .hpe-progress,
   .hpe-page-number,
-  .hpe-toolbar {
+  .hpe-toolbar,
+  .hpe-annotation-dock {
     display: none;
   }
 

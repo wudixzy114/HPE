@@ -41,6 +41,7 @@ export default tseslint.config(
       ".agents/skills/**/assets/**",
       "artifacts/**",
       "node_modules/**",
+      "tests/fixtures/**",
     ],
   },
   eslint.configs.recommended,
