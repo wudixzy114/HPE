@@ -35,6 +35,7 @@ The realistic 50-page deck exposed gaps that the three-page sample did not:
 5. Home/End navigation and document-title synchronization were missing;
 6. compiler template analysis had to use a fresh DOM parser AST because Vue mutates cached compiler ASTs during concurrent Vite loads;
 7. large decks required theme-aware bundle budgets and print readiness before PDF capture.
+8. asynchronous slide chunks initially created an empty stage during navigation; the player now retains the previous slide until the target module is ready and prefetches the previous plus next two slides.
 
 ## Verification evidence
 

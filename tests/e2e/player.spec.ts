@@ -29,7 +29,7 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-test("loads only the active slide and defers notes/source maps until requested", async ({
+test("loads the active slide plus two forward slides and defers notes/source maps", async ({
   page,
 }) => {
   const scripts: string[] = [];
@@ -43,9 +43,16 @@ test("loads only the active slide and defers notes/source maps until requested",
   expect(
     await page.evaluate(() => document.documentElement.dataset.hpeTheme),
   ).toBe("claude-code-architecture");
-  expect(scripts.filter((url) => /slide-\d+\.slide-/u.test(url))).toHaveLength(
-    1,
-  );
+  await expect
+    .poll(() =>
+      scripts
+        .filter((url) => /slide-\d+\.slide-/u.test(url))
+        .map((url) => url.match(/slide-(\d+)\.slide-/u)?.[1])
+        .filter(Boolean)
+        .sort(),
+    )
+    .toEqual(["00", "01", "02"]);
+  expect(scripts.some((url) => /slide-03\.slide-/u.test(url))).toBe(false);
   expect(scripts.some((url) => /notes-|sources-/u.test(url))).toBe(false);
 
   await page.keyboard.press("n");
@@ -54,6 +61,63 @@ test("loads only the active slide and defers notes/source maps until requested",
     .poll(() => scripts.some((url) => /notes-/u.test(url)))
     .toBe(true);
   expect(scripts.some((url) => /sources-/u.test(url))).toBe(false);
+});
+
+test("keeps the previous slide visible while an unprefetched slide chunk loads", async ({
+  page,
+}) => {
+  await page.route("**/slide-10.slide-*.js", async (route) => {
+    await page.waitForTimeout(700);
+    await route.continue();
+  });
+  await page.goto("/#slide=slide-00&step=0&mode=present");
+  await expect(
+    page.locator("[data-hpe-slide][data-slide-id=slide-00]"),
+  ).toBeVisible();
+
+  await page.evaluate(() =>
+    window.__HPE__.dispatch({ type: "GOTO", slideId: "slide-10" }),
+  );
+  await page.waitForTimeout(250);
+  await expect(
+    page.locator("[data-hpe-slide][data-slide-id=slide-00]"),
+  ).toBeVisible();
+  await expect(page.locator(".hpe-stage")).toHaveAttribute("aria-busy", "true");
+  await expect(page.locator("[data-hpe-slide]")).toHaveCount(1);
+
+  await expect(
+    page.locator("[data-hpe-slide][data-slide-id=slide-10]"),
+  ).toBeVisible();
+  await expect(page.locator(".hpe-stage")).toHaveAttribute(
+    "aria-busy",
+    "false",
+  );
+});
+
+test("ignores a stale slide chunk after rapid navigation", async ({ page }) => {
+  await page.route("**/slide-10.slide-*.js", async (route) => {
+    await page.waitForTimeout(700);
+    await route.continue();
+  });
+  await page.goto("/#slide=slide-00&step=0&mode=present");
+  await expect(
+    page.locator("[data-hpe-slide][data-slide-id=slide-00]"),
+  ).toBeVisible();
+
+  await page.evaluate(() => {
+    window.__HPE__.dispatch({ type: "GOTO", slideId: "slide-10" });
+    window.__HPE__.dispatch({ type: "GOTO", slideId: "slide-11" });
+  });
+  await expect(
+    page.locator("[data-hpe-slide][data-slide-id=slide-11]"),
+  ).toBeVisible();
+  await page.waitForTimeout(800);
+  await expect(
+    page.locator("[data-hpe-slide][data-slide-id=slide-11]"),
+  ).toBeVisible();
+  await expect(
+    page.locator("[data-hpe-slide][data-slide-id=slide-10]"),
+  ).toHaveCount(0);
 });
 
 test("deep links, keyboard navigation and overview preserve a 50-slide deck", async ({

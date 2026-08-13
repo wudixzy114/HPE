@@ -15,6 +15,9 @@ declare module "virtual:hpe-deck" {
 
   export const manifest: DeckManifest;
   export const theme: ThemeDefinition | undefined;
+  export const slideLoaders: Readonly<
+    Record<string, () => Promise<{ default: Component }>>
+  >;
   export const slides: Readonly<Record<string, Component>>;
 }
 

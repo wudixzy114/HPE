@@ -60,6 +60,10 @@ export function hpeDeck(options: HpeVitePluginOptions = {}): Plugin {
         const slidePath = `/@fs/${normalizePath(slide.absoluteFile)}`;
         return `${JSON.stringify(slide.id)}: defineAsyncComponent(() => import(${JSON.stringify(slidePath)}))`;
       });
+      const loaders = deck.slides.map((slide) => {
+        const slidePath = `/@fs/${normalizePath(slide.absoluteFile)}`;
+        return `${JSON.stringify(slide.id)}: () => import(${JSON.stringify(slidePath)})`;
+      });
       const themeImport = `/@fs/${normalizePath(deck.themeAbsoluteFile)}`;
       const themeLines =
         typeof deck.manifest.theme === "string"
@@ -75,6 +79,7 @@ export function hpeDeck(options: HpeVitePluginOptions = {}): Plugin {
         `import { defineAsyncComponent } from "vue";`,
         ...themeLines,
         `export const manifest = ${JSON.stringify(deck.manifest)};`,
+        `export const slideLoaders = {${loaders.join(",")}};`,
         `export const slides = {${entries.join(",")}};`,
       ].join("\n");
     },

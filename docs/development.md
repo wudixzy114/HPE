@@ -15,6 +15,8 @@ npm install
 
 No feature phase should require adding an undeclared production dependency. Optional capabilities are exposed through package subpaths and become part of a browser bundle only when imported.
 
+Large decks keep each page in an independent lazy chunk. After a page commits, the player prefetches the previous page and the next two pages. Navigation never unmounts the displayed page before the target module resolves; a failed chunk leaves the previous page visible and exposes an accessible error instead of a blank frame.
+
 ## Module replacement contract
 
 | Module | Stable port / public entrypoint | May depend on |

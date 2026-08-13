@@ -2,11 +2,15 @@
 import {
   computed,
   defineAsyncComponent,
+  markRaw,
   nextTick,
   onBeforeUnmount,
   onMounted,
   ref,
+  shallowRef,
+  watch,
   watchEffect,
+  type Component,
 } from "vue";
 
 import { provideDeckEngine } from "@hpe/renderer-vue";
@@ -32,7 +36,7 @@ import type {
   TimelineDriver,
 } from "@hpe/runtime-core/timeline";
 import type { SlideSourceMap } from "@hpe/compiler";
-import { manifest, slides, theme } from "virtual:hpe-deck";
+import { manifest, slideLoaders, theme } from "virtual:hpe-deck";
 
 const OverviewView = defineAsyncComponent(
   () => import("./components/OverviewView.vue"),
@@ -71,10 +75,14 @@ const props = defineProps<AppProps>();
 const { state } = provideDeckEngine(props.engine);
 const timelineContext = provideTimeline(props.timeline);
 provideSlideStateStore(props.slideState);
-const currentSlide = computed(() => slides[state.value.slideId]);
-const currentEntry = computed(() => manifest.slides[state.value.slideIndex]);
+const displayedSlide = shallowRef<Component>();
+const displayedSlideId = ref(state.value.slideId);
+const displayedSlideIndex = ref(state.value.slideIndex);
+const currentEntry = computed(() => manifest.slides[displayedSlideIndex.value]);
 const timelinePlaying = computed(() => timelineContext.state.value.playing);
 const scale = ref(1);
+const slideLoading = ref(false);
+const slideLoadError = ref<string>();
 const overview = ref(false);
 const printMode = ref(false);
 const notesOpen = ref(false);
@@ -84,6 +92,61 @@ const pointerY = ref(0);
 let controls: BrowserControls | undefined;
 let urlBinding: BrowserBinding | undefined;
 let sync: DeckSync | undefined;
+let slideLoadSequence = 0;
+const prefetchedSlides = new Set<string>();
+
+function prefetchSlide(index: number): void {
+  const entry = manifest.slides[index];
+  if (!entry || prefetchedSlides.has(entry.id)) return;
+  const loader = slideLoaders[entry.id];
+  if (!loader) return;
+  prefetchedSlides.add(entry.id);
+  void loader().catch(() => {
+    prefetchedSlides.delete(entry.id);
+  });
+}
+
+function prefetchAdjacentSlides(index: number): void {
+  prefetchSlide(index - 1);
+  prefetchSlide(index + 1);
+  prefetchSlide(index + 2);
+}
+
+async function displaySlide(slideId: string): Promise<void> {
+  const loader = slideLoaders[slideId];
+  if (!loader) {
+    slideLoadError.value = `Unknown slide module: ${slideId}`;
+    return;
+  }
+  const sequence = ++slideLoadSequence;
+  slideLoading.value = true;
+  slideLoadError.value = undefined;
+  try {
+    const module = await loader();
+    if (sequence !== slideLoadSequence) return;
+    const index = manifest.slides.findIndex((entry) => entry.id === slideId);
+    if (index < 0) throw new Error(`Unknown slide: ${slideId}`);
+    displayedSlide.value = markRaw(module.default);
+    displayedSlideId.value = slideId;
+    displayedSlideIndex.value = index;
+    await nextTick();
+    prefetchAdjacentSlides(index);
+  } catch (error) {
+    if (sequence !== slideLoadSequence) return;
+    slideLoadError.value =
+      error instanceof Error ? error.message : String(error);
+  } finally {
+    if (sequence === slideLoadSequence) slideLoading.value = false;
+  }
+}
+
+watch(
+  () => state.value.slideId,
+  (slideId) => {
+    void displaySlide(slideId);
+  },
+  { immediate: true },
+);
 
 function resize(): void {
   scale.value = Math.min(
@@ -291,17 +354,25 @@ watchEffect(() => {
   <main v-else class="hpe-viewport">
     <div
       class="hpe-stage"
+      :aria-busy="slideLoading"
+      :data-slide-loading="slideLoading ? '' : undefined"
       :style="{
         width: `${manifest.size.width}px`,
         height: `${manifest.size.height}px`,
         transform: `scale(${scale})`,
       }"
     >
-      <component
-        :is="currentSlide"
-        v-if="currentSlide"
-        :data-slide-id="state.slideId"
-      />
+      <Transition name="hpe-slide-switch" mode="in-out">
+        <component
+          :is="displayedSlide"
+          v-if="displayedSlide"
+          :key="displayedSlideId"
+          :data-slide-id="displayedSlideId"
+        />
+      </Transition>
+      <output v-if="slideLoadError" class="hpe-slide-load-error" role="alert">
+        页面加载失败：{{ slideLoadError }}
+      </output>
     </div>
     <nav
       v-if="state.mode !== 'inspect'"
@@ -356,11 +427,11 @@ watchEffect(() => {
     <div
       class="hpe-progress"
       :style="{
-        width: `${((state.slideIndex + 1) / manifest.slides.length) * 100}%`,
+        width: `${((displayedSlideIndex + 1) / manifest.slides.length) * 100}%`,
       }"
     />
     <output class="hpe-page-number"
-      >{{ state.slideIndex + 1 }} / {{ manifest.slides.length }}</output
+      >{{ displayedSlideIndex + 1 }} / {{ manifest.slides.length }}</output
     >
   </main>
 
