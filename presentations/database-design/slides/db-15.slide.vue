@@ -1,75 +1,90 @@
+<script setup lang="ts">
+import DatabaseCaseStory from "./DatabaseCaseStory.vue";
+</script>
+
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">建模第 3 步 · 决定拆几张表</div>
-    <h2 data-node="title">先拆出五张核心表，每张表只负责一种主要事实</h2>
-    <div data-node="five-tables" class="db-grid-3" style="margin-top: 28px">
-      <div class="db-card blue">
-        <div class="db-label">01 · task_template</div>
-        <h3>模板的稳定身份</h3>
-        <p style="margin-top: 10px">
-          保存模板编码、名称和启停状态。一个模板可以发布多个版本。
-        </p>
+    <div class="db-kicker">ER 建模第 3 步 · 建立实体清单</div>
+    <h2 data-node="title">根据候选实体，先建立九张表的空壳</h2>
+    <div data-node="case-evolution" class="db-case-evolution">
+      <DatabaseCaseStory />
+      <div class="db-case-work">
+        <h3>逻辑实体：先写职责，再映射成关系表</h3>
+        <div class="db-grid-3" style="gap: 10px">
+          <div class="db-card blue" style="padding: 13px">
+            <b>workspace</b>
+            <p class="db-small">工作空间</p>
+          </div>
+          <div class="db-card blue" style="padding: 13px">
+            <b>project</b>
+            <p class="db-small">工作空间内的项目</p>
+          </div>
+          <div class="db-card teal" style="padding: 13px">
+            <b>project_member</b>
+            <p class="db-small">用户在项目中的成员关系</p>
+          </div>
+          <div class="db-card blue" style="padding: 13px">
+            <b>task_template</b>
+            <p class="db-small">模板的稳定身份</p>
+          </div>
+          <div class="db-card teal" style="padding: 13px">
+            <b>template_version</b>
+            <p class="db-small">一次模板发布</p>
+          </div>
+          <div class="db-card orange" style="padding: 13px">
+            <b>task</b>
+            <p class="db-small">用户的一次任务提交</p>
+          </div>
+          <div class="db-card yellow" style="padding: 13px">
+            <b>task_input</b>
+            <p class="db-small">任务的一条输入</p>
+          </div>
+          <div class="db-card red" style="padding: 13px">
+            <b>task_run</b>
+            <p class="db-small">任务的一次执行尝试</p>
+          </div>
+          <div class="db-card" style="padding: 13px">
+            <b>run_event / artifact</b>
+            <p class="db-small">状态变化 / 结果文件</p>
+          </div>
+        </div>
+        <table class="db-table compact" style="margin-top: 15px">
+          <thead>
+            <tr>
+              <th>为什么拆开</th>
+              <th>故事依据</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>模板与版本</td>
+              <td>S2：一个模板多次发布，历史任务引用原版本</td>
+            </tr>
+            <tr>
+              <td>任务与输入</td>
+              <td>S3：一个任务有一个或多个输入</td>
+            </tr>
+            <tr>
+              <td>任务与运行</td>
+              <td>S5：失败重试会产生新的运行</td>
+            </tr>
+            <tr>
+              <td>运行与事件/文件</td>
+              <td>S6、S7：一次运行有多条状态变化和多个文件</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="db-band" style="margin-top: 13px">
+          <strong>本步只确定职责：</strong>后续逐组建立关系并填写字段。
+        </div>
       </div>
-      <div class="db-card teal">
-        <div class="db-label">02 · template_version</div>
-        <h3>一次发布的内容</h3>
-        <p style="margin-top: 10px">
-          保存版本号、表单规则和配置规则；发布后保持不变。
-        </p>
-      </div>
-      <div class="db-card orange">
-        <div class="db-label">03 · task</div>
-        <h3>用户的一次提交</h3>
-        <p style="margin-top: 10px">
-          保存项目、提交人、模板版本、名称、优先级和配置快照。
-        </p>
-      </div>
-      <div class="db-card yellow">
-        <div class="db-label">04 · task_input</div>
-        <h3>任务的一条输入</h3>
-        <p style="margin-top: 10px">
-          一个任务可以有多条输入，每条有顺序、用途和来源快照。
-        </p>
-      </div>
-      <div class="db-card red">
-        <div class="db-label">05 · task_run</div>
-        <h3>一次实际执行</h3>
-        <p style="margin-top: 10px">
-          每次重试新增一行，保存状态、时间、错误和外部任务编号。
-        </p>
-      </div>
-      <div class="db-card">
-        <div class="db-label">后续按需要增加</div>
-        <h3>事件与文件表</h3>
-        <p style="margin-top: 10px">
-          需要过程审计时增加 run_event；一个运行产生多个文件时增加 artifact。
-        </p>
-      </div>
-    </div>
-    <div data-node="split-tests" class="db-grid-3" style="margin-top: 22px">
-      <div class="db-note">
-        <strong>数量：</strong
-        >一个任务有多条输入、多次运行，所以输入和运行各自建子表。
-      </div>
-      <div class="db-note">
-        <strong>变化：</strong
-        >模板名称可修改，已发布版本保持稳定，所以模板与版本分开。
-      </div>
-      <div class="db-note">
-        <strong>历史：</strong
-        >每次运行的错误和时间都要保留，不能覆盖在任务主表中。
-      </div>
-    </div>
-    <div class="db-band teal">
-      <strong>拆表判断：</strong
-      >同一对象下会出现多条，或某部分拥有独立生命周期、状态和历史，就适合独立成表。
     </div>
     <div class="db-footer">
-      <span>字段多只是现象，数量和生命周期才是依据</span><span>15</span>
+      <span>先确保每张表都能用一句话说明</span><span>15</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-先给出最小核心结构。文件和事件作为按需求增加的表，降低初学者一次接受的复杂度。拆表依据只保留三项：数量、独立变化、历史保留。
+先建立空表清单，让听众看到整个模型的组成。表名不是凭空出现，每一次拆分都引用 S2、S3、S5、S6、S7 的数量或历史要求。
 </notes>

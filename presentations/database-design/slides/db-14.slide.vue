@@ -1,63 +1,89 @@
+<script setup lang="ts">
+import DatabaseCaseStory from "./DatabaseCaseStory.vue";
+</script>
+
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">建模第 2 步 · 画出业务流转</div>
-    <h2 data-node="title">
-      先画主流程：用户选择模板，提交任务，系统产生一次或多次运行
-    </h2>
-    <div data-node="business-flow" class="db-flow" style="margin-top: 46px">
-      <div class="db-flow-node">
-        <b>工作空间 / 项目</b><span>确定任务归属与可见范围</span>
+    <div class="db-kicker">ER 建模第 2 步 · 判断实体、关联、属性和值对象</div>
+    <h2 data-node="title">业务概念经过身份、生命周期、数量和引用四项检查</h2>
+    <div data-node="case-evolution" class="db-case-evolution">
+      <DatabaseCaseStory />
+      <div class="db-case-work">
+        <h3>概念 → ER 元素决策矩阵</h3>
+        <table class="db-table compact">
+          <thead>
+            <tr>
+              <th>业务概念</th>
+              <th>判断依据</th>
+              <th>ER 元素</th>
+              <th>关系表 / 字段</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>workspace / project / app_user / data_source</td>
+              <td>已有稳定身份，被任务中心引用</td>
+              <td>引用实体 Referenced Entity</td>
+              <td>保存其 ID 或外键</td>
+            </tr>
+            <tr>
+              <td>project_member</td>
+              <td>由 project + user 唯一确定，拥有 role</td>
+              <td>关联实体 Associative Entity</td>
+              <td>project_member 表</td>
+            </tr>
+            <tr>
+              <td>task_template</td>
+              <td>稳定身份，可独立启停和发布</td>
+              <td>实体 Entity</td>
+              <td>task_template 表</td>
+            </tr>
+            <tr>
+              <td>template_version</td>
+              <td>一个模板多条，发布后需保留</td>
+              <td>弱实体 / 子实体</td>
+              <td>template_version 表</td>
+            </tr>
+            <tr>
+              <td>task</td>
+              <td>一次提交，有公开 ID 和独立生命周期</td>
+              <td>事务实体 Transaction Entity</td>
+              <td>task 表</td>
+            </tr>
+            <tr>
+              <td>task_input / task_run / artifact</td>
+              <td>一个父对象下出现多条，各自有属性</td>
+              <td>子实体 Child Entity</td>
+              <td>各自子表</td>
+            </tr>
+            <tr>
+              <td>task_run_event</td>
+              <td>已经发生且需要按时间追加保存</td>
+              <td>事件实体 Event Entity</td>
+              <td>事件表</td>
+            </tr>
+            <tr>
+              <td>priority / status / external_job_id / time</td>
+              <td>没有独立身份，依附一个实体</td>
+              <td>属性 Attribute</td>
+              <td>所属表中的列</td>
+            </tr>
+            <tr>
+              <td>resource_spec / template_config</td>
+              <td>整体描述一次提交，无独立生命周期</td>
+              <td>值对象 Value Object</td>
+              <td>config JSON 或结构化列</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-flow-node">
-        <b>模板版本</b><span>决定表单结构和配置规则</span>
-      </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-flow-node" style="border-color: #79bdb4">
-        <b>任务</b><span>用户的一次提交与配置快照</span>
-      </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-flow-node" style="border-color: #e8b18f">
-        <b>运行</b><span>系统的一次实际执行尝试</span>
-      </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-flow-node">
-        <b>状态与文件</b><span>执行过程和产生的结果</span>
-      </div>
-    </div>
-    <div data-node="flow-questions" class="db-grid-3" style="margin-top: 38px">
-      <div class="db-card blue">
-        <div class="db-label">模板升级</div>
-        <h3>为什么需要版本？</h3>
-        <p style="margin-top: 10px">
-          历史任务要继续按照提交时的表单和配置规则解释。
-        </p>
-      </div>
-      <div class="db-card teal">
-        <div class="db-label">任务提交</div>
-        <h3>什么是一条任务？</h3>
-        <p style="margin-top: 10px">
-          用户确认提交的一份业务记录，包括归属、输入和参数快照。
-        </p>
-      </div>
-      <div class="db-card orange">
-        <div class="db-label">失败重试</div>
-        <h3>为什么需要运行？</h3>
-        <p style="margin-top: 10px">
-          同一任务可能执行多次，每次的状态、时间、错误和外部编号都不同。
-        </p>
-      </div>
-    </div>
-    <div class="db-band">
-      <strong>核心区分：</strong
-      >任务记录用户“提交了什么”；运行记录系统“实际执行了哪一次”。
     </div>
     <div class="db-footer">
-      <span>先画业务流，再决定每个节点是否成为表</span><span>14</span>
+      <span>四项检查：身份、生命周期、数量、引用</span><span>14</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-这页只建立流程，避免马上进入密集字段。模板版本决定提交表单；任务记录用户意图；运行记录一次执行。重试时用户意图不变，因此新增运行；修改输入后重新提交则会产生新任务。
+这页给出完整且稳定的概念分类。不是所有名词都成为表：状态和优先级是属性，资源规格与模板参数是值对象，客户端与外部执行系统是参与者，已有主数据是引用实体。
 </notes>

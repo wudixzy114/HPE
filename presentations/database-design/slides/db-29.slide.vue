@@ -1,6 +1,8 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">并发 · 产品需要理解的两个问题</div>
+    <div class="db-kicker">
+      并发控制（Concurrency Control）· 产品需要理解的两个问题
+    </div>
     <h2 data-node="title">两个人同时操作时，要防止重复创建和互相覆盖</h2>
     <div
       data-node="concurrency-basics"
@@ -23,7 +25,7 @@
         </p>
         <div class="db-code" style="margin-top: 14px">
           UNIQUE(workspace_id,<br />
-          submitter_id, idempotency_key)
+          idempotency_key)
         </div>
       </div>
       <div class="db-card orange">

@@ -1,6 +1,6 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">数据库约束 · 把关键规则落下来</div>
+    <div class="db-kicker">数据完整性约束（Integrity Constraints）</div>
     <h2 data-node="title">
       五种常用约束，分别保护身份、关系、唯一、必填和范围
     </h2>

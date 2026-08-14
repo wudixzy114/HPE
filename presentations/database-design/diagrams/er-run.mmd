@@ -1,0 +1,35 @@
+erDiagram
+    task ||--o{ task_run : "产生运行"
+    task_run ||--o{ task_run_event : "记录状态"
+    task_run ||--o{ task_artifact : "产生文件"
+
+    task {
+        bigint id PK
+        varchar current_status
+    }
+    task_run {
+        bigint id PK
+        bigint task_id FK
+        int attempt_no UK
+        varchar status
+        varchar external_job_id
+        datetime started_at
+        datetime finished_at
+        text error_message
+    }
+    task_run_event {
+        bigint id PK
+        bigint run_id FK
+        varchar from_status
+        varchar to_status
+        datetime occurred_at
+        varchar reason
+    }
+    task_artifact {
+        bigint id PK
+        bigint run_id FK
+        varchar artifact_type
+        varchar object_key
+        bigint size_bytes
+        datetime created_at
+    }

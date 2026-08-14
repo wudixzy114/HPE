@@ -1,6 +1,8 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">第一范式 · 多条数据分成多行</div>
+    <div class="db-kicker">
+      数据库规范化 · 第一范式（1NF / First Normal Form）
+    </div>
     <h2 data-node="title">一个任务有多个输入时，用 task_input 保存多行</h2>
     <div
       data-node="first-normal-form"

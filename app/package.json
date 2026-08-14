@@ -17,6 +17,7 @@
     "@hpe/runtime-core": "0.1.0",
     "@hpe/schema": "0.1.0",
     "@hpe/theme": "0.1.0",
+    "mermaid": "11.16.1",
     "vue": "3.5.40"
   },
   "devDependencies": {

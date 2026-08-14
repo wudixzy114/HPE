@@ -1,6 +1,6 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">能力边界 · 一页了解</div>
+    <div class="db-kicker">数据完整性（Data Integrity）与业务规则</div>
     <h2 data-node="title">
       数据库负责保存和约束数据，完整业务流程还需要应用系统配合
     </h2>

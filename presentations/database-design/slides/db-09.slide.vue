@@ -1,90 +1,89 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">ID 设计 · 一页讲清</div>
-    <h2 data-node="title">
-      ID 的选择取决于生成范围、索引代价、公开方式与业务稳定性
-    </h2>
+    <div class="db-kicker">ID 设计 1/3 · 先分清职责</div>
+    <h2 data-node="title">ID 是“标识职责”，不等于某一种数据库类型</h2>
+
     <table
-      data-node="id-complete-table"
-      class="db-table compact"
-      style="margin-top: 21px"
+      data-node="id-role-table"
+      class="db-table dense"
+      style="margin-top: 25px"
     >
       <thead>
         <tr>
-          <th>方案</th>
-          <th>底层表示</th>
-          <th>为什么使用</th>
-          <th>主要代价</th>
-          <th>推荐场景</th>
+          <th>ID / 键的角色</th>
+          <th>解决的问题</th>
+          <th>案例</th>
+          <th>常用类型</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>自增 BIGINT</strong></td>
-          <td>8 字节整数，通常趋势递增</td>
-          <td>索引紧凑、写入局部性好、关联高效</td>
-          <td>跨库生成困难；对外暴露可推测数量</td>
-          <td>普通单库内部主键</td>
+          <td>
+            <strong>内部主键<br />Primary Key</strong>
+          </td>
+          <td>数据库内部唯一识别一行，并被其他表的外键引用</td>
+          <td><code>task.id</code>、<code>task_run.id</code></td>
+          <td>普通业务优先 BIGINT；也可以使用 UUID/BINARY</td>
         </tr>
         <tr>
-          <td><strong>UUID v4</strong></td>
-          <td>128 bit / 16 字节随机值；文本常显示 36 字符</td>
-          <td>各节点无需协调即可生成，碰撞概率极低</td>
-          <td>比 BIGINT 大；随机写使 B-tree 页更分散</td>
-          <td>公开 ID、离线生成、分布式实体</td>
+          <td>
+            <strong>外键<br />Foreign Key</strong>
+          </td>
+          <td>保存另一张表的内部主键，建立关系</td>
+          <td><code>task_run.task_id</code></td>
+          <td>必须与被引用主键类型一致</td>
         </tr>
         <tr>
-          <td><strong>UUID v7</strong></td>
-          <td>128 bit，包含毫秒时间信息与随机位</td>
-          <td>保留分布式生成能力，同时大体按时间有序</td>
-          <td>仍为 16 字节；依赖统一可靠实现</td>
-          <td>新系统公开 ID、分布式高写入</td>
+          <td>
+            <strong>公开 ID<br />Public / API ID</strong>
+          </td>
+          <td>出现在 URL、接口与跨系统消息中，隐藏内部连续编号</td>
+          <td><code>task.public_id</code></td>
+          <td>UUID，MySQL 常用 BINARY(16) 或 CHAR(36)</td>
         </tr>
         <tr>
-          <td><strong>Snowflake 类</strong></td>
-          <td>常见 64 bit：时间戳 + 节点号 + 序列号</td>
-          <td>分布式、趋势递增、比 UUID 紧凑</td>
-          <td>时钟回拨、节点号冲突、ID 服务治理</td>
-          <td>公司已有成熟统一 ID 服务</td>
+          <td>
+            <strong>业务编号<br />Business Key</strong>
+          </td>
+          <td>给用户阅读、搜索与沟通，承载业务格式</td>
+          <td><code>TASK-20260814-001</code></td>
+          <td>VARCHAR + 业务范围内 UNIQUE</td>
         </tr>
         <tr>
-          <td><strong>业务编号</strong></td>
-          <td>VARCHAR，如 TASK-20260813-001</td>
-          <td>可读、可搜索、方便客服沟通</td>
-          <td>规则会变；生成连续号可能造成锁竞争</td>
-          <td>作为 UNIQUE 业务键，不作默认主键</td>
+          <td>
+            <strong>外部系统 ID<br />External Reference</strong>
+          </td>
+          <td>记录另一个系统中的对象编号，用于回调和对账</td>
+          <td><code>scheduler_type + external_job_id</code></td>
+          <td>遵循外部协议，通常 VARCHAR；加系统命名空间</td>
         </tr>
       </tbody>
     </table>
-    <div data-node="id-details" class="db-grid-3" style="margin-top: 17px">
+
+    <div data-node="id-summary" class="db-grid-3" style="margin-top: 21px">
       <div class="db-note">
-        <strong>UUID 能否用 String 存？</strong><br />能，但不优先。原生 UUID 或
-        BINARY(16) 只需 16 字节并能校验格式；VARCHAR(36)
-        需要更多空间，索引也更大。
+        <strong>数据库内部：</strong>主键 id + 外键 xxx_id，负责本地表关系。
       </div>
       <div class="db-note">
-        <strong>为什么外部 API 常用 UUID？</strong
-        ><br />跨系统生成方便、不暴露连续数量、URL 不易枚举；但仍必须鉴权，UUID
-        不是安全令牌。
+        <strong>面向用户和接口：</strong>public_id 与 task_no，负责公开和展示。
       </div>
       <div class="db-note">
-        <strong>为什么 API 又把 BIGINT 传成 String？</strong><br />JavaScript
-        Number 不能精确表示全部 64 位整数。数据库仍是 BIGINT，只是 JSON
-        传输适配。
+        <strong>来自其他系统：</strong>external_system + external_id，负责映射。
       </div>
     </div>
-    <div class="db-band teal">
-      <strong>推荐组合：</strong><code>id BIGINT</code> 做内部关联；<code
-        >public_id UUID</code
-      >
-      做外部标识；<code>task_no VARCHAR</code> 做业务展示。
+
+    <div class="db-band teal" style="margin-top: 18px">
+      <strong>普通中台推荐：</strong>本地表关联使用 BIGINT
+      内部主键；外部接口使用
+      UUID；业务页面可另设可读编号；外部系统编号只作为映射字段。
     </div>
     <div class="db-footer">
-      <span>普通业务不自创算法；分布式场景使用公司统一方案</span><span>09</span>
+      <span>数据库中还有唯一键、候选键和自然键，并非所有“唯一值”都叫主键</span
+      ><span>09</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-把之前两页 ID 合并成一页，但信息完整。解释 UUID 是 128 位值，不是本质上的字符串；36 字符只是常见文本表现。雪花算法适合有成熟基础设施的分布式系统，不应由每个业务项目自行实现。业务编号与主键分离，避免规则变化扩散到所有外键。
+先把五种标识职责拆开。数据库内部关系使用主键与外键；公开 ID、业务编号和外部系统 ID 都可以唯一，但承担的职责不同。一个业务对象可以同时拥有多种 ID。
 </notes>

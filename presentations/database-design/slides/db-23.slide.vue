@@ -1,6 +1,8 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">第三范式 · 主数据放回自己的表</div>
+    <div class="db-kicker">
+      数据库规范化 · 第三范式（3NF / Third Normal Form）
+    </div>
     <h2 data-node="title">任务保存 project_id，项目名称只在 project 中维护</h2>
     <div
       data-node="third-normal-form"

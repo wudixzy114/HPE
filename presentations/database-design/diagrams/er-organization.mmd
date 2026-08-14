@@ -1,0 +1,37 @@
+erDiagram
+    workspace ||--o{ project : "包含"
+    project ||--o{ project_member : "拥有成员"
+    app_user ||--o{ project_member : "加入项目"
+    workspace ||--o{ task_template : "拥有模板"
+    task_template ||--o{ template_version : "发布版本"
+
+    workspace {
+        bigint id PK
+    }
+    project {
+        bigint id PK
+        bigint workspace_id FK
+    }
+    app_user {
+        bigint id PK
+    }
+    project_member {
+        bigint project_id PK,FK
+        bigint user_id PK,FK
+        varchar role_code
+    }
+    task_template {
+        bigint id PK
+        bigint workspace_id FK
+        varchar code UK
+        varchar name
+        varchar state
+    }
+    template_version {
+        bigint id PK
+        bigint template_id FK
+        int version_no UK
+        json form_schema
+        json config_schema
+        datetime published_at
+    }

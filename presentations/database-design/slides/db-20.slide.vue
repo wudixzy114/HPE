@@ -1,7 +1,7 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">设计原则 · 范式总览</div>
-    <h2 data-node="title">范式帮助我们把同一事实放在合适的位置，并减少重复</h2>
+    <div class="db-kicker">数据库规范化（Normalization）· 范式总览</div>
+    <h2 data-node="title">1NF～3NF 用来减少数据重复和更新异常</h2>
     <div
       data-node="normal-form-overview"
       class="db-grid-3"
@@ -47,12 +47,13 @@
       style="margin-top: 27px"
     >
       <div class="db-note">
-        <strong>主要目标：</strong
-        >一个事实只维护一份；一个对象可以独立创建、修改和删除；新增数量时无需不断加列。
+        <strong>为什么提出范式：</strong
+        >表中重复保存同一事实，会产生更新异常、插入异常和删除异常。规范化用于系统地检查这些问题。
       </div>
       <div class="db-note">
-        <strong>使用方法：</strong>先完成业务建模，再按 1NF、2NF、3NF
-        逐层检查。大多数产品场景掌握这三层已经足够。
+        <strong>检索关键词：</strong>Database Normalization、Functional
+        Dependency、First / Second / Third Normal Form。产品场景先掌握
+        1NF～3NF。
       </div>
     </div>
     <div class="db-footer">

@@ -1,76 +1,86 @@
+<script setup lang="ts">
+import DatabaseCaseStory from "./DatabaseCaseStory.vue";
+</script>
+
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">建模第 5 步 · 建立关系</div>
-    <h2 data-node="title">把“一条对多条”画成父表与子表，外键放在多的一侧</h2>
-    <div
-      data-node="relationship-diagram"
-      style="
-        display: grid;
-        grid-template-columns: 1fr 45px 1fr 45px 1.2fr;
-        gap: 12px;
-        align-items: center;
-        margin-top: 32px;
-      "
-    >
-      <div class="db-stack">
-        <div class="db-entity">
-          <h3>task_template</h3>
-          <div class="db-field"><span>id</span></div>
+    <div class="db-kicker">ER 建模第 5 步 · 一对多关系（1:N）</div>
+    <h2 data-node="title">S2 推导出模板与模板版本：稳定身份和发布内容分开</h2>
+    <div data-node="case-evolution" class="db-case-evolution">
+      <DatabaseCaseStory />
+      <div class="db-case-work">
+        <h3>
+          <span class="db-source-ref">S2</span> 模板与版本是一对多关系（1:N）
+        </h3>
+        <div class="db-flow" style="margin-top: 18px">
+          <div class="db-flow-node">
+            <b>task_template</b><span>稳定编码、名称和启停状态</span>
+          </div>
+          <div class="db-flow-arrow">1:N</div>
+          <div class="db-flow-node">
+            <b>template_version</b><span>每次发布的表单与配置规则</span>
+          </div>
         </div>
-        <div class="db-entity teal">
-          <h3>template_version</h3>
-          <div class="db-field"><span>template_id</span><em>外键</em></div>
+        <div class="db-grid-2" style="margin-top: 20px">
+          <div class="db-entity">
+            <h3>task_template</h3>
+            <div class="db-field"><span>id</span><em>主键</em></div>
+            <div class="db-field">
+              <span>workspace_id</span><em>S2 工作空间内</em>
+            </div>
+            <div class="db-field"><span>code</span><em>S2 唯一编码</em></div>
+            <div class="db-field"><span>name</span><em>S2 名称</em></div>
+            <div class="db-field"><span>state</span><em>S2 已发布可选</em></div>
+          </div>
+          <div class="db-entity teal">
+            <h3>template_version</h3>
+            <div class="db-field"><span>id</span><em>主键</em></div>
+            <div class="db-field"><span>template_id</span><em>外键</em></div>
+            <div class="db-field">
+              <span>version_no</span><em>S2 版本号</em>
+            </div>
+            <div class="db-field">
+              <span>form_schema</span><em>S2 表单结构</em>
+            </div>
+            <div class="db-field">
+              <span>config_schema</span><em>S2 校验规则</em>
+            </div>
+            <div class="db-field">
+              <span>published_at</span><em>S2 发布时间</em>
+            </div>
+          </div>
         </div>
+        <table class="db-table compact" style="margin-top: 17px">
+          <thead>
+            <tr>
+              <th>规则</th>
+              <th>数据库落点</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>模板编码在工作空间内唯一</td>
+              <td>UNIQUE(workspace_id, code)</td>
+            </tr>
+            <tr>
+              <td>同一模板版本号不重复</td>
+              <td>UNIQUE(template_id, version_no)</td>
+            </tr>
+            <tr>
+              <td>历史任务引用提交版本</td>
+              <td>task.template_version_id 外键</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-entity orange">
-        <h3>task</h3>
-        <div class="db-field">
-          <span>template_version_id</span><em>外键</em>
-        </div>
-        <div class="db-field"><span>project_id</span><em>外键</em></div>
-      </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-grid-2">
-        <div class="db-entity">
-          <h3>task_input</h3>
-          <div class="db-field"><span>task_id</span><em>外键</em></div>
-          <div class="db-field"><span>input_no</span></div>
-        </div>
-        <div class="db-entity orange">
-          <h3>task_run</h3>
-          <div class="db-field"><span>task_id</span><em>外键</em></div>
-          <div class="db-field"><span>attempt_no</span></div>
-        </div>
-      </div>
-    </div>
-    <div data-node="relation-rules" class="db-grid-3" style="margin-top: 30px">
-      <div class="db-card teal">
-        <div class="db-label">模板 1 → N 版本</div>
-        <p>版本表保存 template_id；同一模板内 version_no 唯一。</p>
-      </div>
-      <div class="db-card blue">
-        <div class="db-label">任务 1 → N 输入</div>
-        <p>输入表保存 task_id；task_id + input_no 唯一，数量可以自然扩展。</p>
-      </div>
-      <div class="db-card orange">
-        <div class="db-label">任务 1 → N 运行</div>
-        <p>运行表保存 task_id；task_id + attempt_no 唯一，每次重试新增一行。</p>
-      </div>
-    </div>
-    <div class="db-band red">
-      <strong>避免这种设计：</strong
-      ><code>input_id_1、input_id_2、input_id_3</code> 或
-      <code>input_ids="12,18,31"</code
-      >。它们限制数量，也无法为每个输入保存顺序和用途。
     </div>
     <div class="db-footer">
-      <span>多对多关系再增加一张关系表，并把角色等关系属性放进去</span
+      <span>模板改名不影响版本内容；发布新表单时新增 version 行</span
       ><span>17</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-用图说明外键位置。模板版本、任务输入、任务运行都是典型一对多。多对多只需口头补充：用户与项目之间增加 project_member，角色和加入时间放在关系表。
+所有字段都能回到 S2。template 保存稳定身份，template_version 保存一次发布内容。任务未来通过 template_version_id 引用提交时版本，因此模板升级不会改变历史任务的解释方式。
 </notes>

@@ -1,0 +1,40 @@
+erDiagram
+    project ||--o{ task : "包含任务"
+    template_version ||--o{ task : "用于提交"
+    app_user ||--o{ task : "提交"
+    task ||--o{ task_input : "包含输入"
+    data_source ||--o{ task_input : "被选为输入"
+
+    project {
+        bigint id PK
+    }
+    template_version {
+        bigint id PK
+    }
+    app_user {
+        bigint id PK
+    }
+    data_source {
+        bigint id PK
+    }
+    task {
+        bigint id PK
+        uuid public_id UK
+        bigint workspace_id FK
+        bigint project_id FK
+        bigint template_version_id FK
+        bigint submitter_id FK
+        varchar name
+        smallint priority
+        json config
+        varchar current_status
+        varchar idempotency_key UK
+        datetime created_at
+    }
+    task_input {
+        bigint id PK
+        bigint task_id FK
+        int input_no UK
+        bigint source_id FK
+        varchar input_role
+    }

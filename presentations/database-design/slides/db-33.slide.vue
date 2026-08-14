@@ -1,6 +1,6 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">性能 · 索引设计</div>
+    <div class="db-kicker">索引设计（Index Design）</div>
     <h2 data-node="title">
       索引必须从真实查询反推：等值条件、范围、排序与数据分布
     </h2>

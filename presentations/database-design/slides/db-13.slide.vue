@@ -1,75 +1,97 @@
+<script setup lang="ts">
+import DatabaseCaseStory from "./DatabaseCaseStory.vue";
+</script>
+
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">建模第 1 步 · 从故事中提取信息</div>
-    <h2 data-node="title">
-      先提取“东西、动作、数量和规则”，暂时不讨论字段类型
-    </h2>
-    <div data-node="extraction" class="db-grid-4" style="margin-top: 30px">
-      <div class="db-card blue">
-        <div class="db-label">名词：可能成为表</div>
-        <div class="db-pills">
-          <span class="db-pill blue">工作空间</span
-          ><span class="db-pill blue">项目</span
-          ><span class="db-pill blue">成员</span
-          ><span class="db-pill blue">模板</span
-          ><span class="db-pill blue">版本</span
-          ><span class="db-pill blue">任务</span
-          ><span class="db-pill blue">输入</span
-          ><span class="db-pill blue">运行</span
-          ><span class="db-pill blue">文件</span>
+    <div class="db-kicker">ER 建模第 1 步 · 确定建模边界与业务概念全集</div>
+    <h2 data-node="title">先确定“任务中心负责什么”，再盘点完整业务概念</h2>
+    <div data-node="case-evolution" class="db-case-evolution">
+      <DatabaseCaseStory />
+      <div class="db-case-work">
+        <h3>任务中心 Bounded Context · 概念清单</h3>
+        <table class="db-table compact">
+          <thead>
+            <tr>
+              <th>分类</th>
+              <th>完整概念</th>
+              <th>来源</th>
+              <th>当前建模决策</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>引用的主数据</strong></td>
+              <td>
+                工作空间 workspace、项目 project、用户 app_user、数据源
+                data_source
+              </td>
+              <td>S1、S3</td>
+              <td>任务中心保存这些对象的 ID；主数据详情由相应模块维护</td>
+            </tr>
+            <tr>
+              <td><strong>关联概念</strong></td>
+              <td>项目成员关系 project_member、成员角色 role_code</td>
+              <td>S1</td>
+              <td>关联实体；连接 project 与 app_user</td>
+            </tr>
+            <tr>
+              <td><strong>模板概念</strong></td>
+              <td>任务模板 task_template、模板版本 template_version</td>
+              <td>S2</td>
+              <td>任务中心实体；模板拥有多个版本</td>
+            </tr>
+            <tr>
+              <td><strong>提交概念</strong></td>
+              <td>
+                任务 task、任务输入 task_input、请求键
+                request_key、资源规格、模板参数
+              </td>
+              <td>S3、S4</td>
+              <td>task / task_input 为实体；请求键和配置为属性或值对象</td>
+            </tr>
+            <tr>
+              <td><strong>执行概念</strong></td>
+              <td>任务运行 task_run、运行状态、外部任务编号、错误信息</td>
+              <td>S5</td>
+              <td>task_run 为实体；状态、编号、时间和错误为属性</td>
+            </tr>
+            <tr>
+              <td><strong>过程与结果</strong></td>
+              <td>状态变化 task_run_event、结果文件 task_artifact</td>
+              <td>S6、S7</td>
+              <td>事件实体与结果实体</td>
+            </tr>
+            <tr>
+              <td><strong>外部系统</strong></td>
+              <td>客户端、外部执行系统</td>
+              <td>S4、S5</td>
+              <td>参与者 / 外部系统，不直接映射为本地业务表</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="db-grid-2" style="margin-top: 14px">
+          <div class="db-note">
+            <strong>Bounded Context：</strong
+            >领域驱动设计中的“限界上下文”，用于说明哪个模块拥有某类数据和规则。
+          </div>
+          <div class="db-note">
+            <strong>概念规范化：</strong
+            >将“模板”“已发布模板”“模板版本”整理成稳定业务概念，避免按原句逐词建表。
+          </div>
+        </div>
+        <div class="db-band teal" style="margin-top: 13px">
+          <strong>本页输出：</strong
+          >一份去重、同义词归一、标明所有权的业务概念词典。
         </div>
       </div>
-      <div class="db-card teal">
-        <div class="db-label">动作：说明生命周期</div>
-        <div class="db-pills">
-          <span class="db-pill teal">发布模板</span
-          ><span class="db-pill teal">提交任务</span
-          ><span class="db-pill teal">开始运行</span
-          ><span class="db-pill teal">取消</span
-          ><span class="db-pill teal">失败</span
-          ><span class="db-pill teal">重试</span>
-        </div>
-      </div>
-      <div class="db-card orange">
-        <div class="db-label">数量：说明关系</div>
-        <div class="db-pills">
-          <span class="db-pill orange">多个项目</span
-          ><span class="db-pill orange">多个版本</span
-          ><span class="db-pill orange">多个输入</span
-          ><span class="db-pill orange">多次运行</span
-          ><span class="db-pill orange">多个文件</span>
-        </div>
-      </div>
-      <div class="db-card yellow">
-        <div class="db-label">规则：说明约束</div>
-        <div class="db-pills">
-          <span class="db-pill">历史版本保留</span
-          ><span class="db-pill">重复提交只建一次</span
-          ><span class="db-pill">运行必须属于任务</span
-          ><span class="db-pill">按状态筛选</span>
-        </div>
-      </div>
-    </div>
-    <div data-node="first-filter" class="db-grid-2" style="margin-top: 24px">
-      <div class="db-note">
-        <strong>先保留候选：</strong
-        >名词只是线索。“优先级”适合作为任务字段；“提交”是动作；“重试”会产生新的运行。
-      </div>
-      <div class="db-note">
-        <strong>下一步再筛选：</strong
-        >拥有独立身份、会出现多条、会独立变化或需要历史记录的概念，更适合独立成表。
-      </div>
-    </div>
-    <div class="db-band teal">
-      <strong>本页输出：</strong>候选对象清单 + 业务流程 + 数量关系 +
-      必须保持的规则。
     </div>
     <div class="db-footer">
-      <span>从自然语言提取结构，是建模的起点</span><span>13</span>
+      <span>ER 建模从业务概念与边界开始，不是机械圈名词</span><span>13</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-把上一页高亮内容归为四类。名词给出候选表，动作说明数据何时创建和变化，数量词帮助发现一对多，规则最终会转化为唯一、外键、非空或应用校验。
+专业建模先确定任务中心的边界，再建立完整概念词典。原文中的词需要去重、统一名称并区分所有权。workspace、project、user、data_source 是任务中心引用的主数据；模板、任务、运行、事件与文件属于本案例重点建模对象。
 </notes>

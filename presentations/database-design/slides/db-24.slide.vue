@@ -1,7 +1,7 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">设计错误的实际后果</div>
-    <h2 data-node="title">结构问题会在修改、插入、删除和扩展时反复出现</h2>
+    <div class="db-kicker">规范化要解决的异常（Anomalies）</div>
+    <h2 data-node="title">更新异常、插入异常和删除异常都来自事实放错位置</h2>
     <table
       data-node="design-consequences"
       class="db-table dense"

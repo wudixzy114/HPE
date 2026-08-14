@@ -1,6 +1,8 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">第二范式 · 关系字段依赖完整关系</div>
+    <div class="db-kicker">
+      数据库规范化 · 第二范式（2NF / Second Normal Form）
+    </div>
     <h2 data-node="title">项目成员表只保存“用户在这个项目中的信息”</h2>
     <div
       data-node="second-normal-form"

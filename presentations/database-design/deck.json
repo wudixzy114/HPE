@@ -2,7 +2,7 @@
   "$schema": "../../packages/schema/src/deck.schema.json",
   "schemaVersion": 1,
   "id": "database-design-for-product",
-  "title": "数据库设计：从业务需求到表、字段、约束与性能",
+  "title": "产品经理的数据库设计",
   "size": {
     "width": 1600,
     "height": 900
@@ -14,7 +14,7 @@
     {
       "id": "db-00",
       "file": "slides/db-00.slide.vue",
-      "title": "数据库设计：从业务需求到表、字段、约束与性能"
+      "title": "产品经理的数据库设计"
     },
     {
       "id": "db-01",
@@ -42,6 +42,11 @@
       "title": "全部使用字符串会失去哪些能力"
     },
     {
+      "id": "db-05a",
+      "file": "slides/db-05a.slide.vue",
+      "title": "数据类型选错的六类系统代价"
+    },
+    {
       "id": "db-06",
       "file": "slides/db-06.slide.vue",
       "title": "小数、日期、真假和文件类型"
@@ -59,7 +64,22 @@
     {
       "id": "db-09",
       "file": "slides/db-09.slide.vue",
-      "title": "自增 ID、UUID、雪花算法与业务编号"
+      "title": "ID 的五种角色：主键、外键、公开、业务与外部 ID"
+    },
+    {
+      "id": "db-09a",
+      "file": "slides/db-09a.slide.vue",
+      "title": "UUID 是 128 位值：MySQL 存储方式"
+    },
+    {
+      "id": "db-09b",
+      "file": "slides/db-09b.slide.vue",
+      "title": "UUID 能否作为数据库主键"
+    },
+    {
+      "id": "db-09c",
+      "file": "slides/db-09c.slide.vue",
+      "title": "ID 设计示例：本地与外部标识如何落表"
     },
     {
       "id": "db-10",
@@ -74,82 +94,152 @@
     {
       "id": "db-12",
       "file": "slides/db-12.slide.vue",
-      "title": "中台任务提交的完整用户故事"
+      "title": "固定用户故事：中台任务提交、运行与查询"
     },
     {
       "id": "db-13",
       "file": "slides/db-13.slide.vue",
-      "title": "从故事中提取名词、动作、数量和规则"
+      "title": "ER 建模：建模边界与业务概念全集"
     },
     {
       "id": "db-14",
       "file": "slides/db-14.slide.vue",
-      "title": "画出模板、任务和运行的业务流转"
+      "title": "ER 建模：实体、关联、属性与值对象"
+    },
+    {
+      "id": "db-14a",
+      "file": "slides/db-14a.slide.vue",
+      "title": "ER 建模：命令、事件、查询与普通动作"
     },
     {
       "id": "db-15",
       "file": "slides/db-15.slide.vue",
-      "title": "从业务流拆出五张核心表"
+      "title": "ER 建模：建立逻辑实体清单"
     },
     {
       "id": "db-16",
       "file": "slides/db-16.slide.vue",
-      "title": "为核心表填写身份、归属和业务字段"
+      "title": "ER 建模：确定关系与基数"
     },
     {
       "id": "db-17",
       "file": "slides/db-17.slide.vue",
-      "title": "建立父表、子表和外键关系"
+      "title": "ER 建模：一对多关系（1:N）"
     },
     {
       "id": "db-18",
       "file": "slides/db-18.slide.vue",
-      "title": "任务字段与运行字段如何分开"
+      "title": "ER 建模：为实体分配属性"
     },
     {
       "id": "db-19",
       "file": "slides/db-19.slide.vue",
-      "title": "中台案例的最终数据结构"
+      "title": "从 S5 建立任务运行表"
+    },
+    {
+      "id": "db-19a",
+      "file": "slides/db-19a.slide.vue",
+      "title": "从 S6 建立状态历史表"
+    },
+    {
+      "id": "db-19b",
+      "file": "slides/db-19b.slide.vue",
+      "title": "从 S7 建立结果文件表"
+    },
+    {
+      "id": "db-19c",
+      "file": "slides/db-19c.slide.vue",
+      "title": "核对 task 与 task_input 字段来源"
+    },
+    {
+      "id": "db-19d",
+      "file": "slides/db-19d.slide.vue",
+      "title": "核对运行、事件和文件字段来源"
+    },
+    {
+      "id": "db-19e",
+      "file": "slides/db-19e.slide.vue",
+      "title": "根据数量词建立主外键关系"
+    },
+    {
+      "id": "db-19f",
+      "file": "slides/db-19f.slide.vue",
+      "title": "把唯一、必须和只能转换成约束"
+    },
+    {
+      "id": "db-19g",
+      "file": "slides/db-19g.slide.vue",
+      "title": "从 S8 的查询方式反推候选索引"
+    },
+    {
+      "id": "db-19h",
+      "file": "slides/db-19h.slide.vue",
+      "title": "逐表审计职责、字段和关系来源"
+    },
+    {
+      "id": "db-19h2",
+      "file": "slides/db-19h2.slide.vue",
+      "title": "核对运行、事件和文件的字段来源"
+    },
+    {
+      "id": "db-19i-org",
+      "file": "slides/db-19i-org.slide.vue",
+      "title": "Mermaid ER 图：组织、成员与模板关系"
+    },
+    {
+      "id": "db-19i-run",
+      "file": "slides/db-19i-run.slide.vue",
+      "title": "Mermaid ER 图：任务提交与执行关系"
+    },
+    {
+      "id": "db-19i-run-detail",
+      "file": "slides/db-19i-run-detail.slide.vue",
+      "title": "Mermaid ER 图：运行、状态事件与结果文件"
+    },
+    {
+      "id": "db-19i",
+      "file": "slides/db-19i.slide.vue",
+      "title": "中台案例最终 ER 图与来源核对"
     },
     {
       "id": "db-20",
       "file": "slides/db-20.slide.vue",
-      "title": "第一范式到第三范式总览"
+      "title": "数据库规范化与第一至第三范式"
     },
     {
       "id": "db-21",
       "file": "slides/db-21.slide.vue",
-      "title": "第一范式：多个值使用多行保存"
+      "title": "第一范式（1NF）：多个值使用多行保存"
     },
     {
       "id": "db-22",
       "file": "slides/db-22.slide.vue",
-      "title": "第二范式：关系字段依赖完整关系"
+      "title": "第二范式（2NF）：关系字段依赖完整关系"
     },
     {
       "id": "db-23",
       "file": "slides/db-23.slide.vue",
-      "title": "第三范式：主数据放回自己的表"
+      "title": "第三范式（3NF）：主数据放回自己的表"
     },
     {
       "id": "db-24",
       "file": "slides/db-24.slide.vue",
-      "title": "结构问题在修改、插入、删除和扩展时的后果"
+      "title": "更新异常、插入异常与删除异常"
     },
     {
       "id": "db-25",
       "file": "slides/db-25.slide.vue",
-      "title": "五种常用数据库约束"
+      "title": "五种常用数据完整性约束"
     },
     {
       "id": "db-29",
       "file": "slides/db-29.slide.vue",
-      "title": "同时操作时防止重复创建和修改覆盖"
+      "title": "并发控制：防止重复创建和修改覆盖"
     },
     {
       "id": "db-32",
       "file": "slides/db-32.slide.vue",
-      "title": "数据库与应用系统分别负责什么"
+      "title": "数据完整性与业务规则的边界"
     },
     {
       "id": "db-33",
