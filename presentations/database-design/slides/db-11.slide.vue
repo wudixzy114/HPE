@@ -1,7 +1,7 @@
 <template>
   <Slide class="db-slide">
     <div class="db-kicker">高频公共字段</div>
-    <h2 data-node="title">公共字段不是复制模板：每一个都要有明确职责</h2>
+    <h2 data-node="title">常用公共字段各有职责，按表的实际需要选择</h2>
     <table
       data-node="common-field-table"
       class="db-table dense"
@@ -37,8 +37,8 @@
         </tr>
         <tr>
           <td><code>version</code></td>
-          <td>乐观锁版本</td>
-          <td>受保护更新时原子加一，并在 WHERE 中校验旧版本</td>
+          <td>防覆盖版本号</td>
+          <td>多人同时修改时用于发现记录已经发生变化</td>
         </tr>
         <tr>
           <td><code>deleted_at</code></td>
@@ -76,5 +76,5 @@
 </template>
 
 <notes lang="md">
-强调公共字段也不是脚手架无脑生成。事件表追加后通常不修改，updated_at 没有意义；逻辑删除会增加所有查询和唯一约束复杂度。命名中写单位可以避免 timeout=30 到底是秒还是分钟。
+公共字段按实际职责选择。事件表通常只追加，因此常常不需要 updated_at；逻辑删除会增加查询、唯一约束和清理成本。命名中写单位可以避免 timeout=30 到底是秒还是分钟。
 </notes>

@@ -1,75 +1,79 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">设计范式 · 第三范式</div>
-    <h2 data-node="title">第三范式：非主键字段不要再决定另一个非主键字段</h2>
-    <div
-      data-node="third-normal-form"
-      class="db-grid-2"
-      style="margin-top: 24px"
+    <div class="db-kicker">设计错误的实际后果</div>
+    <h2 data-node="title">结构问题会在修改、插入、删除和扩展时反复出现</h2>
+    <table
+      data-node="design-consequences"
+      class="db-table dense"
+      style="margin-top: 25px"
     >
-      <div class="db-card red">
-        <div class="db-label">反例 · 任务表混入项目事实</div>
-        <div class="db-code">
-          <span class="bad">task</span>(<br />
-          id,<br />
-          project_id,<br />
-          project_name,<br />
-          workspace_id,<br />
-          workspace_name,<br />
-          task_name,<br />
-          ...<br />)
-        </div>
-        <div class="db-flow" style="margin-top: 16px">
-          <div class="db-flow-node"><b>task.id</b></div>
-          <div class="db-flow-arrow">→</div>
-          <div class="db-flow-node"><b>project_id</b></div>
-          <div class="db-flow-arrow">→</div>
-          <div class="db-flow-node"><b>project_name</b></div>
-        </div>
-        <p style="margin-top: 12px">
-          project_name 实际由 project_id
-          决定，不是任务自己的事实；workspace_name 同理。
-        </p>
-      </div>
+      <thead>
+        <tr>
+          <th>问题</th>
+          <th>例子</th>
+          <th>会发生什么</th>
+          <th>对应改法</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>更新异常</strong></td>
+          <td>每条任务重复保存 project_name</td>
+          <td>项目改名需要批量更新，漏更新后出现多个名称</td>
+          <td>项目名称只放 project</td>
+        </tr>
+        <tr>
+          <td><strong>插入异常</strong></td>
+          <td>模板信息只能跟任务一起保存</td>
+          <td>没有任务时无法先创建模板，只能制造空记录</td>
+          <td>模板独立成表</td>
+        </tr>
+        <tr>
+          <td><strong>删除异常</strong></td>
+          <td>项目资料只存在任务记录中</td>
+          <td>删除最后一个任务时，项目资料也消失</td>
+          <td>项目与任务分表</td>
+        </tr>
+        <tr>
+          <td><strong>数量扩展困难</strong></td>
+          <td>input_1、input_2、input_3</td>
+          <td>增加第 4 个输入要改表、接口和代码</td>
+          <td>task_input 多行保存</td>
+        </tr>
+        <tr>
+          <td><strong>历史被覆盖</strong></td>
+          <td>任务与每次运行共用一行</td>
+          <td>重试覆盖第一次错误、时间和外部编号</td>
+          <td>task 与 task_run 分开</td>
+        </tr>
+        <tr>
+          <td><strong>查询口径混乱</strong></td>
+          <td>所有字段都用 String 或 JSON</td>
+          <td>不同服务各自解析，统计前需要大量清洗</td>
+          <td>稳定字段使用准确类型和正常列</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-node="simple-summary" class="db-grid-3" style="margin-top: 22px">
       <div class="db-card teal">
-        <div class="db-label">正确拆分</div>
-        <div class="db-code">
-          <span class="good">workspace</span>(id, name)<br /><br /><span
-            class="good"
-            >project</span
-          >(id, workspace_id, name)<br /><br /><span class="good">task</span
-          >(id, project_id, task_name, ...)
-        </div>
-        <ul>
-          <li>项目改名只更新一行。</li>
-          <li>项目可以在没有任务时先创建。</li>
-          <li>删除最后一个任务不会误删项目信息。</li>
-          <li>任务表宽度和重复数据减少。</li>
-        </ul>
+        <div class="db-label">减少重复</div>
+        <p>同一事实有一个主要来源。</p>
       </div>
-    </div>
-    <div
-      data-node="third-normal-form-signals"
-      class="db-grid-3"
-      style="margin-top: 18px"
-    >
-      <div class="db-note">
-        <strong>识别信号 1：</strong>同一个名称、地区、负责人在大量记录中重复。
+      <div class="db-card blue">
+        <div class="db-label">控制变化</div>
+        <p>修改一个对象只影响对应表。</p>
       </div>
-      <div class="db-note">
-        <strong>识别信号 2：</strong>更新某个字段时，需要 WHERE
-        另一个非主键字段批量更新。
-      </div>
-      <div class="db-note">
-        <strong>识别信号 3：</strong>某个信息必须等另一类记录出现后才能插入。
+      <div class="db-card orange">
+        <div class="db-label">支持增长</div>
+        <p>新增多条数据时增加行，不增加固定列。</p>
       </div>
     </div>
     <div class="db-footer">
-      <span>目标不是表越多，而是每个事实有唯一权威位置</span><span>24</span>
+      <span>范式的价值体现在长期维护成本</span><span>24</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-第三范式避免传递依赖。任务通过 project_id 找到项目名称，项目再通过 workspace_id 找到工作空间。若把这些名称复制进每条任务，改名、插入和删除都会产生异常。查询需要 JOIN 是正常代价，必要时再做受控缓存。
+将范式的价值落到六类具体问题。初学者不需要记“异常”术语的定义，只需能识别：改一处要改很多行、没有子记录时无法保存主数据、删除明细会带走主数据。
 </notes>

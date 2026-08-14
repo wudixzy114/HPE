@@ -1,95 +1,84 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">建模步骤 2 · 决定哪些对象独立成表</div>
-    <h2 data-node="title">
-      一个概念有独立身份、数量或生命周期时，才值得成为独立实体
-    </h2>
+    <div class="db-kicker">建模第 4 步 · 填核心字段</div>
+    <h2 data-node="title">先为每张表填写身份、归属和最主要的业务字段</h2>
+    <div data-node="field-fill" class="db-grid-3" style="margin-top: 26px">
+      <div class="db-entity">
+        <h3>task_template</h3>
+        <div class="db-field"><span>id</span><em>BIGINT · 主键</em></div>
+        <div class="db-field"><span>workspace_id</span><em>归属</em></div>
+        <div class="db-field"><span>code</span><em>租户内唯一</em></div>
+        <div class="db-field"><span>name</span><em>VARCHAR</em></div>
+        <div class="db-field"><span>state</span><em>启用状态</em></div>
+      </div>
+      <div class="db-entity teal">
+        <h3>template_version</h3>
+        <div class="db-field"><span>id</span><em>BIGINT · 主键</em></div>
+        <div class="db-field"><span>template_id</span><em>外键</em></div>
+        <div class="db-field"><span>version_no</span><em>版本号</em></div>
+        <div class="db-field"><span>form_schema</span><em>JSON</em></div>
+        <div class="db-field"><span>published_at</span><em>发布时间</em></div>
+      </div>
+      <div class="db-entity orange">
+        <h3>task</h3>
+        <div class="db-field">
+          <span>id / public_id</span><em>内部 / 外部 ID</em>
+        </div>
+        <div class="db-field"><span>project_id</span><em>项目归属</em></div>
+        <div class="db-field">
+          <span>template_version_id</span><em>提交版本</em>
+        </div>
+        <div class="db-field">
+          <span>name / priority</span><em>通用字段</em>
+        </div>
+        <div class="db-field"><span>config</span><em>配置快照</em></div>
+      </div>
+    </div>
     <table
-      data-node="entity-decision-table"
+      data-node="field-thinking"
       class="db-table dense"
-      style="margin-top: 22px"
+      style="margin-top: 24px"
     >
       <thead>
         <tr>
-          <th>候选概念</th>
-          <th>独立身份？</th>
-          <th>独立生命周期 / 数量？</th>
-          <th>判断</th>
-          <th>为什么</th>
+          <th>填写顺序</th>
+          <th>要回答的问题</th>
+          <th>案例中的结果</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>模板</strong></td>
-          <td>有稳定编码</td>
-          <td>启用、停用；拥有多个版本</td>
-          <td>独立表</td>
-          <td>稳定身份与版本内容的生命周期不同</td>
+          <td>1. 身份</td>
+          <td>这条记录怎样被稳定引用？是否需要公开 ID？</td>
+          <td>内部 BIGINT；task 另有 public UUID</td>
         </tr>
         <tr>
-          <td><strong>模板版本</strong></td>
-          <td>模板内版本号</td>
-          <td>发布后不可变</td>
-          <td>独立表</td>
-          <td>历史任务必须精确引用某个版本</td>
+          <td>2. 归属</td>
+          <td>属于哪个工作空间、项目或父对象？</td>
+          <td>workspace_id、project_id、template_id</td>
         </tr>
         <tr>
-          <td><strong>任务</strong></td>
-          <td>有内部与公开 ID</td>
-          <td>一次业务提交</td>
-          <td>独立表</td>
-          <td>承载提交快照、归属和当前汇总状态</td>
+          <td>3. 业务字段</td>
+          <td>什么值描述这条记录本身？</td>
+          <td>code、name、priority、version_no</td>
         </tr>
         <tr>
-          <td><strong>输入</strong></td>
-          <td>任务内序号</td>
-          <td>一个任务可以有多个</td>
-          <td>子表</td>
-          <td>数量不固定，并且每个输入有用途和快照</td>
-        </tr>
-        <tr>
-          <td><strong>运行</strong></td>
-          <td>独立运行 ID</td>
-          <td>一次任务可重试多次</td>
-          <td>独立子表</td>
-          <td>每次有自己的状态、时间、错误和外部 ID</td>
-        </tr>
-        <tr>
-          <td><strong>运行事件</strong></td>
-          <td>事件 ID / 外部事件 ID</td>
-          <td>只追加，不覆盖</td>
-          <td>事件表</td>
-          <td>支持去重、审计、乱序判断和耗时分析</td>
-        </tr>
-        <tr>
-          <td><strong>优先级</strong></td>
-          <td>无</td>
-          <td>随任务一起变化</td>
-          <td>任务字段</td>
-          <td>它只是任务的一项属性</td>
+          <td>4. 规则</td>
+          <td>必填、唯一、范围和修改规则是什么？</td>
+          <td>模板编码租户内唯一；版本发布后稳定</td>
         </tr>
       </tbody>
     </table>
-    <div data-node="entity-tests" class="db-grid-3" style="margin-top: 17px">
-      <div class="db-note">
-        <strong>身份测试：</strong>它是否需要被别的记录单独引用？是否需要稳定
-        ID？
-      </div>
-      <div class="db-note">
-        <strong>数量测试：</strong>一个父对象下会不会出现 0、1、N 条？N
-        条通常意味着子表。
-      </div>
-      <div class="db-note">
-        <strong>生命周期测试：</strong
-        >是否独立创建、修改、删除、归档、授权或保留历史？
-      </div>
+    <div class="db-band">
+      <strong>字段归属：</strong>给定哪条记录的
+      ID，才能唯一确定这个值，字段通常就放在那张表。
     </div>
     <div class="db-footer">
-      <span>字段多不是拆表理由，独立性才是</span><span>16</span>
+      <span>先填稳定字段，动态配置在结构明确后再加入</span><span>16</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-逐个判断候选概念。模板与模板版本拆开，不是因为字段多，而是版本发布后不可变，模板本身还能继续启停和发布新版本。优先级没有独立身份和生命周期，因此只是任务字段。
+这一页演示填字段的顺序：身份、归属、业务属性、规则。task 同时使用内部 BIGINT 和公开 UUID。模板版本保存表单 Schema，任务保存提交时配置快照。
 </notes>

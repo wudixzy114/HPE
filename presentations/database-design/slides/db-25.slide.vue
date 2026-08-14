@@ -1,77 +1,77 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">范式的实际价值</div>
+    <div class="db-kicker">数据库约束 · 把关键规则落下来</div>
     <h2 data-node="title">
-      不遵循范式，问题会分别出现在修改、并发、可靠性和扩展时
+      五种常用约束，分别保护身份、关系、唯一、必填和范围
     </h2>
     <table
-      data-node="normalization-consequences"
+      data-node="constraint-table"
       class="db-table dense"
-      style="margin-top: 22px"
+      style="margin-top: 24px"
     >
       <thead>
         <tr>
-          <th>场景</th>
-          <th>坏结构</th>
-          <th>故障过程</th>
-          <th>最终后果</th>
+          <th>约束</th>
+          <th>它保证什么</th>
+          <th>中台案例</th>
+          <th>缺少后的问题</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>修改</strong></td>
-          <td>每条任务重复 project_name</td>
-          <td>项目改名需批量更新数百万任务；中途失败或漏更新</td>
-          <td>同一项目出现多个名称，查询口径不一致</td>
+          <td><strong>PRIMARY KEY</strong></td>
+          <td>每条记录有唯一身份</td>
+          <td>task.id、task_run.id</td>
+          <td>其他表无法稳定引用记录</td>
         </tr>
         <tr>
-          <td><strong>并发</strong></td>
-          <td>任务行同时保存项目当前配额</td>
-          <td>两个提交分别读旧配额并覆盖写入</td>
-          <td>配额丢失更新或超额使用</td>
+          <td><strong>FOREIGN KEY</strong></td>
+          <td>被引用的记录真实存在</td>
+          <td>task_run.task_id → task.id</td>
+          <td>出现找不到任务的孤儿运行</td>
         </tr>
         <tr>
-          <td><strong>可靠性</strong></td>
-          <td>任务和运行共用一行</td>
-          <td>重试覆盖第一次错误、外部 ID 和时间</td>
-          <td>无法审计、排障、对账与恢复过程</td>
+          <td><strong>UNIQUE</strong></td>
+          <td>某个业务组合不重复</td>
+          <td>(task_id, attempt_no)</td>
+          <td>同一任务可能出现两个“第 2 次运行”</td>
         </tr>
         <tr>
-          <td><strong>扩展</strong></td>
-          <td>input_1 / input_2 / input_3</td>
-          <td>新增第 4 个输入需改表、接口、代码和历史兼容</td>
-          <td>需求每次扩展都变成全链路结构变更</td>
+          <td><strong>NOT NULL</strong></td>
+          <td>必填事实不能缺失</td>
+          <td>project_id、submitter_id</td>
+          <td>产生没有归属或提交人的任务</td>
         </tr>
         <tr>
-          <td><strong>删除</strong></td>
-          <td>模板信息只存在任务行</td>
-          <td>删除最后一条任务时模板信息一起消失</td>
-          <td>删除业务记录意外丢失另一类主数据</td>
-        </tr>
-        <tr>
-          <td><strong>插入</strong></td>
-          <td>项目信息依赖任务行存在</td>
-          <td>项目尚未有任务时没有位置保存</td>
-          <td>业务被迫创建假任务或允许大量空字段</td>
-        </tr>
-        <tr>
-          <td><strong>改字段</strong></td>
-          <td>所有动态参数都用 value_text</td>
-          <td>将 timeout 从文本改整数，要清洗所有历史格式</td>
-          <td>迁移无法判断“30s”“半小时”等原始意图</td>
+          <td><strong>CHECK</strong></td>
+          <td>值必须落在合法范围</td>
+          <td>priority 0～100；状态属于合法集合</td>
+          <td>非法优先级和未知状态进入数据库</td>
         </tr>
       </tbody>
     </table>
-    <div data-node="consequence-chain" class="db-band red">
-      <strong>共同根因：</strong
-      >不同事实被放在同一位置，或同一事实被放在多个位置；一旦多个请求、多个版本或多年数据同时存在，矛盾必然显现。
+    <div
+      data-node="constraint-examples"
+      class="db-grid-2"
+      style="margin-top: 22px"
+    >
+      <div class="db-code">
+        <span class="good">UNIQUE</span> (workspace_id, code)<br /><br />模板编码在工作空间内唯一
+      </div>
+      <div class="db-code">
+        <span class="good">CHECK</span> (priority BETWEEN 0 AND 100)<br /><br />优先级只能取合法范围
+      </div>
+    </div>
+    <div class="db-band red">
+      <strong>代码校验仍然要做：</strong
+      >数据库约束负责最终兜底，可以阻止并发请求、脚本或新接口写入明显错误的数据。
     </div>
     <div class="db-footer">
-      <span>范式不是形式主义，而是在控制变化的影响范围</span><span>25</span>
+      <span>多租户唯一性通常需要带 workspace_id</span><span>25</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-这页逐项回应为什么范式和并发、可靠性、扩展有关。范式本身不直接实现锁，但把权威事实集中到正确位置后，数据库才有可能用一行锁、唯一约束或事务保护它。结构错误会让一致性维护扩散到大量行和多个服务。
+只保留产品需要理解的五种约束。重点解释 UNIQUE：两个请求同时先查后写时，数据库唯一约束仍能阻止重复。复杂状态流程仍由应用处理，数据库负责基本合法性。
 </notes>

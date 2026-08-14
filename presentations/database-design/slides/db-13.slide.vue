@@ -1,71 +1,75 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">完整案例 · 用户故事 2/3</div>
-    <h2 data-node="title">任务提交后：排队、运行、失败、取消与重试</h2>
-    <div data-node="story-run" class="db-grid-2" style="margin-top: 22px">
-      <div class="db-story">
-        <p>
-          <span class="db-badge orange">13</span>
-          首次提交会创建第一次执行尝试，并发送给外部调度系统。
-        </p>
-        <p>
-          <span class="db-badge orange">14</span> 调度系统返回外部任务
-          ID；同一外部 ID 不能关联两次运行。
-        </p>
-        <p>
-          <span class="db-badge orange">15</span>
-          一次运行依次经历待提交、排队、运行、成功或失败等状态。
-        </p>
-        <p>
-          <span class="db-badge orange">16</span>
-          用户可以在允许的状态下取消；取消请求发出后还要等待外部确认。
-        </p>
-        <p>
-          <span class="db-badge orange">17</span>
-          外部回调可能重复、乱序、延迟，甚至先成功后又收到旧的运行中事件。
-        </p>
-        <p>
-          <span class="db-badge orange">18</span>
-          系统超时扫描与用户取消可能同时更新同一次运行。
-        </p>
+    <div class="db-kicker">建模第 1 步 · 从故事中提取信息</div>
+    <h2 data-node="title">
+      先提取“东西、动作、数量和规则”，暂时不讨论字段类型
+    </h2>
+    <div data-node="extraction" class="db-grid-4" style="margin-top: 30px">
+      <div class="db-card blue">
+        <div class="db-label">名词：可能成为表</div>
+        <div class="db-pills">
+          <span class="db-pill blue">工作空间</span
+          ><span class="db-pill blue">项目</span
+          ><span class="db-pill blue">成员</span
+          ><span class="db-pill blue">模板</span
+          ><span class="db-pill blue">版本</span
+          ><span class="db-pill blue">任务</span
+          ><span class="db-pill blue">输入</span
+          ><span class="db-pill blue">运行</span
+          ><span class="db-pill blue">文件</span>
+        </div>
       </div>
-      <div class="db-story">
-        <p>
-          <span class="db-badge red">19</span>
-          运行失败后可使用完全相同配置重试；每次重试有独立尝试序号。
-        </p>
-        <p>
-          <span class="db-badge red">20</span>
-          每次运行都保留队列、开始结束时间、错误码、错误摘要和外部任务 ID。
-        </p>
-        <p>
-          <span class="db-badge red">21</span>
-          用户修改输入或参数后重新提交，应创建新任务，并记录来源任务。
-        </p>
-        <p>
-          <span class="db-badge red">22</span>
-          每次运行可产生多个日志、报表或数据文件，文件存对象存储。
-        </p>
-        <p>
-          <span class="db-badge red">23</span> 数据库只保存对象
-          key、类型、大小、哈希和创建时间。
-        </p>
-        <p>
-          <span class="db-badge red">24</span>
-          需要统计成功率、重试次数、排队时长、运行时长和失败原因。
-        </p>
+      <div class="db-card teal">
+        <div class="db-label">动作：说明生命周期</div>
+        <div class="db-pills">
+          <span class="db-pill teal">发布模板</span
+          ><span class="db-pill teal">提交任务</span
+          ><span class="db-pill teal">开始运行</span
+          ><span class="db-pill teal">取消</span
+          ><span class="db-pill teal">失败</span
+          ><span class="db-pill teal">重试</span>
+        </div>
+      </div>
+      <div class="db-card orange">
+        <div class="db-label">数量：说明关系</div>
+        <div class="db-pills">
+          <span class="db-pill orange">多个项目</span
+          ><span class="db-pill orange">多个版本</span
+          ><span class="db-pill orange">多个输入</span
+          ><span class="db-pill orange">多次运行</span
+          ><span class="db-pill orange">多个文件</span>
+        </div>
+      </div>
+      <div class="db-card yellow">
+        <div class="db-label">规则：说明约束</div>
+        <div class="db-pills">
+          <span class="db-pill">历史版本保留</span
+          ><span class="db-pill">重复提交只建一次</span
+          ><span class="db-pill">运行必须属于任务</span
+          ><span class="db-pill">按状态筛选</span>
+        </div>
       </div>
     </div>
-    <div class="db-band red">
-      <strong>这里已经出现三个不同概念：</strong
-      >用户的一次提交、一次实际执行、一次状态变化。混成一行一定会覆盖历史。
+    <div data-node="first-filter" class="db-grid-2" style="margin-top: 24px">
+      <div class="db-note">
+        <strong>先保留候选：</strong
+        >名词只是线索。“优先级”适合作为任务字段；“提交”是动作；“重试”会产生新的运行。
+      </div>
+      <div class="db-note">
+        <strong>下一步再筛选：</strong
+        >拥有独立身份、会出现多条、会独立变化或需要历史记录的概念，更适合独立成表。
+      </div>
+    </div>
+    <div class="db-band teal">
+      <strong>本页输出：</strong>候选对象清单 + 业务流程 + 数量关系 +
+      必须保持的规则。
     </div>
     <div class="db-footer">
-      <span>异常流程比正常流程更能暴露表结构问题</span><span>13</span>
+      <span>从自然语言提取结构，是建模的起点</span><span>13</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-这部分需求专门用于拆出 task、task_run 和 task_run_event。重复回调要求事件去重；乱序回调要求状态迁移规则；修改后重提与相同配置重试是两个不同业务动作。产物文件不直接塞入核心业务表。
+把上一页高亮内容归为四类。名词给出候选表，动作说明数据何时创建和变化，数量词帮助发现一对多，规则最终会转化为唯一、外键、非空或应用校验。
 </notes>

@@ -1,7 +1,9 @@
 <template>
   <Slide class="db-slide">
     <div class="db-kicker">字段类型 · 全部 String 的代价</div>
-    <h2 data-node="title">全部用 String：开发入口变简单，所有后续环节变复杂</h2>
+    <h2 data-node="title">
+      全部使用字符串，会失去校验、正确排序和直接计算能力
+    </h2>
     <table
       data-node="string-consequence-table"
       class="db-table dense"
@@ -25,8 +27,8 @@
         <tr>
           <td><strong>金额</strong></td>
           <td>"12.50"、"￥12.5"、"12,50"</td>
-          <td>币种与格式混乱，聚合和对账失败</td>
-          <td>DECIMAL + currency_code</td>
+          <td>单位与格式混乱，聚合计算失败</td>
+          <td>DECIMAL + 明确单位</td>
         </tr>
         <tr>
           <td><strong>日期</strong></td>
@@ -70,11 +72,11 @@
       把“定义数据”的成本推给每一个读取者，并把错误从写入时推迟到线上使用时。
     </div>
     <div class="db-footer">
-      <span>灵活不是没有规则，而是规则可演进</span><span>05</span>
+      <span>准确类型让错误在写入时被发现</span><span>05</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-逐行用业务故障解释，而不是只说性能差。全部 String 最大的问题是语义丢失：原始值进入后无法判断“￥12.5”究竟是展示文本还是金额。类型转换还可能让索引无法直接使用，长期代价是全链路清洗。
+逐行用业务故障解释全部 String 的代价。核心问题是语义丢失：原始值进入后很难判断“12.5元”究竟是展示文本还是可计算数值。查询时进行类型转换还可能影响索引使用，长期会形成全链路清洗成本。
 </notes>

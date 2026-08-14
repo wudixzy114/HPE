@@ -678,6 +678,40 @@
   font-weight: 800;
 }
 
+.db-highlight {
+  padding: 1px 5px;
+  border-radius: 5px;
+  color: #075f58;
+  background: #d7f0eb;
+  font-weight: 750;
+}
+
+.db-highlight.blue {
+  color: #294e83;
+  background: #e2eaf6;
+}
+
+.db-highlight.orange {
+  color: #98451f;
+  background: #fae4d8;
+}
+
+.db-highlight.yellow {
+  color: #725500;
+  background: #fff0b5;
+}
+
+.db-story-large {
+  padding: 26px 30px;
+  border: 1px solid var(--db-line);
+  border-radius: 16px;
+  color: #304057;
+  background: #fff;
+  font-size: 21px;
+  line-height: 1.78;
+  box-shadow: 0 7px 22px rgba(23, 35, 59, 0.05);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hpe-slide.db-slide *,
   .hpe-slide.db-slide *::before,

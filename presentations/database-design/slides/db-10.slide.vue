@@ -1,85 +1,60 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">字段类型 · 动态配置</div>
-    <h2 data-node="title">
-      “动态配置”指结构因类型或版本而变化，不代表没有结构
-    </h2>
-    <div
-      data-node="dynamic-definition"
-      class="db-grid-3"
-      style="margin-top: 23px"
-    >
+    <div class="db-kicker">JSON · 灵活配置</div>
+    <h2 data-node="title">稳定、常查的字段放普通列；随模板变化的参数放 JSON</h2>
+    <div data-node="json-layout" class="db-grid-2" style="margin-top: 29px">
       <div class="db-card teal">
-        <div class="db-label">结构按任务类型变化</div>
-        <p>
-          数据处理任务有
-          SQL、输出表；质量检查任务有规则集；报表任务有统计维度和通知方式。
-        </p>
+        <div class="db-label">普通数据库列</div>
+        <h3>所有任务都共有，并且经常查询</h3>
+        <div class="db-pills" style="margin-top: 17px">
+          <span class="db-pill teal">workspace_id</span
+          ><span class="db-pill teal">project_id</span
+          ><span class="db-pill teal">submitter_id</span
+          ><span class="db-pill teal">status</span
+          ><span class="db-pill teal">priority</span
+          ><span class="db-pill teal">created_at</span>
+        </div>
+        <ul>
+          <li>类型和空值规则清楚。</li>
+          <li>可以添加外键、唯一和范围约束。</li>
+          <li>适合筛选、排序和统计。</li>
+        </ul>
       </div>
       <div class="db-card blue">
-        <div class="db-label">结构按版本演进</div>
-        <p>
-          模板 v1 只有单输入；v2 支持多输入；历史任务必须仍能按提交时版本解释。
-        </p>
-      </div>
-      <div class="db-card orange">
-        <div class="db-label">通常整体读取</div>
-        <p>
-          执行器取整份配置启动任务，而不是频繁并发修改 JSON 中某一个小字段。
-        </p>
+        <div class="db-label">JSON 配置</div>
+        <h3>不同模板各自拥有的参数</h3>
+        <div class="db-code" style="margin-top: 17px">
+          {<br />
+          <span class="good">"source_type"</span>: "TABLE",<br />
+          <span class="good">"timeout_minutes"</span>: 30,<br />
+          <span class="good">"quality_rules"</span>: ["NOT_NULL"]<br />}
+        </div>
+        <ul>
+          <li>结构会随任务类型或模板版本变化。</li>
+          <li>通常整份读取后交给执行系统。</li>
+          <li>必须记录 schema_version 并在提交时校验。</li>
+        </ul>
       </div>
     </div>
-    <table
-      data-node="json-eav-table"
-      class="db-table dense"
-      style="margin-top: 19px"
-    >
-      <thead>
-        <tr>
-          <th>方案</th>
-          <th>优点</th>
-          <th>失去什么</th>
-          <th>何时使用</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>普通列</strong></td>
-          <td>类型、外键、唯一、索引与统计最清楚</td>
-          <td>结构变更需要迁移与发版</td>
-          <td>通用、稳定、强约束、高频查询字段</td>
-        </tr>
-        <tr>
-          <td><strong>JSON / JSONB</strong></td>
-          <td>结构可按模板版本变化，整体保存方便</td>
-          <td>跨字段约束、外键与统一分析更复杂</td>
-          <td>类型特有、低频筛选、整体读取的配置</td>
-        </tr>
-        <tr>
-          <td><strong>EAV</strong><br />attribute_name/value</td>
-          <td>字段可任意增加，极度稀疏</td>
-          <td>数字日期都易变字符串；查询需多次自连接；必填与范围难约束</td>
-          <td>真正的元数据平台，不能作为普通业务默认方案</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-node="json-rules" class="db-grid-2" style="margin-top: 18px">
+    <div data-node="json-decisions" class="db-grid-3" style="margin-top: 22px">
+      <div class="db-note"><strong>需要外键：</strong>使用普通列。</div>
       <div class="db-note">
-        <strong>JSON 必须一起保存：</strong>schema_version、校验
-        Schema、默认值规则和模板版本。否则同一 key 可能先是数字，后来变字符串。
+        <strong>经常筛选统计：</strong>使用普通列或专门结构。
       </div>
       <div class="db-note">
-        <strong>字段提升规则：</strong
-        >一旦成为高频筛选、排序、统计、关联或强约束字段，就从 JSON
-        提升为明确列或专门结构。
+        <strong>模板特有且变化快：</strong>适合进入 JSON。
       </div>
+    </div>
+    <div class="db-band red">
+      <strong>避免整张表只剩一个 JSON：</strong
+      >工作空间、项目、状态、提交人等核心信息需要清晰的列和约束。
     </div>
     <div class="db-footer">
-      <span>JSON 是版本化扩展区，不是无结构垃圾桶</span><span>10</span>
+      <span>JSON 仍然有结构，只是结构由模板版本管理</span><span>10</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-先定义什么才算动态配置，避免把“暂时没想清楚”也叫动态。JSON 的灵活来自结构由模板 Schema 管理，而不是完全无校验。EAV 看似更灵活，但会损失类型、约束和查询能力，只适合非常特殊的元数据场景。
+这页只保留普通列与 JSON 的核心边界。动态配置指不同模板拥有不同参数，或者参数随版本演进。JSON 需要 Schema 和版本；核心归属、状态与高频查询字段继续使用普通列。
 </notes>

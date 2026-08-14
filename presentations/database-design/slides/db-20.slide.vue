@@ -1,114 +1,66 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">建模步骤 6 · 字段与约束落地</div>
-    <h2 data-node="title">
-      先为核心表定义“身份、归属、事实、状态、并发、时间”
-    </h2>
-    <table
-      data-node="task-field-design"
-      class="db-table compact"
-      style="margin-top: 20px"
+    <div class="db-kicker">设计原则 · 范式总览</div>
+    <h2 data-node="title">范式帮助我们把同一事实放在合适的位置，并减少重复</h2>
+    <div
+      data-node="normal-form-overview"
+      class="db-grid-3"
+      style="margin-top: 34px"
     >
-      <thead>
-        <tr>
-          <th>字段</th>
-          <th>类型建议</th>
-          <th>是否必填</th>
-          <th>约束 / 含义</th>
-          <th>为什么这样设计</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>id</code></td>
-          <td>BIGINT</td>
-          <td>是</td>
-          <td>主键</td>
-          <td>内部关联紧凑稳定</td>
-        </tr>
-        <tr>
-          <td><code>public_id</code></td>
-          <td>原生 UUID</td>
-          <td>是</td>
-          <td>UNIQUE</td>
-          <td>API/URL 使用，不暴露连续 ID</td>
-        </tr>
-        <tr>
-          <td><code>workspace_id</code></td>
-          <td>BIGINT</td>
-          <td>是</td>
-          <td>外键 / 租户边界</td>
-          <td>进入权限、查询和组合唯一约束</td>
-        </tr>
-        <tr>
-          <td><code>project_id</code></td>
-          <td>BIGINT</td>
-          <td>是</td>
-          <td>外键</td>
-          <td>还要保证项目属于同一工作空间</td>
-        </tr>
-        <tr>
-          <td><code>template_version_id</code></td>
-          <td>BIGINT</td>
-          <td>是</td>
-          <td>外键</td>
-          <td>历史配置可按提交版本解释</td>
-        </tr>
-        <tr>
-          <td><code>name</code></td>
-          <td>VARCHAR(128)</td>
-          <td>是</td>
-          <td>去首尾空格；是否唯一由业务定</td>
-          <td>普通展示名称，不承担关联</td>
-        </tr>
-        <tr>
-          <td><code>priority</code></td>
-          <td>SMALLINT</td>
-          <td>是</td>
-          <td>DEFAULT 50；CHECK 0～100</td>
-          <td>范围小且参与排序</td>
-        </tr>
-        <tr>
-          <td><code>config</code></td>
-          <td>JSONB / JSON</td>
-          <td>是</td>
-          <td>按模板版本 Schema 校验</td>
-          <td>保存类型特有提交快照</td>
-        </tr>
-        <tr>
-          <td><code>current_status</code></td>
-          <td>VARCHAR(20)</td>
-          <td>是</td>
-          <td>CHECK 合法状态</td>
-          <td>列表高频过滤，稳定机器代码</td>
-        </tr>
-        <tr>
-          <td><code>idempotency_key</code></td>
-          <td>VARCHAR(128)</td>
-          <td>是</td>
-          <td>工作空间+提交人+键 UNIQUE</td>
-          <td>并发和网络重试下防止重复创建</td>
-        </tr>
-        <tr>
-          <td><code>version</code></td>
-          <td>INTEGER</td>
-          <td>是</td>
-          <td>DEFAULT 0</td>
-          <td>并发更新时检测覆盖</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-node="cross-tenant-rule" class="db-band red">
-      <strong>仅每张表都有 workspace_id 仍不够：</strong>必须校验
-      task.workspace_id 与 project.workspace_id 一致，避免跨工作空间错误关联。
+      <div class="db-card teal">
+        <div class="db-number">1NF</div>
+        <h3 style="margin-top: 15px">多条数据分成多行</h3>
+        <p style="margin-top: 10px">
+          避免 input_1、input_2、input_3，也避免把多个 ID 拼成一个字符串。
+        </p>
+        <div class="db-pills" style="margin-top: 16px">
+          <span class="db-pill teal">解决重复列</span
+          ><span class="db-pill teal">支持任意数量</span>
+        </div>
+      </div>
+      <div class="db-card blue">
+        <div class="db-number" style="color: var(--db-blue)">2NF</div>
+        <h3 style="margin-top: 15px">关系字段依赖完整关系</h3>
+        <p style="margin-top: 10px">
+          项目成员的角色由“项目 + 用户”共同决定；项目名称只属于项目。
+        </p>
+        <div class="db-pills" style="margin-top: 16px">
+          <span class="db-pill blue">检查关系表</span
+          ><span class="db-pill blue">减少重复</span>
+        </div>
+      </div>
+      <div class="db-card orange">
+        <div class="db-number" style="color: var(--db-orange)">3NF</div>
+        <h3 style="margin-top: 15px">主数据放回自己的表</h3>
+        <p style="margin-top: 10px">
+          任务保存 project_id，项目名称保存在 project 中，改名只更新一处。
+        </p>
+        <div class="db-pills" style="margin-top: 16px">
+          <span class="db-pill orange">唯一来源</span
+          ><span class="db-pill orange">控制修改范围</span>
+        </div>
+      </div>
+    </div>
+    <div
+      data-node="normalization-purpose"
+      class="db-grid-2"
+      style="margin-top: 27px"
+    >
+      <div class="db-note">
+        <strong>主要目标：</strong
+        >一个事实只维护一份；一个对象可以独立创建、修改和删除；新增数量时无需不断加列。
+      </div>
+      <div class="db-note">
+        <strong>使用方法：</strong>先完成业务建模，再按 1NF、2NF、3NF
+        逐层检查。大多数产品场景掌握这三层已经足够。
+      </div>
     </div>
     <div class="db-footer">
-      <span>字段设计必须同时写类型、空值、默认值、范围、唯一与修改规则</span
-      ><span>20</span>
+      <span>先理解每一层解决的具体问题，再记名称</span><span>20</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-这一页展示如何把前面判断落实到字段字典。不是要求产品写最终 DDL，但这些业务语义必须明确。特别强调组合唯一约束和跨租户关联，单独保存 workspace_id 不会自动保证隔离。
+先用一页给出三层全景。每层只记一个动作：多条拆成多行；关系字段依赖完整关系；主数据回到自己的表。随后三页分别用案例展开。
 </notes>

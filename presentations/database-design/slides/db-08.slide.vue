@@ -1,92 +1,62 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">字段类型 · 状态</div>
-    <h2 data-node="title">
-      状态不是一个随便写的字符串，而是一套“合法值 + 合法迁移 + 历史”
-    </h2>
+    <div class="db-kicker">状态字段 · 有限的业务阶段</div>
+    <h2 data-node="title">状态字段包含三部分：稳定代码、允许变化、过程记录</h2>
     <div
       data-node="state-layout"
       class="db-grid-2"
-      style="margin-top: 24px; grid-template-columns: 0.9fr 1.4fr"
+      style="margin-top: 27px; grid-template-columns: 0.85fr 1.4fr"
     >
       <div class="db-card teal">
-        <div class="db-label">短代码是什么</div>
+        <div class="db-label">1. 保存稳定代码</div>
         <div class="db-code">
-          status VARCHAR(20) NOT NULL<br /><br /><span class="good">CHECK</span>
-          (status IN (<br />
-          'QUEUED', 'RUNNING',<br />
-          'SUCCEEDED', 'FAILED',<br />
-          'CANCELLED'<br />))
+          status VARCHAR(20)<br /><br /><span class="good">QUEUED</span
+          ><br /><span class="good">RUNNING</span><br /><span class="good"
+            >SUCCEEDED</span
+          ><br /><span class="good">FAILED</span><br /><span class="good"
+            >CANCELLED</span
+          >
         </div>
-        <p style="margin-top: 12px">
-          数据库保存稳定代码；“运行中”“Running”由前端根据语言展示。不要直接保存展示文案。
+        <p style="margin-top: 14px">
+          数据库保存机器代码；页面根据语言展示“排队中”“运行中”等文案。
         </p>
       </div>
       <div>
-        <div class="db-flow" style="margin-bottom: 16px">
-          <div class="db-flow-node"><b>QUEUED</b><span>排队中</span></div>
-          <div class="db-flow-arrow">→</div>
-          <div class="db-flow-node"><b>RUNNING</b><span>运行中</span></div>
-          <div class="db-flow-arrow">→</div>
-          <div class="db-flow-node">
-            <b>SUCCEEDED</b><span>成功，终态</span>
+        <div class="db-card blue">
+          <div class="db-label">2. 画出允许变化</div>
+          <div class="db-flow" style="margin-top: 16px">
+            <div class="db-flow-node"><b>QUEUED</b><span>排队中</span></div>
+            <div class="db-flow-arrow">→</div>
+            <div class="db-flow-node"><b>RUNNING</b><span>运行中</span></div>
+            <div class="db-flow-arrow">→</div>
+            <div class="db-flow-node"><b>SUCCEEDED</b><span>成功</span></div>
+          </div>
+          <div class="db-grid-2" style="margin-top: 15px">
+            <div class="db-note"><strong>允许：</strong>RUNNING → FAILED</div>
+            <div class="db-note">
+              <strong>禁止：</strong>SUCCEEDED → RUNNING
+            </div>
           </div>
         </div>
-        <div class="db-grid-2">
-          <div class="db-note">
-            <strong>合法迁移：</strong>RUNNING → FAILED；QUEUED →
-            CANCELLED。应用更新时必须带当前状态条件。
-          </div>
-          <div class="db-note">
-            <strong>非法迁移：</strong>SUCCEEDED →
-            RUNNING；收到乱序旧回调时不能让状态倒退。
-          </div>
-          <div class="db-note">
-            <strong>当前状态：</strong>放主表，支持列表快速筛选。
-          </div>
-          <div class="db-note">
-            <strong>过程历史：</strong
-            >事件表记录谁、何时、从哪到哪、原因和外部事件 ID。
-          </div>
+        <div class="db-card orange" style="margin-top: 17px">
+          <div class="db-label">3. 判断是否需要历史</div>
+          <p>
+            只关心当前状态：主表保存
+            status。需要排障、审计或统计状态耗时：再增加事件表，记录变化时间、原状态、新状态和原因。
+          </p>
         </div>
       </div>
     </div>
-    <table
-      data-node="state-storage-options"
-      class="db-table compact"
-      style="margin-top: 18px"
-    >
-      <thead>
-        <tr>
-          <th>约束方式</th>
-          <th>适合</th>
-          <th>主要权衡</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>VARCHAR/整数 + CHECK</td>
-          <td>值少、随代码版本发布</td>
-          <td>简单清楚，通常是任务状态首选</td>
-        </tr>
-        <tr>
-          <td>数据库 ENUM</td>
-          <td>集合极稳定</td>
-          <td>约束强，但改值和跨库迁移可能麻烦</td>
-        </tr>
-        <tr>
-          <td>字典表 + 外键</td>
-          <td>运营可配置且状态还有属性</td>
-          <td>可扩展，但字典表本身不等于状态机</td>
-        </tr>
-      </tbody>
-    </table>
+    <div data-node="status-vs-boolean" class="db-band red">
+      <strong>布尔值适合两个答案：</strong>是否启用可以用
+      BOOLEAN；排队、运行、成功、失败包含多个阶段，应使用一个状态字段。
+    </div>
     <div class="db-footer">
-      <span>布尔值只能表达两种确定答案，不能拼出完整流程</span><span>08</span>
+      <span>状态值要有限、稳定、可解释</span><span>08</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-解释“短代码 + 合法值限制”：短代码是稳定的机器值，不是中文展示文案。CHECK 负责阻止不存在的状态，但状态能否从 A 变到 B 通常还需要条件更新与应用状态机。只用 is_finished、is_success 会产生矛盾组合，例如两个字段同时为 false 到底是排队还是运行。
+状态只讲三个动作：保存稳定代码、画允许变化、判断是否保存历史。页面文案可以多语言变化，数据库代码保持稳定。多个阶段使用一个状态字段，避免多个布尔字段组合出矛盾结果。
 </notes>

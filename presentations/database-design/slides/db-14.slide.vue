@@ -1,71 +1,63 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">完整案例 · 用户故事 3/3</div>
-    <h2 data-node="title">查询、权限、审计、删除和数据增长同样属于需求</h2>
-    <div data-node="story-query" class="db-grid-2" style="margin-top: 22px">
-      <div class="db-story">
-        <p>
-          <span class="db-badge">25</span>
-          列表按工作空间、项目、模板、提交人、状态和创建时间筛选。
-        </p>
-        <p>
-          <span class="db-badge">26</span>
-          默认按创建时间倒序；同一时间的记录仍要稳定分页。
-        </p>
-        <p>
-          <span class="db-badge">27</span>
-          详情展示任务提交配置、全部输入、每次运行和每次状态变化。
-        </p>
-        <p>
-          <span class="db-badge">28</span>
-          创建人可查看自己的任务；项目管理员可查看项目内全部任务。
-        </p>
-        <p>
-          <span class="db-badge">29</span>
-          任务中可能包含敏感连接信息，列表和日志不可返回明文。
-        </p>
-        <p>
-          <span class="db-badge">30</span>
-          所有取消、重试和参数变更需要记录操作者、时间和原因。
+    <div class="db-kicker">建模第 2 步 · 画出业务流转</div>
+    <h2 data-node="title">
+      先画主流程：用户选择模板，提交任务，系统产生一次或多次运行
+    </h2>
+    <div data-node="business-flow" class="db-flow" style="margin-top: 46px">
+      <div class="db-flow-node">
+        <b>工作空间 / 项目</b><span>确定任务归属与可见范围</span>
+      </div>
+      <div class="db-flow-arrow">→</div>
+      <div class="db-flow-node">
+        <b>模板版本</b><span>决定表单结构和配置规则</span>
+      </div>
+      <div class="db-flow-arrow">→</div>
+      <div class="db-flow-node" style="border-color: #79bdb4">
+        <b>任务</b><span>用户的一次提交与配置快照</span>
+      </div>
+      <div class="db-flow-arrow">→</div>
+      <div class="db-flow-node" style="border-color: #e8b18f">
+        <b>运行</b><span>系统的一次实际执行尝试</span>
+      </div>
+      <div class="db-flow-arrow">→</div>
+      <div class="db-flow-node">
+        <b>状态与文件</b><span>执行过程和产生的结果</span>
+      </div>
+    </div>
+    <div data-node="flow-questions" class="db-grid-3" style="margin-top: 38px">
+      <div class="db-card blue">
+        <div class="db-label">模板升级</div>
+        <h3>为什么需要版本？</h3>
+        <p style="margin-top: 10px">
+          历史任务要继续按照提交时的表单和配置规则解释。
         </p>
       </div>
-      <div class="db-story">
-        <p>
-          <span class="db-badge blue">31</span>
-          用户可以归档任务，但运行历史按平台保留策略继续保存。
+      <div class="db-card teal">
+        <div class="db-label">任务提交</div>
+        <h3>什么是一条任务？</h3>
+        <p style="margin-top: 10px">
+          用户确认提交的一份业务记录，包括归属、输入和参数快照。
         </p>
-        <p>
-          <span class="db-badge blue">32</span> 运行事件在线保留 180
-          天，之后归档；任务主记录保留 3 年。
-        </p>
-        <p>
-          <span class="db-badge blue">33</span> 单工作空间预计每年 500
-          万任务，运行次数约为任务数的 1.3 倍。
-        </p>
-        <p>
-          <span class="db-badge blue">34</span> 峰值提交 80 次/秒，列表读取 600
-          次/秒，外部回调 300 次/秒。
-        </p>
-        <p>
-          <span class="db-badge blue">35</span>
-          大批量导出必须异步生成文件，不能长时间占用在线请求。
-        </p>
-        <p>
-          <span class="db-badge blue">36</span>
-          提交成功后必须立即可见；统计报表允许分钟级延迟。
+      </div>
+      <div class="db-card orange">
+        <div class="db-label">失败重试</div>
+        <h3>为什么需要运行？</h3>
+        <p style="margin-top: 10px">
+          同一任务可能执行多次，每次的状态、时间、错误和外部编号都不同。
         </p>
       </div>
     </div>
-    <div class="db-band teal">
-      <strong>建模不只回答“存什么”：</strong
-      >权限决定拆分和脱敏，查询决定索引，保留期决定分区与归档，一致性要求决定读写路径。
+    <div class="db-band">
+      <strong>核心区分：</strong
+      >任务记录用户“提交了什么”；运行记录系统“实际执行了哪一次”。
     </div>
     <div class="db-footer">
-      <span>容量和保留策略必须在设计时出现</span><span>14</span>
+      <span>先画业务流，再决定每个节点是否成为表</span><span>14</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-第三段把经常被漏掉的非功能需求放回业务故事。没有查询条件就无法设计索引；没有保留期就无法判断事件表是否需要分区归档；没有“提交后立即可见”就无法判断能不能从有延迟的只读副本查询。
+这页只建立流程，避免马上进入密集字段。模板版本决定提交表单；任务记录用户意图；运行记录一次执行。重试时用户意图不变，因此新增运行；修改输入后重新提交则会产生新任务。
 </notes>

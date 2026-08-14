@@ -1,69 +1,66 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">字段类型 · 精确数值</div>
-    <h2 data-node="title">
-      金额用 DECIMAL，不是因为习惯，而是二进制浮点无法精确表示多数十进制小数
-    </h2>
-    <div data-node="money-layout" class="db-grid-2" style="margin-top: 25px">
-      <div class="db-card red">
-        <div class="db-label">FLOAT / DOUBLE · 近似数</div>
-        <div class="db-code">
-          <span class="bad">0.1 + 0.2 ≠ 精确的 0.3</span
-          ><br /><br />适合：测量值、监控指标、科学计算<br />不适合：金额、税额、需要精确相等的比例
-        </div>
-        <p style="margin-top: 14px">
-          二进制浮点通常只能保存最接近的值。单次误差很小，但聚合、舍入、对账时会累积并暴露。
-        </p>
-      </div>
+    <div class="db-kicker">其他常用类型</div>
+    <h2 data-node="title">小数、日期、真假和文件：掌握各自最重要的一条规则</h2>
+    <div
+      data-node="common-special-types"
+      class="db-grid-2"
+      style="margin-top: 27px"
+    >
       <div class="db-card teal">
-        <div class="db-label">两种精确方案</div>
-        <div class="db-code">
-          <span class="good">方案 A</span><br />amount NUMERIC(18, 2)<br /><br /><span
-            class="good"
-            >方案 B</span
-          ><br />amount_minor BIGINT -- 分<br />currency_code CHAR(3)
-        </div>
-        <p style="margin-top: 14px">
-          高精度计费可能需要更多小数位；多币种不能假设所有货币都固定两位小数。
+        <div class="db-label">DECIMAL / FLOAT / DOUBLE</div>
+        <h3>需要精确的十进制值使用 DECIMAL</h3>
+        <p style="margin-top: 10px">
+          例如费用、比例、精确单价。FLOAT/DOUBLE
+          保存近似值，适合监控指标和允许误差的测量数据。
         </p>
+        <div class="db-code" style="margin-top: 14px">
+          unit_price DECIMAL(18, 6)
+        </div>
+      </div>
+      <div class="db-card blue">
+        <div class="db-label">DATE / DATETIME / TIMESTAMP</div>
+        <h3>日期和时刻使用专门的时间类型</h3>
+        <p style="margin-top: 10px">
+          数据库可以校验合法日期、正确排序和计算时长。PRD
+          还需明确时区，以及“尚未开始”是否允许 NULL。
+        </p>
+        <div class="db-code" style="margin-top: 14px">
+          started_at DATETIME NULL
+        </div>
+      </div>
+      <div class="db-card orange">
+        <div class="db-label">BOOLEAN</div>
+        <h3>只用于两个明确答案</h3>
+        <p style="margin-top: 10px">
+          是否启用、是否公开可以使用布尔值。待审核、通过、拒绝包含三个状态，应使用状态字段。
+        </p>
+        <div class="db-code" style="margin-top: 14px">
+          is_enabled BOOLEAN NOT NULL
+        </div>
+      </div>
+      <div class="db-card yellow">
+        <div class="db-label">BLOB / 文件</div>
+        <h3>大文件通常放对象存储</h3>
+        <p style="margin-top: 10px">
+          数据库保存
+          object_key、文件名、大小、类型、哈希和创建时间，避免核心表和备份被大文件拖慢。
+        </p>
+        <div class="db-code" style="margin-top: 14px">
+          object_key VARCHAR(512)
+        </div>
       </div>
     </div>
-    <table
-      data-node="money-prd"
-      class="db-table dense"
-      style="margin-top: 20px"
-    >
-      <thead>
-        <tr>
-          <th>PRD 必须定义</th>
-          <th>不定义会怎样</th>
-          <th>示例</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>单位与币种</td>
-          <td>12 是元、分还是美元无法判断</td>
-          <td><code>amount_minor=1250, currency=CNY</code></td>
-        </tr>
-        <tr>
-          <td>最大范围与小数位</td>
-          <td>字段溢出，或单价精度被过早截断</td>
-          <td>资源计费单价可能需要 6 位小数</td>
-        </tr>
-        <tr>
-          <td>舍入时机与规则</td>
-          <td>逐项舍入和汇总后舍入结果不同</td>
-          <td>银行家舍入 / 四舍五入需统一</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="db-band">
+      <strong>本节重点：</strong
+      >专门类型可以提前阻止非法值，并提供正确的比较和计算能力；产品需要补充单位、时区、可空与精度口径。
+    </div>
     <div class="db-footer">
-      <span>准确类型之外，还必须定义业务计算口径</span><span>06</span>
+      <span>费用等精确数值按实际业务进一步评审</span><span>06</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-解释浮点不是“有 bug”，而是设计目标不同：它用有限二进制位近似实数。科学计算允许误差，财务对账不允许。金额字段还不能只写 DECIMAL，需要产品明确币种、单位、精度、上限和舍入规则。
+这页保留四个通用结论：精确十进制用 DECIMAL，监控和测量可用浮点；日期使用时间类型；布尔值只表达两个明确答案；大文件通常放对象存储。
 </notes>

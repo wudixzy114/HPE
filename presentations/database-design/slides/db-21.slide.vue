@@ -1,119 +1,59 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">案例结果 · 最终结构</div>
-    <h2 data-node="title">
-      最终不是“一张任务表”，而是一组各自表达单一事实的表
-    </h2>
+    <div class="db-kicker">第一范式 · 多条数据分成多行</div>
+    <h2 data-node="title">一个任务有多个输入时，用 task_input 保存多行</h2>
     <div
-      data-node="final-model"
-      style="
-        display: grid;
-        grid-template-columns: 0.72fr 32px 0.95fr 32px 1.05fr 32px 1.2fr;
-        gap: 8px;
-        align-items: center;
-        margin-top: 22px;
-      "
+      data-node="first-normal-form"
+      class="db-grid-2"
+      style="margin-top: 28px"
     >
-      <div class="db-stack">
-        <div class="db-entity"><h3>workspace</h3></div>
-        <div class="db-entity"><h3>project</h3></div>
-        <div class="db-entity teal">
-          <h3>project_member</h3>
-          <div class="db-field"><span>role / joined_at</span></div>
+      <div class="db-card red">
+        <div class="db-label">问题结构</div>
+        <div class="db-code">
+          <span class="bad">task</span>(<br />
+          id,<br />
+          input_1,<br />
+          input_2,<br />
+          input_3<br />)<br /><br />或 input_ids = "12,18,31"
         </div>
+        <ul>
+          <li>最多只能保存固定数量。</li>
+          <li>无法给每个输入增加外键。</li>
+          <li>无法保存每个输入的顺序和用途。</li>
+          <li>查询某个输入被哪些任务使用很困难。</li>
+        </ul>
       </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-stack">
-        <div class="db-entity">
-          <h3>task_template</h3>
-          <div class="db-field"><span>code / current state</span></div>
+      <div class="db-card teal">
+        <div class="db-label">推荐结构</div>
+        <div class="db-code">
+          <span class="good">task</span>(id, name, ...)<br /><br /><span
+            class="good"
+            >task_input</span
+          >(<br />
+          id,<br />
+          task_id,<br />
+          input_no,<br />
+          dataset_id,<br />
+          input_role<br />)
         </div>
-        <div class="db-entity teal">
-          <h3>template_version</h3>
-          <div class="db-field"><span>form_schema</span></div>
-          <div class="db-field"><span>config_schema</span></div>
-        </div>
-      </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-stack">
-        <div class="db-entity orange">
-          <h3>task</h3>
-          <div class="db-field"><span>提交事实 / config</span></div>
-          <div class="db-field"><span>current_status</span></div>
-        </div>
-        <div class="db-entity">
-          <h3>task_input</h3>
-          <div class="db-field"><span>input_no / snapshot</span></div>
-        </div>
-      </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-stack">
-        <div class="db-entity orange">
-          <h3>task_run</h3>
-          <div class="db-field"><span>attempt_no / status</span></div>
-          <div class="db-field"><span>external_job_id</span></div>
-        </div>
-        <div class="db-grid-2" style="gap: 8px">
-          <div class="db-entity">
-            <h3 style="font-size: 17px">run_event</h3>
-            <div class="db-field"><span>追加历史</span></div>
-          </div>
-          <div class="db-entity">
-            <h3 style="font-size: 17px">artifact</h3>
-            <div class="db-field"><span>对象 key</span></div>
-          </div>
-        </div>
-        <div class="db-entity teal">
-          <h3>outbox_event</h3>
-          <div class="db-field"><span>待投递事件</span></div>
-        </div>
+        <ul>
+          <li>输入数量可以自然增长。</li>
+          <li>dataset_id 可以添加外键。</li>
+          <li>task_id + input_no 可以保证顺序唯一。</li>
+          <li>每个输入可以继续增加自己的字段。</li>
+        </ul>
       </div>
     </div>
-    <table
-      data-node="table-responsibilities"
-      class="db-table compact"
-      style="margin-top: 18px"
-    >
-      <thead>
-        <tr>
-          <th>表</th>
-          <th>只负责什么</th>
-          <th>最关键约束</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>template_version</td>
-          <td>一个不可变模板版本</td>
-          <td>UNIQUE(template_id, version_no)</td>
-        </tr>
-        <tr>
-          <td>task</td>
-          <td>用户一次提交及其快照</td>
-          <td>防重复键、租户归属、模板版本外键</td>
-        </tr>
-        <tr>
-          <td>task_run</td>
-          <td>一次实际执行尝试</td>
-          <td>UNIQUE(task_id, attempt_no)；外部 ID 唯一</td>
-        </tr>
-        <tr>
-          <td>run_event</td>
-          <td>一次状态变化或外部回调</td>
-          <td>外部事件去重，只追加</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="db-band teal">
-      <strong>设计完成的判断标准：</strong
-      >每张表能用一句话说明；同一事实有唯一权威位置；业务不变量能找到约束或事务落点。
+    <div class="db-band">
+      <strong>识别信号：</strong>字段名出现
+      _1、_2、_3，或一个字段里用逗号保存多个值，通常需要改成子表多行。
     </div>
     <div class="db-footer">
-      <span>接下来用范式检查这组结构是否存在重复与依赖问题</span><span>21</span>
+      <span>1NF 主要解决重复列和多值字段</span><span>21</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-最终图是前面六步的结果，不是凭经验直接画出来。逐项回顾：版本表解决历史解释，输入表解决多值，运行表解决重试，事件表解决过程历史，outbox 解决数据库与外部系统之间的可靠投递。
+第一范式只讲一个直观规则：会重复出现的值改成多行。任务输入是最清晰的例子。这样数量可以扩展，关系可以约束，每条输入也能拥有自己的属性。
 </notes>

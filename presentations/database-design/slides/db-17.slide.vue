@@ -1,80 +1,76 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">建模步骤 3 · 确定关系与数量</div>
-    <h2 data-node="title">
-      关系不只说“有关联”，还要说明最少几个、最多几个、关系本身有什么属性
-    </h2>
+    <div class="db-kicker">建模第 5 步 · 建立关系</div>
+    <h2 data-node="title">把“一条对多条”画成父表与子表，外键放在多的一侧</h2>
     <div
-      data-node="relationship-map"
+      data-node="relationship-diagram"
       style="
         display: grid;
-        grid-template-columns: 1fr 46px 1fr 46px 1fr;
-        gap: 10px;
+        grid-template-columns: 1fr 45px 1fr 45px 1.2fr;
+        gap: 12px;
         align-items: center;
-        margin-top: 27px;
+        margin-top: 32px;
       "
     >
       <div class="db-stack">
         <div class="db-entity">
-          <h3>workspace</h3>
-          <div class="db-field"><span>一个工作空间</span><em>1</em></div>
-        </div>
-        <div class="db-entity teal">
-          <h3>project</h3>
-          <div class="db-field"><span>属于工作空间</span><em>N</em></div>
-        </div>
-      </div>
-      <div class="db-flow-arrow">→</div>
-      <div class="db-stack">
-        <div class="db-entity">
-          <h3>template</h3>
-          <div class="db-field"><span>拥有版本</span><em>1:N</em></div>
+          <h3>task_template</h3>
+          <div class="db-field"><span>id</span></div>
         </div>
         <div class="db-entity teal">
           <h3>template_version</h3>
-          <div class="db-field"><span>被任务引用</span><em>1:N</em></div>
+          <div class="db-field"><span>template_id</span><em>外键</em></div>
         </div>
       </div>
       <div class="db-flow-arrow">→</div>
-      <div class="db-stack">
-        <div class="db-entity orange">
-          <h3>task</h3>
-          <div class="db-field"><span>输入</span><em>1:N</em></div>
-          <div class="db-field"><span>运行</span><em>1:N</em></div>
+      <div class="db-entity orange">
+        <h3>task</h3>
+        <div class="db-field">
+          <span>template_version_id</span><em>外键</em>
         </div>
-        <div class="db-grid-2" style="gap: 10px">
-          <div class="db-entity"><h3>task_input</h3></div>
-          <div class="db-entity"><h3>task_run</h3></div>
+        <div class="db-field"><span>project_id</span><em>外键</em></div>
+      </div>
+      <div class="db-flow-arrow">→</div>
+      <div class="db-grid-2">
+        <div class="db-entity">
+          <h3>task_input</h3>
+          <div class="db-field"><span>task_id</span><em>外键</em></div>
+          <div class="db-field"><span>input_no</span></div>
+        </div>
+        <div class="db-entity orange">
+          <h3>task_run</h3>
+          <div class="db-field"><span>task_id</span><em>外键</em></div>
+          <div class="db-field"><span>attempt_no</span></div>
         </div>
       </div>
     </div>
-    <div data-node="many-to-many" class="db-grid-2" style="margin-top: 22px">
+    <div data-node="relation-rules" class="db-grid-3" style="margin-top: 30px">
+      <div class="db-card teal">
+        <div class="db-label">模板 1 → N 版本</div>
+        <p>版本表保存 template_id；同一模板内 version_no 唯一。</p>
+      </div>
       <div class="db-card blue">
-        <div class="db-label">多对多不能直接相连</div>
-        <h3>用户 ↔ 项目 → project_member</h3>
-        <p style="margin-top: 9px">
-          关联表至少包含
-          project_id、user_id；角色、加入时间、邀请人、有效期属于这段关系，而不属于用户或项目单独一方。
-        </p>
+        <div class="db-label">任务 1 → N 输入</div>
+        <p>输入表保存 task_id；task_id + input_no 唯一，数量可以自然扩展。</p>
       </div>
       <div class="db-card orange">
-        <div class="db-label">可选性也要明确</div>
-        <h3>0..N 与 1..N 不一样</h3>
-        <p style="margin-top: 9px">
-          任务创建时是否必须至少一个输入？运行能否在任务创建后异步产生？答案会决定事务边界、非空和校验位置。
-        </p>
+        <div class="db-label">任务 1 → N 运行</div>
+        <p>运行表保存 task_id；task_id + attempt_no 唯一，每次重试新增一行。</p>
       </div>
     </div>
     <div class="db-band red">
-      <strong>错误表达：</strong><code>input_ids='12,18,31'</code>
-      无法加外键、无法保存每个输入的顺序与用途，也难以高效查询。
+      <strong>避免这种设计：</strong
+      ><code>input_id_1、input_id_2、input_id_3</code> 或
+      <code>input_ids="12,18,31"</code
+      >。它们限制数量，也无法为每个输入保存顺序和用途。
     </div>
     <div class="db-footer">
-      <span>外键通常放在“多个”的一侧</span><span>17</span>
+      <span>多对多关系再增加一张关系表，并把角色等关系属性放进去</span
+      ><span>17</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-关系设计要回答数量和可选性。多对多关系必须通过关系表落地，因为关系本身常有角色和时间等属性。逗号拼接 ID 看似少一张表，实际丢失外键、关系属性、查询和扩展能力。
+用图说明外键位置。模板版本、任务输入、任务运行都是典型一对多。多对多只需口头补充：用户与项目之间增加 project_member，角色和加入时间放在关系表。
 </notes>

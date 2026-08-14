@@ -1,83 +1,92 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">字段类型 · 为什么存在</div>
-    <h2 data-node="title">
-      数据类型同时决定：能存什么、怎样比较、怎样计算、怎样索引
-    </h2>
-    <div data-node="type-effects" class="db-grid-4" style="margin-top: 29px">
+    <div class="db-kicker">MySQL 类型全景</div>
+    <h2 data-node="title">常见业务字段可以先归入六大类，再选择具体类型</h2>
+    <div data-node="mysql-type-map" class="db-grid-3" style="margin-top: 25px">
       <div class="db-card teal">
-        <div class="db-label">合法性</div>
-        <h3>能否阻止脏数据</h3>
-        <p style="margin-top: 9px">
-          <code>INT</code> 无法写入 “十”；日期类型会拒绝 2 月 30
-          日；字符串则可能照单全收。
+        <div class="db-label">整数</div>
+        <h3>整数值</h3>
+        <div class="db-pills" style="margin-top: 12px">
+          <span class="db-pill teal">TINYINT</span
+          ><span class="db-pill teal">SMALLINT</span
+          ><span class="db-pill teal">INT</span
+          ><span class="db-pill teal">BIGINT</span>
+        </div>
+        <p style="margin-top: 13px">
+          数量、次数、序号、内部 ID。主要区别是可表示范围和存储空间。
         </p>
       </div>
       <div class="db-card blue">
-        <div class="db-label">比较与排序</div>
-        <h3>按数值还是按字符</h3>
-        <p style="margin-top: 9px">
-          字符串排序中 <code>"100" &lt; "20"</code>，因为比较的是第一个字符。
+        <div class="db-label">精确 / 近似小数</div>
+        <h3>带小数的数值</h3>
+        <div class="db-pills" style="margin-top: 12px">
+          <span class="db-pill blue">DECIMAL</span
+          ><span class="db-pill blue">FLOAT</span
+          ><span class="db-pill blue">DOUBLE</span>
+        </div>
+        <p style="margin-top: 13px">
+          DECIMAL 用于需要十进制精确的值；FLOAT/DOUBLE
+          用于允许误差的测量与统计。
         </p>
       </div>
       <div class="db-card orange">
-        <div class="db-label">计算语义</div>
-        <h3>精确还是近似</h3>
-        <p style="margin-top: 9px">
-          金额要求十进制精确；科学测量允许浮点近似；编码根本不参与算术。
+        <div class="db-label">字符串</div>
+        <h3>文本和编码</h3>
+        <div class="db-pills" style="margin-top: 12px">
+          <span class="db-pill orange">CHAR</span
+          ><span class="db-pill orange">VARCHAR</span
+          ><span class="db-pill orange">TEXT</span>
+        </div>
+        <p style="margin-top: 13px">
+          名称、业务编号、手机号、描述、错误信息。长度和排序规则需要明确。
         </p>
       </div>
       <div class="db-card yellow">
-        <div class="db-label">存储与索引</div>
-        <h3>每行和每个索引多大</h3>
-        <p style="margin-top: 9px">
-          定长整数通常比数字字符串紧凑；字段越宽，索引能缓存的条目越少。
+        <div class="db-label">日期时间</div>
+        <h3>日期与时刻</h3>
+        <div class="db-pills" style="margin-top: 12px">
+          <span class="db-pill">DATE</span><span class="db-pill">DATETIME</span
+          ><span class="db-pill">TIMESTAMP</span>
+        </div>
+        <p style="margin-top: 13px">
+          业务日期、创建时间、开始结束时间。重点是格式、时区和是否允许为空。
+        </p>
+      </div>
+      <div class="db-card red">
+        <div class="db-label">真假与状态</div>
+        <h3>布尔值和有限集合</h3>
+        <div class="db-pills" style="margin-top: 12px">
+          <span class="db-pill red">BOOLEAN</span
+          ><span class="db-pill red">状态代码</span>
+        </div>
+        <p style="margin-top: 13px">
+          BOOLEAN 表示明确的是/否；排队、运行、成功等流程使用状态代码。
+        </p>
+      </div>
+      <div class="db-card">
+        <div class="db-label">结构化扩展</div>
+        <h3>灵活配置</h3>
+        <div class="db-pills" style="margin-top: 12px">
+          <span class="db-pill blue">JSON</span
+          ><span class="db-pill">BLOB</span>
+        </div>
+        <p style="margin-top: 13px">
+          JSON 保存版本化配置；大文件通常放对象存储，数据库保存地址和元数据。
         </p>
       </div>
     </div>
-    <div
-      data-node="all-string-example"
-      class="db-split"
-      style="margin-top: 23px"
-    >
-      <div class="db-code">
-        <span class="bad">全部 String</span><br />age = "十八"<br />amount =
-        "12.9元"<br />created_at = "昨天"<br />priority = "high" / "高" / "3"
-      </div>
-      <div class="db-rule-list">
-        <div class="db-rule">
-          <span class="db-badge red">1</span
-          ><span
-            ><b>写入容易，使用困难：</b
-            >每个查询、接口和统计都要重新解析与校验。</span
-          >
-        </div>
-        <div class="db-rule">
-          <span class="db-badge red">2</span
-          ><span
-            ><b>规则无法统一：</b
-            >旧接口、脚本和新服务可能各自接受不同格式。</span
-          >
-        </div>
-        <div class="db-rule">
-          <span class="db-badge red">3</span
-          ><span
-            ><b>错误推迟到线上：</b
-            >直到排序、求和、范围查询或数据分析时才爆发。</span
-          >
-        </div>
-      </div>
-    </div>
-    <div class="db-band">
-      <strong>类型选择顺序：</strong
-      >先确认业务语义，再确认范围、精度、比较方式、约束和未来增长。
+    <div class="db-band teal">
+      <strong>第一步只做分类：</strong
+      >数值、文本、时间、真假、状态或结构化配置。分类明确后，再讨论 INT 还是
+      BIGINT、VARCHAR 应该多长。
     </div>
     <div class="db-footer">
-      <span>类型不是存储格式细节，而是业务规则</span><span>02</span>
+      <span>示例以 MySQL 为主，具体范围与行为以实际版本为准</span
+      ><span>02</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-明确回答“能不能全部用 String”：技术上能存，业务上代价很高。数据库失去第一层校验，排序和计算语义错误，所有消费者都要重复解析。类型越准确，错误越早被拒绝，规则越容易统一。
+先给类型地图，避免一上来就抠 INT 和 BIGINT。让听众先会把业务字段归类：ID 是整数或 UUID，手机号属于文本，开始时间属于时间，任务流程属于状态。后面只深化最常用、最容易选错的类型。
 </notes>

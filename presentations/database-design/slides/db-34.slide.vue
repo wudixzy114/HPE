@@ -1,91 +1,79 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">性能 · 过载保护</div>
+    <div class="db-kicker">性能 · 控制每次操作的规模</div>
     <h2 data-node="title">
-      数据库被打爆通常不是一条慢 SQL，而是无边界访问与故障放大
+      数据库稳定运行，需要为列表、导出、批处理和历史数据设置边界
     </h2>
     <table
       data-node="performance-controls"
       class="db-table dense"
-      style="margin-top: 21px"
+      style="margin-top: 23px"
     >
       <thead>
         <tr>
-          <th>风险</th>
-          <th>错误做法</th>
-          <th>保护方式</th>
-          <th>PRD / 方案要给出的数字</th>
+          <th>场景</th>
+          <th>容易出现的问题</th>
+          <th>推荐做法</th>
+          <th>产品需要定义</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>深分页</strong></td>
-          <td><code>OFFSET 1000000</code></td>
-          <td>使用 created_at + id 的游标分页</td>
-          <td>每页上限、是否允许跳页</td>
+          <td><strong>任务列表</strong></td>
+          <td>一次返回全部记录，或翻到很深的页码</td>
+          <td>强制分页；每页有上限；大数据量使用游标翻页</td>
+          <td>默认页数、最大每页数量、是否支持跳页</td>
         </tr>
         <tr>
-          <td><strong>大导出</strong></td>
-          <td>在线接口一次查数百万行</td>
-          <td>异步任务分批读取，生成文件后下载</td>
-          <td>最大行数、完成时限、文件保留期</td>
+          <td><strong>批量导出</strong></td>
+          <td>在线请求查询数百万行并长时间占用连接</td>
+          <td>提交异步导出任务，完成后生成文件下载</td>
+          <td>最大导出量、完成时间、文件保留期</td>
         </tr>
         <tr>
-          <td><strong>定时扫描</strong></td>
-          <td>每分钟全表查待处理记录</td>
-          <td>索引条件 + 小批次 + 游标 / 跳过锁定行</td>
-          <td>批次大小、并发数、扫描周期</td>
+          <td><strong>定时处理</strong></td>
+          <td>定时任务每次扫描整张表</td>
+          <td>使用查询条件和索引，小批量持续处理</td>
+          <td>批次大小、处理周期、允许并发数</td>
         </tr>
         <tr>
-          <td><strong>连接耗尽</strong></td>
-          <td>实例越多，每个实例连接池也越大</td>
-          <td>按数据库容量分配总连接预算和获取超时</td>
-          <td>总连接上限、单服务份额、超时</td>
+          <td><strong>失败重试</strong></td>
+          <td>失败后大量请求立即再次访问数据库</td>
+          <td>限制重试次数，并逐步增加等待时间</td>
+          <td>重试次数、等待时间、最终失败提示</td>
         </tr>
         <tr>
-          <td><strong>重试风暴</strong></td>
-          <td>失败后立即无限重试</td>
-          <td>次数上限 + 指数退避 + 随机抖动 + 熔断</td>
-          <td>最大重试次数、间隔、降级策略</td>
-        </tr>
-        <tr>
-          <td><strong>历史膨胀</strong></td>
-          <td>事件和日志永久留在在线主表</td>
-          <td>按时间分区、归档、冷热分层和删除</td>
-          <td>在线保留期、归档期、恢复需求</td>
+          <td><strong>事件与日志</strong></td>
+          <td>数据持续增长，在线表越来越大</td>
+          <td>明确在线保留期，过期后归档或删除</td>
+          <td>保留多久、能否恢复、谁可查询历史</td>
         </tr>
       </tbody>
     </table>
-    <div
-      data-node="capacity-formula"
-      class="db-grid-3"
-      style="margin-top: 17px"
-    >
+    <div data-node="capacity-basics" class="db-grid-3" style="margin-top: 22px">
       <div class="db-card teal">
-        <div class="db-label">容量输入</div>
-        <p>
-          初始 / 1 年 / 3 年行数，平均与峰值读写 QPS，单行平均大小，保留期限。
-        </p>
+        <div class="db-label">数据量</div>
+        <p>现在、1 年后、3 年后大约有多少任务和运行记录。</p>
       </div>
       <div class="db-card blue">
-        <div class="db-label">服务目标</div>
-        <p>列表 P95/P99 响应时间，提交吞吐，允许的复制延迟与统计延迟。</p>
+        <div class="db-label">访问量</div>
+        <p>平时和高峰每秒大约有多少提交、查询和回调。</p>
       </div>
       <div class="db-card orange">
-        <div class="db-label">增长来源</div>
-        <p>用户流量、外部回调、批处理、定时任务分别估算，不能只给总量。</p>
+        <div class="db-label">保留期</div>
+        <p>任务、运行、事件、日志分别在线保存多久。</p>
       </div>
     </div>
     <div class="db-band">
-      <strong>优化顺序：</strong>查询形态 → 索引 → 分页与批次 → 连接与限流 →
-      归档；确认仍不足后再评估缓存、读副本、分区和分库分表。
+      <strong>优化顺序：</strong
+      >先控制查询范围和每次处理数量，再设计索引和归档；数据规模确实超过单库能力时，再评估更复杂的架构。
     </div>
     <div class="db-footer">
-      <span>“支持海量”不能指导设计，必须换成可验证数字</span><span>34</span>
+      <span>“数据量大”需要换成具体数字</span><span>34</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-性能事故常由多个正常请求叠加，或故障时重试放大。连接池也需要总预算：十个实例各开 100 个连接，数据库面对的是 1000 个连接。分库分表不是第一步，先把查询、分页、批处理、连接和保留期做清楚。
+性能部分只保留产品能够直接影响的边界：分页、导出、批次、重试和保留期。产品在 PRD 中给出数量和上限，研发才能据此设计索引和容量。
 </notes>

@@ -19,32 +19,32 @@
     {
       "id": "db-01",
       "file": "slides/db-01.slide.vue",
-      "title": "从一段需求到数据库，要连续完成六次判断"
+      "title": "从类型全景到业务建模的学习路径"
     },
     {
       "id": "db-02",
       "file": "slides/db-02.slide.vue",
-      "title": "数据类型同时决定存储、比较、计算与索引"
+      "title": "MySQL 常用字段类型全景"
     },
     {
       "id": "db-03",
       "file": "slides/db-03.slide.vue",
-      "title": "INT 与 BIGINT 的范围、空间和迁移成本"
+      "title": "INT 与 BIGINT 的范围、空间和增长"
     },
     {
       "id": "db-04",
       "file": "slides/db-04.slide.vue",
-      "title": "CHAR、VARCHAR、TEXT 的边界与长度选择"
+      "title": "VARCHAR、TEXT 与字符串长度选择"
     },
     {
       "id": "db-05",
       "file": "slides/db-05.slide.vue",
-      "title": "全部使用 String 的具体代价"
+      "title": "全部使用字符串会失去哪些能力"
     },
     {
       "id": "db-06",
       "file": "slides/db-06.slide.vue",
-      "title": "金额为什么必须使用精确数值"
+      "title": "小数、日期、真假和文件类型"
     },
     {
       "id": "db-07",
@@ -54,7 +54,7 @@
     {
       "id": "db-08",
       "file": "slides/db-08.slide.vue",
-      "title": "状态字段需要合法值、合法迁移与历史"
+      "title": "状态字段的代码、变化与历史"
     },
     {
       "id": "db-09",
@@ -64,117 +64,92 @@
     {
       "id": "db-10",
       "file": "slides/db-10.slide.vue",
-      "title": "动态配置、JSON 与 EAV 的使用边界"
+      "title": "普通列与 JSON 的使用边界"
     },
     {
       "id": "db-11",
       "file": "slides/db-11.slide.vue",
-      "title": "高频公共字段的职责与设计规则"
+      "title": "常用公共字段及其职责"
     },
     {
       "id": "db-12",
       "file": "slides/db-12.slide.vue",
-      "title": "中台用户故事：创建任务与管理模板"
+      "title": "中台任务提交的完整用户故事"
     },
     {
       "id": "db-13",
       "file": "slides/db-13.slide.vue",
-      "title": "中台用户故事：排队、运行、取消与重试"
+      "title": "从故事中提取名词、动作、数量和规则"
     },
     {
       "id": "db-14",
       "file": "slides/db-14.slide.vue",
-      "title": "中台用户故事：查询、权限、审计与容量"
+      "title": "画出模板、任务和运行的业务流转"
     },
     {
       "id": "db-15",
       "file": "slides/db-15.slide.vue",
-      "title": "从需求中提取名词、动作、数量与规则"
+      "title": "从业务流拆出五张核心表"
     },
     {
       "id": "db-16",
       "file": "slides/db-16.slide.vue",
-      "title": "如何决定哪些对象应该独立成表"
+      "title": "为核心表填写身份、归属和业务字段"
     },
     {
       "id": "db-17",
       "file": "slides/db-17.slide.vue",
-      "title": "如何确定关系、数量与关系属性"
+      "title": "建立父表、子表和外键关系"
     },
     {
       "id": "db-18",
       "file": "slides/db-18.slide.vue",
-      "title": "字段归属取决于谁能唯一决定它"
+      "title": "任务字段与运行字段如何分开"
     },
     {
       "id": "db-19",
       "file": "slides/db-19.slide.vue",
-      "title": "当前状态与事件历史为什么要并存"
+      "title": "中台案例的最终数据结构"
     },
     {
       "id": "db-20",
       "file": "slides/db-20.slide.vue",
-      "title": "核心任务表的字段与约束如何落地"
+      "title": "第一范式到第三范式总览"
     },
     {
       "id": "db-21",
       "file": "slides/db-21.slide.vue",
-      "title": "中台案例的最终数据结构"
+      "title": "第一范式：多个值使用多行保存"
     },
     {
       "id": "db-22",
       "file": "slides/db-22.slide.vue",
-      "title": "第一范式：一个字段表达一个可约束的值"
+      "title": "第二范式：关系字段依赖完整关系"
     },
     {
       "id": "db-23",
       "file": "slides/db-23.slide.vue",
-      "title": "第二范式：关系表字段必须依赖完整关系"
+      "title": "第三范式：主数据放回自己的表"
     },
     {
       "id": "db-24",
       "file": "slides/db-24.slide.vue",
-      "title": "第三范式：不要让非主键字段决定另一个字段"
+      "title": "结构问题在修改、插入、删除和扩展时的后果"
     },
     {
       "id": "db-25",
       "file": "slides/db-25.slide.vue",
-      "title": "不遵循范式，问题会在修改、并发和扩展时出现"
-    },
-    {
-      "id": "db-26",
-      "file": "slides/db-26.slide.vue",
-      "title": "反范式不是随便重复，而是受控的性能设计"
-    },
-    {
-      "id": "db-27",
-      "file": "slides/db-27.slide.vue",
-      "title": "约束、删除与多租户决定数据能否长期可信"
-    },
-    {
-      "id": "db-28",
-      "file": "slides/db-28.slide.vue",
-      "title": "事务只解决一个边界内的全部成功或全部失败"
+      "title": "五种常用数据库约束"
     },
     {
       "id": "db-29",
       "file": "slides/db-29.slide.vue",
-      "title": "并发会制造重复、覆盖、超额和状态倒退"
-    },
-    {
-      "id": "db-30",
-      "file": "slides/db-30.slide.vue",
-      "title": "唯一约束、条件更新与锁各解决不同问题"
-    },
-    {
-      "id": "db-31",
-      "file": "slides/db-31.slide.vue",
-      "title": "写数据库再调用调度平台，需要可重试的事件链路"
+      "title": "同时操作时防止重复创建和修改覆盖"
     },
     {
       "id": "db-32",
       "file": "slides/db-32.slide.vue",
-      "title": "数据库提供底座，业务系统仍要完成剩余保证"
+      "title": "数据库与应用系统分别负责什么"
     },
     {
       "id": "db-33",
@@ -184,17 +159,17 @@
     {
       "id": "db-34",
       "file": "slides/db-34.slide.vue",
-      "title": "分页、批处理、连接池和归档共同保护数据库"
+      "title": "为列表、导出、批处理和历史数据设置边界"
     },
     {
       "id": "db-35",
       "file": "slides/db-35.slide.vue",
-      "title": "PRD 必须写清字段、状态、并发与容量规则"
+      "title": "PRD 中的字段与表关系说明模板"
     },
     {
       "id": "db-36",
       "file": "slides/db-36.slide.vue",
-      "title": "一套可复用的数据库设计评审清单"
+      "title": "14 个数据库设计评审问题"
     }
   ]
 }

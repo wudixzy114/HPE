@@ -1,84 +1,61 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">设计范式 · 第二范式</div>
-    <h2 data-node="title">
-      第二范式：关系表中的字段，必须依赖完整关系，而不是只依赖一半
-    </h2>
+    <div class="db-kicker">第三范式 · 主数据放回自己的表</div>
+    <h2 data-node="title">任务保存 project_id，项目名称只在 project 中维护</h2>
     <div
-      data-node="second-normal-form"
+      data-node="third-normal-form"
       class="db-grid-2"
-      style="margin-top: 24px"
+      style="margin-top: 28px"
     >
       <div class="db-card red">
-        <div class="db-label">反例 · 项目成员关系</div>
+        <div class="db-label">大量任务重复项目名称</div>
         <div class="db-code">
-          <span class="bad">project_member</span>(<br />
+          <span class="bad">task</span>(<br />
+          id,<br />
           project_id,<br />
-          user_id,<br />
           project_name,<br />
-          user_email,<br />
-          role_code,<br />
-          joined_at<br />)<br /><br />PRIMARY KEY(project_id, user_id)
+          workspace_name,<br />
+          task_name<br />)
         </div>
-        <table class="db-table compact" style="margin-top: 13px">
-          <tbody>
-            <tr>
-              <td>project_name</td>
-              <td>只由 project_id 决定</td>
-            </tr>
-            <tr>
-              <td>user_email</td>
-              <td>只由 user_id 决定</td>
-            </tr>
-            <tr>
-              <td>role_code</td>
-              <td>由 project_id + user_id 共同决定</td>
-            </tr>
-          </tbody>
-        </table>
+        <p style="margin-top: 15px">
+          项目改名时需要更新所有任务。漏掉部分记录后，同一个 project_id
+          会显示多个名称。
+        </p>
       </div>
       <div class="db-card teal">
-        <div class="db-label">正确拆分</div>
+        <div class="db-label">项目名称只有一个来源</div>
         <div class="db-code">
-          <span class="good">project</span>(id, name, ...)<br /><br /><span
+          <span class="good">workspace</span>(id, name)<br /><br /><span
             class="good"
-            >app_user</span
-          >(id, email, ...)<br /><br /><span class="good">project_member</span
-          >(<br />
-          project_id,<br />
-          user_id,<br />
-          role_code,<br />
-          joined_at<br />)
+            >project</span
+          >(id, workspace_id, name)<br /><br /><span class="good">task</span
+          >(id, project_id, task_name)
         </div>
-        <p style="margin-top: 14px">
-          成员角色和加入时间描述的是“这个用户在这个项目中的关系”，因此依赖完整组合键；项目名称与邮箱回到各自权威表。
+        <p style="margin-top: 15px">
+          项目改名只更新 project 一行。任务通过 project_id 查询项目名称。
         </p>
       </div>
     </div>
-    <div
-      data-node="snapshot-exception"
-      class="db-grid-2"
-      style="margin-top: 12px"
-    >
+    <div data-node="third-benefits" class="db-grid-3" style="margin-top: 23px">
+      <div class="db-note"><strong>修改简单：</strong>项目改名只更新一处。</div>
       <div class="db-note">
-        <strong>错误重复：</strong>为了少一次 JOIN，把当前 project_name
-        复制到每条成员关系；项目改名时必须更新所有成员。
+        <strong>独立存在：</strong>项目还没有任务时也能先创建。
       </div>
       <div class="db-note">
-        <strong>合理快照：</strong>若字段明确叫
-        project_name_snapshot，表达“加入当时的项目名称”，它的业务含义已经属于这次关系记录。
+        <strong>删除安全：</strong>删除最后一条任务不会丢失项目信息。
       </div>
     </div>
-    <div class="db-band" style="margin-top: 12px">
-      <strong>判断方法：</strong
-      >对于组合键表，逐个问非键字段：只给键的一部分，能否确定这个值？如果能，它通常放错了。
+    <div class="db-band teal">
+      <strong>核心原则：</strong
+      >项目名称属于项目，用户邮箱属于用户，模板名称属于模板。任务只保存这些对象的稳定
+      ID。
     </div>
     <div class="db-footer">
-      <span>第二范式主要检查关系表和组合唯一键</span><span>23</span>
+      <span>3NF 主要减少主数据在业务明细中的重复</span><span>23</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-用项目成员表讲清“依赖完整关系”。项目名称只由项目决定，邮箱只由用户决定，角色才由用户与项目共同决定。快照是例外，但必须更名并重新定义语义，不能把当前值和快照混为一谈。
+第三范式通过“项目改名”解释。任务只保存 project_id；项目名称在 project 中维护。这样修改范围小，项目也能独立创建和删除。
 </notes>

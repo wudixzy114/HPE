@@ -1,28 +1,26 @@
 <template>
   <Slide class="db-slide">
     <div class="db-kicker">PRD 应写到什么程度</div>
-    <h2 data-node="title">
-      产品不必给最终 DDL，但必须把研发无法替你决定的业务语义写清
-    </h2>
-    <div data-node="prd-template" class="db-grid-2" style="margin-top: 22px">
+    <h2 data-node="title">产品需要写清业务语义，具体数据库语法由研发完成</h2>
+    <div data-node="prd-template" class="db-grid-2" style="margin-top: 25px">
       <div class="db-card teal">
-        <div class="db-label">字段定义模板</div>
+        <div class="db-label">字段说明示例</div>
         <table class="db-table compact">
           <tbody>
             <tr>
-              <td><strong>业务名称</strong></td>
+              <td><strong>字段名称</strong></td>
               <td>优先级</td>
             </tr>
             <tr>
               <td><strong>业务含义</strong></td>
-              <td>调度时的相对顺序，越大越优先</td>
+              <td>任务排队时的相对顺序，数值越大越优先</td>
             </tr>
             <tr>
               <td><strong>类型 / 单位</strong></td>
               <td>整数，无单位</td>
             </tr>
             <tr>
-              <td><strong>必填 / 默认</strong></td>
+              <td><strong>必填 / 默认值</strong></td>
               <td>必填，默认 50</td>
             </tr>
             <tr>
@@ -31,88 +29,73 @@
             </tr>
             <tr>
               <td><strong>修改规则</strong></td>
-              <td>排队前可改；运行后不可改</td>
+              <td>排队前可改；开始运行后不可改</td>
             </tr>
             <tr>
               <td><strong>示例</strong></td>
               <td>80</td>
             </tr>
-            <tr>
-              <td><strong>敏感等级</strong></td>
-              <td>内部</td>
-            </tr>
           </tbody>
         </table>
       </div>
       <div class="db-card blue">
-        <div class="db-label">状态机定义模板</div>
+        <div class="db-label">表与关系说明示例</div>
         <table class="db-table compact">
-          <thead>
-            <tr>
-              <th>当前</th>
-              <th>事件</th>
-              <th>下一状态</th>
-              <th>失败处理</th>
-            </tr>
-          </thead>
           <tbody>
             <tr>
-              <td>QUEUED</td>
-              <td>开始回调</td>
-              <td>RUNNING</td>
-              <td>重复事件幂等返回</td>
+              <td><strong>对象</strong></td>
+              <td>任务运行</td>
             </tr>
             <tr>
-              <td>RUNNING</td>
-              <td>执行成功</td>
-              <td>SUCCEEDED</td>
-              <td>先记录产物再提交状态</td>
+              <td><strong>一句定义</strong></td>
+              <td>任务的一次实际执行尝试</td>
             </tr>
             <tr>
-              <td>RUNNING</td>
-              <td>用户取消</td>
-              <td>CANCELLING</td>
-              <td>等待外部确认</td>
+              <td><strong>数量关系</strong></td>
+              <td>一个任务可以有多次运行</td>
             </tr>
             <tr>
-              <td>SUCCEEDED</td>
-              <td>旧运行回调</td>
-              <td>禁止</td>
-              <td>记录并忽略乱序事件</td>
+              <td><strong>创建时机</strong></td>
+              <td>首次提交或用户点击重试</td>
+            </tr>
+            <tr>
+              <td><strong>修改规则</strong></td>
+              <td>只允许按状态流程变化</td>
+            </tr>
+            <tr>
+              <td><strong>删除 / 保留</strong></td>
+              <td>用户归档任务后，运行记录仍按保留策略保存</td>
+            </tr>
+            <tr>
+              <td><strong>主要查询</strong></td>
+              <td>按 task_id 查询全部运行，按 attempt_no 排序</td>
             </tr>
           </tbody>
         </table>
-        <div class="db-note" style="margin-top: 12px">
-          <strong>还要写：</strong
-          >谁可操作、前置条件、是否可重试、是否记录原因、重复请求与同键不同参数如何处理。
-        </div>
       </div>
     </div>
-    <div
-      data-node="query-capacity-template"
-      class="db-grid-2"
-      style="margin-top: 17px"
-    >
+    <div data-node="prd-four-parts" class="db-grid-4" style="margin-top: 22px">
       <div class="db-note">
-        <strong>查询模板：</strong
-        >过滤条件、排序、分页、每页上限、是否立即可见、最大时间范围、导出方式。
+        <strong>字段：</strong>含义、类型、长度、单位、空值、默认值。
       </div>
       <div class="db-note">
-        <strong>容量模板：</strong>初始/年度行数、峰值读写
-        QPS、保留期、响应目标、增长来源、是否允许延迟。
+        <strong>关系：</strong>一条或多条，是否必须存在。
+      </div>
+      <div class="db-note"><strong>流程：</strong>状态如何变化，谁能操作。</div>
+      <div class="db-note">
+        <strong>规模：</strong>查询方式、数据量、分页和保留期。
       </div>
     </div>
     <div class="db-band teal">
-      <strong>产品负责定义“什么才算正确”：</strong
-      >唯一范围、空值含义、状态变化、历史要求、冲突规则、查询口径和容量目标。
+      <strong>分工：</strong>产品定义业务规则和使用方式；研发选择 MySQL
+      具体类型、约束、索引和实现方案；双方共同评审取舍。
     </div>
     <div class="db-footer">
-      <span>研发负责选择具体数据库实现，双方共同评审边界与代价</span
-      ><span>35</span>
+      <span>PRD 中只写 String，无法表达完整字段规则</span><span>35</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-产品无需决定 PostgreSQL 还是 MySQL 的所有语法，但唯一性范围、状态迁移、空值含义和历史需求属于业务决定，研发无法替代。字段定义不能只写 String；查询不能只写“支持筛选”；容量不能只写“数据量大”。
+将 PRD 产物分成字段说明和对象关系说明。产品负责含义、数量、修改规则和查询方式；研发负责具体 DDL 和索引。双方对边界和代价共同确认。
 </notes>

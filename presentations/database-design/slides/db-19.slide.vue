@@ -1,87 +1,95 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">建模步骤 5 · 当前值与历史值</div>
-    <h2 data-node="title">
-      当前状态用于在线查询，事件历史用于解释“怎么变成现在这样”
-    </h2>
+    <div class="db-kicker">案例结果 · 最终结构</div>
+    <h2 data-node="title">六步完成后，业务故事变成一张可以检查的数据结构图</h2>
     <div
-      data-node="current-history-layout"
-      class="db-grid-2"
-      style="margin-top: 24px"
+      data-node="final-model"
+      style="
+        display: grid;
+        grid-template-columns: 0.9fr 34px 1fr 34px 1.1fr 34px 1.2fr;
+        gap: 9px;
+        align-items: center;
+        margin-top: 27px;
+      "
     >
-      <div class="db-card teal">
-        <div class="db-label">当前快照 · task / task_run</div>
-        <div class="db-entity teal" style="margin-top: 13px">
-          <h3>task_run</h3>
-          <div class="db-field"><span>status</span><em>FAILED</em></div>
-          <div class="db-field">
-            <span>error_code</span><em>RESOURCE_LIMIT</em>
-          </div>
-          <div class="db-field"><span>started_at</span><em>10:02</em></div>
-          <div class="db-field"><span>finished_at</span><em>10:18</em></div>
-          <div class="db-field"><span>version</span><em>7</em></div>
+      <div class="db-stack">
+        <div class="db-entity"><h3>workspace</h3></div>
+        <div class="db-entity"><h3>project</h3></div>
+        <div class="db-entity teal">
+          <h3>project_member</h3>
+          <div class="db-field"><span>user_id / role</span></div>
         </div>
-        <p style="margin-top: 12px">
-          优点：列表和详情直接读取当前结果；状态条件更新也有明确落点。
+      </div>
+      <div class="db-flow-arrow">→</div>
+      <div class="db-stack">
+        <div class="db-entity">
+          <h3>task_template</h3>
+          <div class="db-field"><span>code / name / state</span></div>
+        </div>
+        <div class="db-entity teal">
+          <h3>template_version</h3>
+          <div class="db-field"><span>version_no</span></div>
+          <div class="db-field"><span>form_schema</span></div>
+        </div>
+      </div>
+      <div class="db-flow-arrow">→</div>
+      <div class="db-stack">
+        <div class="db-entity orange">
+          <h3>task</h3>
+          <div class="db-field"><span>project / version</span></div>
+          <div class="db-field"><span>name / config</span></div>
+        </div>
+        <div class="db-entity">
+          <h3>task_input</h3>
+          <div class="db-field"><span>task_id / input_no</span></div>
+        </div>
+      </div>
+      <div class="db-flow-arrow">→</div>
+      <div class="db-stack">
+        <div class="db-entity orange">
+          <h3>task_run</h3>
+          <div class="db-field"><span>attempt_no / status</span></div>
+          <div class="db-field"><span>time / error / external_id</span></div>
+        </div>
+        <div class="db-grid-2" style="gap: 8px">
+          <div class="db-entity">
+            <h3 style="font-size: 17px">run_event</h3>
+            <div class="db-field"><span>按需</span></div>
+          </div>
+          <div class="db-entity">
+            <h3 style="font-size: 17px">artifact</h3>
+            <div class="db-field"><span>按需</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-node="model-check" class="db-grid-3" style="margin-top: 28px">
+      <div class="db-card teal">
+        <div class="db-label">每张表有一句定义</div>
+        <p>
+          task 是一次提交；task_run 是一次执行；template_version
+          是一次模板发布。
         </p>
       </div>
       <div class="db-card blue">
-        <div class="db-label">追加历史 · task_run_event</div>
-        <table class="db-table compact" style="margin-top: 13px">
-          <thead>
-            <tr>
-              <th>时间</th>
-              <th>from → to</th>
-              <th>来源</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>10:00</td>
-              <td>PENDING → QUEUED</td>
-              <td>submit</td>
-            </tr>
-            <tr>
-              <td>10:02</td>
-              <td>QUEUED → RUNNING</td>
-              <td>callback-18</td>
-            </tr>
-            <tr>
-              <td>10:18</td>
-              <td>RUNNING → FAILED</td>
-              <td>callback-29</td>
-            </tr>
-          </tbody>
-        </table>
-        <p style="margin-top: 12px">
-          用于去重、审计、排障、状态停留时长、失败路径和乱序事件分析。
-        </p>
+        <div class="db-label">每段关系有明确数量</div>
+        <p>模板有多个版本，任务有多个输入和多次运行。</p>
+      </div>
+      <div class="db-card orange">
+        <div class="db-label">每条规则有落点</div>
+        <p>外键保证归属，唯一约束防重复，状态字段支持筛选。</p>
       </div>
     </div>
-    <div data-node="history-rules" class="db-grid-3" style="margin-top: 19px">
-      <div class="db-note">
-        <strong>事件不可随意修改：</strong
-        >修正错误应追加纠正事件，而不是抹掉证据。
-      </div>
-      <div class="db-note">
-        <strong>定义权威来源：</strong
-        >若当前状态与历史不一致，是重放事件修复快照，还是以快照为准？
-      </div>
-      <div class="db-note">
-        <strong>不是所有字段都留历史：</strong
-        >只为审计、排障、恢复或分析需要的变化保存。
-      </div>
-    </div>
-    <div class="db-band">
-      <strong>常见组合：</strong>主表保存
-      current_status；事件表追加每次变化。既保证在线性能，也保留解释能力。
+    <div class="db-band teal">
+      <strong>最终检查：</strong
+      >同一个事实有一个主要存放位置；需要多条的数据使用子表；历史记录不会被后续更新覆盖。
     </div>
     <div class="db-footer">
-      <span>只存当前值，系统就失去了过程证据</span><span>19</span>
+      <span>接下来用 1NF～3NF 检查结构是否存在常见问题</span><span>19</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-解释为什么不是只选一种。纯事件计算当前状态可能让在线查询成本高；只存当前状态又无法排障和审计。因此当前快照与事件历史组合最常见。还要定义二者不一致时的修复策略。
+这是案例收束页。图中只保留关键表和关系，不追求展示所有字段。听众应能说出每张表的一句话职责，并能从关系看出为什么需要拆表。
 </notes>

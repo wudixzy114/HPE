@@ -1,71 +1,31 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">完整案例 · 用户故事 1/3</div>
-    <h2 data-node="title">先给需求全文：中台如何创建任务与管理模板</h2>
-    <div data-node="story-create" class="db-grid-2" style="margin-top: 22px">
-      <div class="db-story">
-        <p>
-          <span class="db-badge">01</span>
-          用户属于一个或多个工作空间，进入工作空间后选择项目。
-        </p>
-        <p>
-          <span class="db-badge">02</span>
-          项目由多个成员共同使用，成员在不同项目中的角色可能不同。
-        </p>
-        <p>
-          <span class="db-badge">03</span>
-          用户从模板中心选择一个已发布模板；草稿模板不可提交任务。
-        </p>
-        <p>
-          <span class="db-badge">04</span>
-          模板有稳定编码和名称，但表单结构会发布多个版本。
-        </p>
-        <p>
-          <span class="db-badge">05</span>
-          已发布模板版本不可原地修改；更新表单时发布新版本。
-        </p>
-        <p>
-          <span class="db-badge">06</span>
-          历史任务必须按提交时使用的模板版本解释。
-        </p>
-      </div>
-      <div class="db-story">
-        <p>
-          <span class="db-badge blue">07</span>
-          用户填写任务名称、优先级、输入数据、资源规格和模板特有参数。
-        </p>
-        <p>
-          <span class="db-badge blue">08</span>
-          一个任务可能有一个或多个输入，每个输入有顺序、用途和提交时来源快照。
-        </p>
-        <p>
-          <span class="db-badge blue">09</span>
-          不同任务类型的特有参数差异较大，但项目、提交人、状态等字段相同。
-        </p>
-        <p>
-          <span class="db-badge blue">10</span>
-          同一工作空间内任务名称允许重复，但模板编码必须唯一。
-        </p>
-        <p>
-          <span class="db-badge blue">11</span>
-          用户连续点击或网络重试，不能创建两个相同任务。
-        </p>
-        <p>
-          <span class="db-badge blue">12</span> 提交成功后返回公开任务
-          ID；内部连续 ID 不直接出现在 URL。
-        </p>
-      </div>
+    <div class="db-kicker">完整案例 · 一段自然语言需求</div>
+    <h2 data-node="title">用户在中台提交任务，系统负责执行、重试和保留记录</h2>
+    <div data-node="user-story" class="db-story-large" style="margin-top: 26px">
+      用户进入一个<span class="db-highlight blue">工作空间</span
+      >，选择其中的<span class="db-highlight blue">项目</span
+      >。项目成员可以从<span class="db-highlight">模板</span
+      >中心选择一个已经发布的模板，填写<span class="db-highlight yellow"
+        >任务名称、优先级、一个或多个输入、资源规格和模板特有参数</span
+      >，然后提交任务。模板以后可能升级，但历史任务需要继续使用提交时的<span
+        class="db-highlight"
+        >模板版本</span
+      >和配置。<br /><br />
+      提交成功后，系统创建一次<span class="db-highlight orange">运行</span
+      >并交给外部系统执行。运行会经历排队、运行、成功、失败或取消；失败后可以按原配置重试，因此一个任务可能有多次运行。每次运行都要保存开始结束时间、外部任务编号、错误信息、状态变化和产生的文件。用户重复点击提交时，只能创建一个任务。<br /><br />
+      任务列表需要按项目、提交人、模板、状态和创建时间筛选；详情页要展示提交配置、全部输入和历次运行。任务与运行长期保存，数量会持续增长。
     </div>
     <div class="db-band">
-      <strong>先不要建表：</strong
-      >圈出名词、动作、数量词、不可变规则和“历史必须保持”的描述。
+      <strong>阅读方法：</strong
+      >蓝色表示归属，绿色表示独立对象，黄色表示候选字段，橙色表示会重复发生的过程。
     </div>
     <div class="db-footer">
-      <span>用户故事是建模输入，不是页面控件列表</span><span>12</span>
+      <span>先理解事物如何流转，再开始画表</span><span>12</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-完整读需求时先不讨论字段。名词是候选对象，动作暗示生命周期，数量词暗示一对多，“不可修改”“历史必须保持”暗示版本与快照。工作空间、项目成员关系和模板版本都已经埋在故事中。
+先完整讲完故事，让大家建立整体画面。用户从工作空间进入项目，选择模板并填写任务；提交后产生运行；失败后重试会产生新的运行。高亮只帮助观察，不要求听众当场记住所有字段。
 </notes>

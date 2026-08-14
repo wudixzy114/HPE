@@ -2,7 +2,7 @@
   <Slide class="db-slide">
     <div class="db-kicker">字段类型 · 字符串</div>
     <h2 data-node="title">
-      “String”不是数据库类型；CHAR、VARCHAR、TEXT 的边界不同
+      字符串类型：短文本用 VARCHAR，长描述用 TEXT，固定长度谨慎用 CHAR
     </h2>
     <table
       data-node="string-type-table"
@@ -21,7 +21,7 @@
         <tr>
           <td><strong>CHAR(n)</strong></td>
           <td>固定声明长度语义；不同数据库对尾部空格处理有差异</td>
-          <td>真正固定长度的国家码、币种码；仍需查数据库行为</td>
+          <td>真正固定长度的国家码等短编码；仍需查数据库行为</td>
           <td>以为固定长度一定更快，把普通名称都设成 CHAR</td>
         </tr>
         <tr>
@@ -42,7 +42,7 @@
       <div class="db-card teal">
         <div class="db-label">长度怎么定</div>
         <ol>
-          <li>先取协议或业务硬上限：ISO 币种 3 位、外部系统编码上限等。</li>
+          <li>先取协议或业务硬上限：国家码 2 位、外部系统编码上限等。</li>
           <li>没有硬上限时看真实样本 P99，再为国际化与演进留余量。</li>
           <li>区分“产品输入限制”和“数据库保护上限”，二者不一定相同。</li>
           <li>编码字段要短且规范；长描述直接使用 TEXT。</li>

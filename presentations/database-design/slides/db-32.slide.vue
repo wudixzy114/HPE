@@ -1,75 +1,78 @@
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">能力边界</div>
+    <div class="db-kicker">能力边界 · 一页了解</div>
     <h2 data-node="title">
-      数据库提供底座，但业务系统仍要完成鉴权、补偿、恢复和治理
+      数据库负责保存和约束数据，完整业务流程还需要应用系统配合
     </h2>
-    <table
-      data-node="capability-boundary"
-      class="db-table dense"
-      style="margin-top: 22px"
-    >
-      <thead>
-        <tr>
-          <th>数据库擅长提供</th>
-          <th>前提与边界</th>
-          <th>应用 / 基础设施仍要负责</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>类型、非空、唯一、检查、外键</td>
-          <td>规则能被单行或关系约束表达</td>
-          <td>复杂状态机、跨行规则、跨系统业务语义</td>
-        </tr>
-        <tr>
-          <td>单数据库事务</td>
-          <td>所有写入在同一个数据库边界内</td>
-          <td>消息、缓存、对象存储和外部系统的一致性</td>
-        </tr>
-        <tr>
-          <td>锁、版本与隔离级别</td>
-          <td>正确选择事务范围并处理冲突</td>
-          <td>幂等键、冲突提示、重试上限和状态规则</td>
-        </tr>
-        <tr>
-          <td>索引和查询执行器</td>
-          <td>查询形态合理，统计信息与索引匹配</td>
-          <td>分页、限流、批处理、超时和容量规划</td>
-        </tr>
-        <tr>
-          <td>持久化日志与崩溃恢复</td>
-          <td>配置与硬件满足承诺</td>
-          <td>备份、异地容灾、RPO/RTO 和恢复演练</td>
-        </tr>
-        <tr>
-          <td>账号与数据库权限</td>
-          <td>最小权限正确配置</td>
-          <td>业务用户鉴权、租户隔离、字段脱敏和审计</td>
-        </tr>
-        <tr>
-          <td>复制</td>
-          <td>接受复制延迟和故障切换边界</td>
-          <td>刚写后读的一致性策略；副本不能代替备份</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-node="boundary-myths" class="db-grid-4" style="margin-top: 18px">
-      <div class="db-note"><strong>UUID</strong><br />不等于已鉴权</div>
-      <div class="db-note"><strong>事务</strong><br />不等于跨系统一致</div>
-      <div class="db-note"><strong>副本</strong><br />不等于可恢复备份</div>
-      <div class="db-note"><strong>索引</strong><br />不等于任何查询都快</div>
+    <div data-node="simple-boundary" class="db-grid-2" style="margin-top: 30px">
+      <div class="db-card teal">
+        <div class="db-label">数据库擅长</div>
+        <div
+          class="db-check-grid"
+          style="grid-template-columns: 1fr; margin-top: 12px"
+        >
+          <div class="db-check">
+            <i>✓</i><span>主键保证每条记录有唯一身份</span>
+          </div>
+          <div class="db-check">
+            <i>✓</i><span>唯一约束防止业务数据重复</span>
+          </div>
+          <div class="db-check">
+            <i>✓</i><span>外键保证引用的任务、项目真实存在</span>
+          </div>
+          <div class="db-check">
+            <i>✓</i><span>事务让一组数据库修改一起成功或失败</span>
+          </div>
+          <div class="db-check">
+            <i>✓</i><span>索引帮助常用查询更快定位数据</span>
+          </div>
+        </div>
+      </div>
+      <div class="db-card blue">
+        <div class="db-label">应用系统负责</div>
+        <div
+          class="db-check-grid"
+          style="grid-template-columns: 1fr; margin-top: 12px"
+        >
+          <div class="db-check">
+            <i>1</i><span>判断用户有没有权限查看和修改</span>
+          </div>
+          <div class="db-check"><i>2</i><span>定义状态可以怎样变化</span></div>
+          <div class="db-check">
+            <i>3</i><span>处理重复请求、失败重试和用户提示</span>
+          </div>
+          <div class="db-check">
+            <i>4</i><span>调用外部系统失败后的补偿与查询</span>
+          </div>
+          <div class="db-check">
+            <i>5</i><span>限制接口并发、导出规模和批处理速度</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="db-band red">
-      <strong>高可用不是“不出错”：</strong
-      >必须提前定义允许丢多少数据、多久恢复、如何降级、如何对账，以及人工如何修复。
+    <div data-node="boundary-example" class="db-flow" style="margin-top: 25px">
+      <div class="db-flow-node">
+        <b>数据库</b><span>保证 task_run.task_id 对应真实任务</span>
+      </div>
+      <div class="db-flow-arrow">+</div>
+      <div class="db-flow-node">
+        <b>应用系统</b><span>保证当前用户有权查看这个任务</span>
+      </div>
+      <div class="db-flow-arrow">=</div>
+      <div class="db-flow-node" style="border-color: #79bdb4">
+        <b>完整业务保证</b><span>数据正确，同时访问合法</span>
+      </div>
+    </div>
+    <div class="db-band teal">
+      <strong>理解边界即可：</strong
+      >数据库提供可靠的数据底座，业务含义、权限和外部流程由应用系统共同完成。
     </div>
     <div class="db-footer">
-      <span>能力边界不明确，故障时就会出现责任空白</span><span>32</span>
+      <span>本节不展开分布式一致性和数据库内部机制</span><span>32</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-将数据库能力与外部责任逐行对应。持久性不等于企业已经完成备份；复制也会复制误删。可靠系统必须定义 RPO、RTO、恢复演练、对账和人工修复，而不是只依赖数据库产品名称。
+能力边界压缩为直观的一页。数据库能保证数据存在、唯一和关联正确；应用系统负责权限、状态流程、失败重试和外部调用。让产品知道哪些规则需要共同设计即可。
 </notes>

@@ -1,7 +1,7 @@
 <template>
   <Slide class="db-slide">
     <div class="db-kicker">字段类型 · 整数</div>
-    <h2 data-node="title">INT 与 BIGINT 的差别，是范围、空间和未来迁移成本</h2>
+    <h2 data-node="title">INT 与 BIGINT：先看最大范围，再考虑空间和未来增长</h2>
     <table
       data-node="integer-table"
       class="db-table dense"
@@ -67,9 +67,10 @@
         </p>
       </div>
     </div>
-    <div class="db-band red">
-      <strong>注意数据库差异：</strong>MySQL 还区分 UNSIGNED；PostgreSQL
-      没有普通无符号整数。上线设计以目标数据库版本为准。
+    <div class="db-band">
+      <strong>简单选择：</strong>普通内部主键优先
+      BIGINT；明确只在小范围内的优先级、状态序号可用
+      SMALLINT；普通业务数量按上限选择 INT 或 BIGINT。
     </div>
     <div class="db-footer">
       <span>默认主键 BIGINT；业务数量按可证明的范围选择</span><span>03</span>
@@ -78,5 +79,5 @@
 </template>
 
 <notes lang="md">
-说明范围是典型有符号实现，不把数据库差异讲死。主键选择 BIGINT 的核心不是“当前数据多”，而是主键扩容会扩散到所有外键。普通计数仍可用 INT，但必须用容量公式证明范围足够。
+范围按照常见有符号实现展示。主键使用 BIGINT 的主要原因是后期扩容会影响主表、外键、索引和接口。普通计数可按明确上限选择 INT；MySQL 的 UNSIGNED 会改变正数范围，实际项目仍需按版本确认。
 </notes>
