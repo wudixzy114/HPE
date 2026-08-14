@@ -4,83 +4,66 @@ import DatabaseCaseStory from "./DatabaseCaseStory.vue";
 
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">ER 建模第 5 步 · 一对多关系（1:N）</div>
-    <h2 data-node="title">S2 推导出模板与模板版本：稳定身份和发布内容分开</h2>
-    <div data-node="case-evolution" class="db-case-evolution">
+    <div class="db-kicker">ER 建模第 4 步 · 按粒度分配属性</div>
+    <h2 data-node="title">
+      字段归属取决于“它描述哪一条事实”，不是页面上和谁摆在一起
+    </h2>
+    <div data-node="attribute-grain" class="db-case-evolution">
       <DatabaseCaseStory />
       <div class="db-case-work">
-        <h3>
-          <span class="db-source-ref">S2</span> 模板与版本是一对多关系（1:N）
-        </h3>
-        <div class="db-flow" style="margin-top: 18px">
-          <div class="db-flow-node">
-            <b>task_template</b><span>稳定编码、名称和启停状态</span>
-          </div>
-          <div class="db-flow-arrow">1:N</div>
-          <div class="db-flow-node">
-            <b>template_version</b><span>每次发布的表单与配置规则</span>
-          </div>
-        </div>
-        <div class="db-grid-2" style="margin-top: 20px">
+        <h3>属性只依赖所属实体的主键</h3>
+        <div class="db-grid-2" style="margin-top: 15px">
           <div class="db-entity">
             <h3>task_template</h3>
-            <div class="db-field"><span>id</span><em>主键</em></div>
-            <div class="db-field">
-              <span>workspace_id</span><em>S2 工作空间内</em>
-            </div>
-            <div class="db-field"><span>code</span><em>S2 唯一编码</em></div>
-            <div class="db-field"><span>name</span><em>S2 名称</em></div>
-            <div class="db-field"><span>state</span><em>S2 已发布可选</em></div>
+            <div class="db-field"><span>name</span><em>模板名称</em></div>
+            <div class="db-field"><span>state</span><em>可选状态</em></div>
           </div>
-          <div class="db-entity teal">
-            <h3>template_version</h3>
-            <div class="db-field"><span>id</span><em>主键</em></div>
-            <div class="db-field"><span>template_id</span><em>外键</em></div>
+          <div class="db-entity orange">
+            <h3>task</h3>
             <div class="db-field">
-              <span>version_no</span><em>S2 版本号</em>
+              <span>template_id / user_id / project_id</span
+              ><em>一次提交的归属</em>
             </div>
             <div class="db-field">
-              <span>form_schema</span><em>S2 表单结构</em>
+              <span>name / priority / created_at</span><em>提交事实</em>
             </div>
             <div class="db-field">
-              <span>config_schema</span><em>S2 校验规则</em>
-            </div>
-            <div class="db-field">
-              <span>published_at</span><em>S2 发布时间</em>
+              <span>current_status</span><em>列表用当前快照</em>
             </div>
           </div>
         </div>
-        <table class="db-table compact" style="margin-top: 17px">
-          <thead>
-            <tr>
-              <th>规则</th>
-              <th>数据库落点</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>模板编码在工作空间内唯一</td>
-              <td>UNIQUE(workspace_id, code)</td>
-            </tr>
-            <tr>
-              <td>同一模板版本号不重复</td>
-              <td>UNIQUE(template_id, version_no)</td>
-            </tr>
-            <tr>
-              <td>历史任务引用提交版本</td>
-              <td>task.template_version_id 外键</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="db-grid-2" style="margin-top: 15px">
+          <div class="db-entity">
+            <h3>task_input</h3>
+            <div class="db-field">
+              <span>source_id / input_no / input_role</span
+              ><em>一条输入事实</em>
+            </div>
+          </div>
+          <div class="db-entity teal">
+            <h3>task_run</h3>
+            <div class="db-field">
+              <span>attempt_no / status</span><em>一次尝试</em>
+            </div>
+            <div class="db-field">
+              <span>started_at / finished_at / error_message</span
+              ><em>本次结果</em>
+            </div>
+          </div>
+        </div>
+        <div class="db-band teal" style="margin-top: 15px">
+          <strong>关键分离：</strong>task_run 保存历次尝试；task.current_status
+          是面向列表的当前摘要，不替代历史。
+        </div>
       </div>
     </div>
     <div class="db-footer">
-      <span>模板改名不影响版本内容；发布新表单时新增 version 行</span
+      <span>字段依赖哪条业务事实，就落在哪个实体；多值与历史事实拆行保存</span
       ><span>17</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-所有字段都能回到 S2。template 保存稳定身份，template_version 保存一次发布内容。任务未来通过 template_version_id 引用提交时版本，因此模板升级不会改变历史任务的解释方式。
+属性分配以实体粒度为依据；重复或历史性质的字段不能塞回父表或 JSON。
 </notes>

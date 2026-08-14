@@ -1,14 +1,39 @@
 erDiagram
-    workspace ||--o{ project : "包含"
-    project ||--o{ project_member : "拥有成员"
-    app_user ||--o{ project_member : "加入"
-    workspace ||--o{ task_template : "拥有模板"
-    task_template ||--o{ template_version : "发布"
-    project ||--o{ task : "包含任务"
-    template_version ||--o{ task : "用于提交"
-    app_user ||--o{ task : "提交"
-    task ||--o{ task_input : "包含输入"
-    data_source ||--o{ task_input : "被选为输入"
-    task ||--o{ task_run : "产生运行"
-    task_run ||--o{ task_run_event : "记录状态"
-    task_run ||--o{ task_artifact : "产生文件"
+    direction LR
+
+    task_template ||--o{ task : "创建任务"
+    task ||--|{ task_input : "拥有输入"
+    task ||--|{ task_run : "产生尝试"
+
+    task_template {
+        bigint id PK
+        varchar name
+        varchar state "状态受控"
+    }
+    task {
+        bigint id PK
+        bigint template_id FK
+        bigint user_id "外部引用"
+        bigint project_id "外部引用"
+        varchar name
+        smallint priority
+        datetime created_at
+        varchar request_key "与 project_id 联合唯一"
+        varchar current_status "当前快照"
+    }
+    task_input {
+        bigint id PK
+        bigint task_id FK
+        bigint source_id "外部引用"
+        int input_no "与 task_id 联合唯一"
+        varchar input_role
+    }
+    task_run {
+        bigint id PK
+        bigint task_id FK
+        int attempt_no "与 task_id 联合唯一"
+        varchar status
+        datetime started_at
+        datetime finished_at
+        text error_message
+    }

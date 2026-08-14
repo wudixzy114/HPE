@@ -4,66 +4,59 @@ import DatabaseCaseStory from "./DatabaseCaseStory.vue";
 
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">案例演进 7 · 建立运行</div>
-    <h2 data-node="title">S5 推导出 task_run：每次执行尝试新增一行</h2>
-    <div data-node="case-evolution" class="db-case-evolution">
+    <div class="db-kicker">ER 建模第 6 步 · 用读写路径验证模型</div>
+    <h2 data-node="title">
+      最后用真实命令和查询验证：能写对、能查快、能解释历史
+    </h2>
+    <div data-node="access-validation" class="db-case-evolution">
       <DatabaseCaseStory />
       <div class="db-case-work">
-        <h3>
-          <span class="db-source-ref">S5</span>
-          同一任务可运行多次，每次结果独立保存
-        </h3>
-        <div class="db-entity orange" style="margin-top: 16px">
-          <h3>task_run</h3>
-          <div class="db-field"><span>id</span><em>主键</em></div>
-          <div class="db-field"><span>task_id</span><em>属于哪个任务</em></div>
-          <div class="db-field">
-            <span>attempt_no</span><em>S5 尝试序号</em>
+        <h3>模型通过业务操作验收</h3>
+        <div class="db-rule-list" style="margin-top: 16px">
+          <div class="db-rule">
+            <span class="db-source-ref">写入</span
+            ><span
+              ><b>提交：</b>校验模板已发布，事务内写 task、输入和第 1
+              次运行；请求键重复则不新建。</span
+            >
           </div>
-          <div class="db-field"><span>status</span><em>S5 当前状态</em></div>
-          <div class="db-field">
-            <span>external_job_id</span><em>S5 外部编号</em>
+          <div class="db-rule">
+            <span class="db-source-ref">追加</span
+            ><span
+              ><b>重试：</b>新增 task_run，唯一键保护
+              attempt_no；历史运行和错误信息全部保留。</span
+            >
           </div>
-          <div class="db-field">
-            <span>started_at</span><em>S5 开始时间</em>
-          </div>
-          <div class="db-field">
-            <span>finished_at</span><em>S5 结束时间</em>
-          </div>
-          <div class="db-field">
-            <span>error_code / error_message</span><em>S5 错误信息</em>
-          </div>
-        </div>
-        <div class="db-flow" style="margin-top: 17px">
-          <div class="db-flow-node">
-            <b>任务 T-1024</b><span>task 一行</span>
-          </div>
-          <div class="db-flow-arrow">→</div>
-          <div class="db-flow-node" style="border-color: #dfa8a8">
-            <b>运行 1：失败</b><span>attempt_no=1</span>
-          </div>
-          <div class="db-flow-arrow">→</div>
-          <div class="db-flow-node" style="border-color: #79bdb4">
-            <b>运行 2：成功</b><span>attempt_no=2</span>
+          <div class="db-rule">
+            <span class="db-source-ref">查询</span
+            ><span
+              ><b>列表：</b>按 project_id、current_status、created_at
+              分页；详情按 task_id 读取输入与运行。</span
+            >
           </div>
         </div>
-        <div class="db-grid-2" style="margin-top: 14px">
+        <div class="db-grid-2" style="margin-top: 16px">
           <div class="db-note">
-            <strong>关系：</strong>task 1 → N task_run；task_run 保存 task_id。
+            <strong>候选索引：</strong
+            ><code>(project_id, current_status, created_at DESC, id DESC)</code>
           </div>
           <div class="db-note">
-            <strong>字段边界：</strong>S5 没有要求队列名称，因此此版不添加
-            queue_name。
+            <strong>子表索引：</strong>所有外键列可支撑详情读取和关联校验。
           </div>
+        </div>
+        <div class="db-band teal" style="margin-top: 15px">
+          <strong>验收问题：</strong
+          >能否防重？重试会否覆盖历史？列表能否按条件分页？每个问题都能回到模型找到答案。
         </div>
       </div>
     </div>
     <div class="db-footer">
-      <span>字段只取自故事；新需求出现后再扩展</span><span>19</span>
+      <span>索引来自真实查询；事务边界来自一次业务操作必须同时成立的规则</span
+      ><span>19</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-运行字段全部来自 S5。这里明确展示“没有需求就不加字段”：故事没有提到队列名称，所以模型中暂不出现 queue_name。相同配置重试新增 task_run，不覆盖上一次失败记录。
+模型完成前必须以真实写入与查询验收；发现问题时回到前面的实体、关系或约束步骤调整。
 </notes>

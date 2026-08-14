@@ -826,6 +826,49 @@
   vertical-align: 1px;
 }
 
+.story-entity,
+.story-action,
+.story-attribute,
+.story-rule {
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-weight: 750;
+}
+
+.story-entity {
+  color: #24518b;
+  background: #e2eaf6;
+}
+
+.story-action {
+  color: #076a63;
+  background: #dcf1ed;
+}
+
+.story-attribute {
+  color: #9a4b23;
+  background: #fae5d8;
+}
+
+.story-rule {
+  color: #725500;
+  background: #fff0b5;
+}
+
+.story-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.story-legend span {
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 750;
+}
+
 .db-case-work {
   box-sizing: border-box;
   height: 600px;

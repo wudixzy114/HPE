@@ -4,65 +4,63 @@ import DatabaseCaseStory from "./DatabaseCaseStory.vue";
 
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">ER 建模第 4 步 · 确定关系与基数</div>
-    <h2 data-node="title">S1 推导出工作空间、项目和项目成员三张表</h2>
-    <div data-node="case-evolution" class="db-case-evolution">
+    <div class="db-kicker">ER 建模第 3 步 · 确定关系、基数和可选性</div>
+    <h2 data-node="title">
+      每条关系都要回答：两端各有几个、是否可缺省、外键放在哪里
+    </h2>
+    <div data-node="relationships" class="db-case-evolution">
       <DatabaseCaseStory />
       <div class="db-case-work">
-        <h3>
-          <span class="db-source-ref">S1</span>
-          关系（Relationship）与基数（Cardinality）
-        </h3>
-        <div class="db-flow" style="margin-top: 18px">
-          <div class="db-flow-node">
-            <b>workspace</b><span>一个工作空间</span>
-          </div>
-          <div class="db-flow-arrow">1:N</div>
-          <div class="db-flow-node"><b>project</b><span>多个项目</span></div>
-          <div class="db-flow-arrow">1:N</div>
-          <div class="db-flow-node">
-            <b>project_member</b><span>多个成员关系</span>
-          </div>
-        </div>
-        <div class="db-grid-3" style="margin-top: 20px">
-          <div class="db-entity">
-            <h3>workspace</h3>
-            <div class="db-field"><span>id</span><em>已有主数据 ID</em></div>
-          </div>
-          <div class="db-entity">
-            <h3>project</h3>
-            <div class="db-field"><span>id</span><em>已有主数据 ID</em></div>
-            <div class="db-field"><span>workspace_id</span><em>外键</em></div>
-          </div>
-          <div class="db-entity teal">
-            <h3>project_member</h3>
-            <div class="db-field"><span>project_id</span><em>外键</em></div>
-            <div class="db-field"><span>user_id</span><em>用户</em></div>
-            <div class="db-field"><span>role_code</span><em>角色</em></div>
-          </div>
-        </div>
-        <div class="db-grid-2" style="margin-top: 17px">
+        <h3>关系矩阵</h3>
+        <table class="db-table compact" style="margin-top: 16px">
+          <thead>
+            <tr>
+              <th>关系</th>
+              <th>基数与可选性</th>
+              <th>外键</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>template → task</td>
+              <td>模板 0..N；每个任务恰好 1 个模板</td>
+              <td>task.template_id NOT NULL</td>
+            </tr>
+            <tr>
+              <td>task → input</td>
+              <td>任务业务上 1..N；每个输入恰好属于 1 个任务</td>
+              <td>task_input.task_id NOT NULL</td>
+            </tr>
+            <tr>
+              <td>task → run</td>
+              <td>任务业务上 1..N；每次运行恰好属于 1 个任务</td>
+              <td>task_run.task_id NOT NULL</td>
+            </tr>
+            <tr>
+              <td>用户 / 项目 / 数据源</td>
+              <td>模型边界外，不在此图展开</td>
+              <td>保存外部 ID</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="db-grid-2" style="margin-top: 16px">
           <div class="db-note">
-            <strong>为什么有 project_member：</strong
-            >一个用户可加入多个项目，一个项目也有多个用户。
+            <strong>乌鸦脚：</strong>表达结构上的一对多；子表外键表达“属于谁”。
           </div>
           <div class="db-note">
-            <strong>role_code 来源：</strong>S1 区分普通项目成员和项目管理员。
+            <strong>最小数量：</strong>“至少一个输入 /
+            运行”跨多行，需由事务和应用规则保证。
           </div>
-        </div>
-        <div class="db-band teal" style="margin-top: 14px">
-          <strong>关系约束：</strong>project.workspace_id →
-          workspace.id；project_member.project_id →
-          project.id。本故事只设计关联所需字段，工作空间与项目的其他主数据由其自身需求定义。
         </div>
       </div>
     </div>
     <div class="db-footer">
-      <span>用户表可来自已有账号系统，本案例只保存 user_id</span><span>16</span>
+      <span>基数说明业务语义；NOT NULL + FK 实现“子记录必须有父记录”</span
+      ><span>16</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-这一步只处理 S1。项目通过 workspace_id 归属工作空间；用户和项目是多对多关系，因此使用 project_member。角色来自“成员可提交、管理员可查看全部任务”的明确规则。
+关系不只是一根线；必须明确基数、可选性、外键和最小数量如何执行。
 </notes>

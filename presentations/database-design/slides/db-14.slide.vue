@@ -4,86 +4,74 @@ import DatabaseCaseStory from "./DatabaseCaseStory.vue";
 
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">ER 建模第 2 步 · 判断实体、关联、属性和值对象</div>
-    <h2 data-node="title">业务概念经过身份、生命周期、数量和引用四项检查</h2>
-    <div data-node="case-evolution" class="db-case-evolution">
+    <div class="db-kicker">ER 建模第 1 步 · 识别实体与粒度</div>
+    <h2 data-node="title">
+      有独立身份、生命周期或可重复出现的业务事实，才成为实体
+    </h2>
+    <div data-node="entity-grain" class="db-case-evolution">
       <DatabaseCaseStory />
       <div class="db-case-work">
-        <h3>概念 → ER 元素决策矩阵</h3>
-        <table class="db-table compact">
+        <h3>先判断“是否独立存在”</h3>
+        <div class="db-grid-3" style="margin-top: 15px">
+          <div class="db-note">
+            <strong>身份：</strong>能否单独被引用和定位？
+          </div>
+          <div class="db-note">
+            <strong>生命周期：</strong>会否被创建、变化、结束？
+          </div>
+          <div class="db-note">
+            <strong>重复：</strong>一个父事实下会否有多条？
+          </div>
+        </div>
+        <table class="db-table compact" style="margin-top: 16px">
           <thead>
             <tr>
               <th>业务概念</th>
-              <th>判断依据</th>
-              <th>ER 元素</th>
-              <th>关系表 / 字段</th>
+              <th>行粒度</th>
+              <th>结果</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>workspace / project / app_user / data_source</td>
-              <td>已有稳定身份，被任务中心引用</td>
-              <td>引用实体 Referenced Entity</td>
-              <td>保存其 ID 或外键</td>
-            </tr>
-            <tr>
-              <td>project_member</td>
-              <td>由 project + user 唯一确定，拥有 role</td>
-              <td>关联实体 Associative Entity</td>
-              <td>project_member 表</td>
-            </tr>
-            <tr>
+              <td>任务模板</td>
+              <td>一条可选择的模板定义</td>
               <td>task_template</td>
-              <td>稳定身份，可独立启停和发布</td>
-              <td>实体 Entity</td>
-              <td>task_template 表</td>
             </tr>
             <tr>
-              <td>template_version</td>
-              <td>一个模板多条，发布后需保留</td>
-              <td>弱实体 / 子实体</td>
-              <td>template_version 表</td>
-            </tr>
-            <tr>
+              <td>任务</td>
+              <td>一次任务提交</td>
               <td>task</td>
-              <td>一次提交，有公开 ID 和独立生命周期</td>
-              <td>事务实体 Transaction Entity</td>
-              <td>task 表</td>
             </tr>
             <tr>
-              <td>task_input / task_run / artifact</td>
-              <td>一个父对象下出现多条，各自有属性</td>
-              <td>子实体 Child Entity</td>
-              <td>各自子表</td>
+              <td>输入 / 运行</td>
+              <td>一条输入 / 一次执行尝试</td>
+              <td>task_input / task_run</td>
             </tr>
             <tr>
-              <td>task_run_event</td>
-              <td>已经发生且需要按时间追加保存</td>
-              <td>事件实体 Event Entity</td>
-              <td>事件表</td>
+              <td>用户 / 项目 / 数据源</td>
+              <td>由其他模块主数据管理</td>
+              <td>外部 ID 引用</td>
             </tr>
             <tr>
-              <td>priority / status / external_job_id / time</td>
-              <td>没有独立身份，依附一个实体</td>
-              <td>属性 Attribute</td>
-              <td>所属表中的列</td>
-            </tr>
-            <tr>
-              <td>resource_spec / template_config</td>
-              <td>整体描述一次提交，无独立生命周期</td>
-              <td>值对象 Value Object</td>
-              <td>config JSON 或结构化列</td>
+              <td>提交 / 重试 / 名称</td>
+              <td>动作或描述，不独立存在</td>
+              <td>命令或属性</td>
             </tr>
           </tbody>
         </table>
+        <div class="db-band teal" style="margin-top: 14px">
+          <strong>结论：</strong
+          >四张核心表不是因为名词刚好有四个，而是它们的粒度、生命周期和重复性不同。
+        </div>
       </div>
     </div>
     <div class="db-footer">
-      <span>四项检查：身份、生命周期、数量、引用</span><span>14</span>
+      <span>先定义每行代表的业务事实，后续字段与约束才有归属</span
+      ><span>14</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-这页给出完整且稳定的概念分类。不是所有名词都成为表：状态和优先级是属性，资源规格与模板参数是值对象，客户端与外部执行系统是参与者，已有主数据是引用实体。
+实体不是名词清单；每个实体必须有清楚的行粒度和独立存在理由。
 </notes>

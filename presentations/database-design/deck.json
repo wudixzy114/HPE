@@ -67,21 +67,6 @@
       "title": "ID 的五种角色：主键、外键、公开、业务与外部 ID"
     },
     {
-      "id": "db-09a",
-      "file": "slides/db-09a.slide.vue",
-      "title": "UUID 是 128 位值：MySQL 存储方式"
-    },
-    {
-      "id": "db-09b",
-      "file": "slides/db-09b.slide.vue",
-      "title": "UUID 能否作为数据库主键"
-    },
-    {
-      "id": "db-09c",
-      "file": "slides/db-09c.slide.vue",
-      "title": "ID 设计示例：本地与外部标识如何落表"
-    },
-    {
       "id": "db-10",
       "file": "slides/db-10.slide.vue",
       "title": "普通列与 JSON 的使用边界"
@@ -94,112 +79,47 @@
     {
       "id": "db-12",
       "file": "slides/db-12.slide.vue",
-      "title": "固定用户故事：中台任务提交、运行与查询"
+      "title": "简化用户故事：模板、任务、输入与运行"
     },
     {
       "id": "db-13",
       "file": "slides/db-13.slide.vue",
-      "title": "ER 建模：建模边界与业务概念全集"
+      "title": "ER 建模：完整提取实体、动作、属性与约束"
     },
     {
       "id": "db-14",
       "file": "slides/db-14.slide.vue",
-      "title": "ER 建模：实体、关联、属性与值对象"
-    },
-    {
-      "id": "db-14a",
-      "file": "slides/db-14a.slide.vue",
-      "title": "ER 建模：命令、事件、查询与普通动作"
+      "title": "ER 建模：四个核心实体与三个外部引用"
     },
     {
       "id": "db-15",
       "file": "slides/db-15.slide.vue",
-      "title": "ER 建模：建立逻辑实体清单"
+      "title": "ER 建模：建立四张核心表"
     },
     {
       "id": "db-16",
       "file": "slides/db-16.slide.vue",
-      "title": "ER 建模：确定关系与基数"
+      "title": "ER 建模：填写模板与任务属性"
     },
     {
       "id": "db-17",
       "file": "slides/db-17.slide.vue",
-      "title": "ER 建模：一对多关系（1:N）"
+      "title": "ER 建模：填写输入与运行属性"
     },
     {
       "id": "db-18",
       "file": "slides/db-18.slide.vue",
-      "title": "ER 建模：为实体分配属性"
+      "title": "ER 建模：确定三条一对多关系"
     },
     {
       "id": "db-19",
       "file": "slides/db-19.slide.vue",
-      "title": "从 S5 建立任务运行表"
-    },
-    {
-      "id": "db-19a",
-      "file": "slides/db-19a.slide.vue",
-      "title": "从 S6 建立状态历史表"
-    },
-    {
-      "id": "db-19b",
-      "file": "slides/db-19b.slide.vue",
-      "title": "从 S7 建立结果文件表"
-    },
-    {
-      "id": "db-19c",
-      "file": "slides/db-19c.slide.vue",
-      "title": "核对 task 与 task_input 字段来源"
-    },
-    {
-      "id": "db-19d",
-      "file": "slides/db-19d.slide.vue",
-      "title": "核对运行、事件和文件字段来源"
-    },
-    {
-      "id": "db-19e",
-      "file": "slides/db-19e.slide.vue",
-      "title": "根据数量词建立主外键关系"
-    },
-    {
-      "id": "db-19f",
-      "file": "slides/db-19f.slide.vue",
-      "title": "把唯一、必须和只能转换成约束"
-    },
-    {
-      "id": "db-19g",
-      "file": "slides/db-19g.slide.vue",
-      "title": "从 S8 的查询方式反推候选索引"
-    },
-    {
-      "id": "db-19h",
-      "file": "slides/db-19h.slide.vue",
-      "title": "逐表审计职责、字段和关系来源"
-    },
-    {
-      "id": "db-19h2",
-      "file": "slides/db-19h2.slide.vue",
-      "title": "核对运行、事件和文件的字段来源"
-    },
-    {
-      "id": "db-19i-org",
-      "file": "slides/db-19i-org.slide.vue",
-      "title": "Mermaid ER 图：组织、成员与模板关系"
-    },
-    {
-      "id": "db-19i-run",
-      "file": "slides/db-19i-run.slide.vue",
-      "title": "Mermaid ER 图：任务提交与执行关系"
-    },
-    {
-      "id": "db-19i-run-detail",
-      "file": "slides/db-19i-run-detail.slide.vue",
-      "title": "Mermaid ER 图：运行、状态事件与结果文件"
+      "title": "ER 建模：将规则落成约束和索引"
     },
     {
       "id": "db-19i",
       "file": "slides/db-19i.slide.vue",
-      "title": "中台案例最终 ER 图与来源核对"
+      "title": "简化中台案例最终 ER 图"
     },
     {
       "id": "db-20",
@@ -245,11 +165,6 @@
       "id": "db-33",
       "file": "slides/db-33.slide.vue",
       "title": "索引必须从查询条件、排序与数据分布反推"
-    },
-    {
-      "id": "db-34",
-      "file": "slides/db-34.slide.vue",
-      "title": "为列表、导出、批处理和历史数据设置边界"
     },
     {
       "id": "db-35",

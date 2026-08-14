@@ -4,87 +4,58 @@ import DatabaseCaseStory from "./DatabaseCaseStory.vue";
 
 <template>
   <Slide class="db-slide">
-    <div class="db-kicker">ER 建模第 3 步 · 建立实体清单</div>
-    <h2 data-node="title">根据候选实体，先建立九张表的空壳</h2>
-    <div data-node="case-evolution" class="db-case-evolution">
+    <div class="db-kicker">ER 建模第 2 步 · 识别动作与状态</div>
+    <h2 data-node="title">
+      动作不自动变成表；重复发生且需要追溯的事实，才追加为独立记录
+    </h2>
+    <div data-node="actions-state" class="db-case-evolution">
       <DatabaseCaseStory />
       <div class="db-case-work">
-        <h3>逻辑实体：先写职责，再映射成关系表</h3>
-        <div class="db-grid-3" style="gap: 10px">
-          <div class="db-card blue" style="padding: 13px">
-            <b>workspace</b>
-            <p class="db-small">工作空间</p>
+        <h3>动作决定“新增、更新还是追加历史”</h3>
+        <div class="db-rule-list" style="margin-top: 16px">
+          <div class="db-rule">
+            <span class="db-source-ref">S2</span
+            ><span
+              ><b>提交任务</b><br />同一事务创建 task、首批 task_input 和第 1 条
+              task_run。</span
+            >
           </div>
-          <div class="db-card blue" style="padding: 13px">
-            <b>project</b>
-            <p class="db-small">工作空间内的项目</p>
+          <div class="db-rule">
+            <span class="db-source-ref">S3</span
+            ><span
+              ><b>重试</b><br />新增 task_run(attempt_no +
+              1)，绝不覆盖失败运行。</span
+            >
           </div>
-          <div class="db-card teal" style="padding: 13px">
-            <b>project_member</b>
-            <p class="db-small">用户在项目中的成员关系</p>
+          <div class="db-rule">
+            <span class="db-source-ref">S3</span
+            ><span
+              ><b>运行状态变化</b><br />更新本次
+              task_run.status；需要完整事件审计时再增加 task_run_event。</span
+            >
           </div>
-          <div class="db-card blue" style="padding: 13px">
-            <b>task_template</b>
-            <p class="db-small">模板的稳定身份</p>
-          </div>
-          <div class="db-card teal" style="padding: 13px">
-            <b>template_version</b>
-            <p class="db-small">一次模板发布</p>
-          </div>
-          <div class="db-card orange" style="padding: 13px">
-            <b>task</b>
-            <p class="db-small">用户的一次任务提交</p>
-          </div>
-          <div class="db-card yellow" style="padding: 13px">
-            <b>task_input</b>
-            <p class="db-small">任务的一条输入</p>
-          </div>
-          <div class="db-card red" style="padding: 13px">
-            <b>task_run</b>
-            <p class="db-small">任务的一次执行尝试</p>
-          </div>
-          <div class="db-card" style="padding: 13px">
-            <b>run_event / artifact</b>
-            <p class="db-small">状态变化 / 结果文件</p>
+          <div class="db-rule">
+            <span class="db-source-ref">S4</span
+            ><span
+              ><b>任务当前状态</b><br />task.current_status
+              是列表读取用的当前快照，与运行状态在同一事务同步。</span
+            >
           </div>
         </div>
-        <table class="db-table compact" style="margin-top: 15px">
-          <thead>
-            <tr>
-              <th>为什么拆开</th>
-              <th>故事依据</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>模板与版本</td>
-              <td>S2：一个模板多次发布，历史任务引用原版本</td>
-            </tr>
-            <tr>
-              <td>任务与输入</td>
-              <td>S3：一个任务有一个或多个输入</td>
-            </tr>
-            <tr>
-              <td>任务与运行</td>
-              <td>S5：失败重试会产生新的运行</td>
-            </tr>
-            <tr>
-              <td>运行与事件/文件</td>
-              <td>S6、S7：一次运行有多条状态变化和多个文件</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="db-band" style="margin-top: 13px">
-          <strong>本步只确定职责：</strong>后续逐组建立关系并填写字段。
+        <div class="db-band teal" style="margin-top: 16px">
+          <strong>专业判断：</strong
+          >“提交、重试”是命令；“一次运行”是可重复且需保留的业务事实，所以建成
+          task_run。
         </div>
       </div>
     </div>
     <div class="db-footer">
-      <span>先确保每张表都能用一句话说明</span><span>15</span>
+      <span>把当前状态与历次运行分开，既能查快，也不会丢失重试历史</span
+      ><span>15</span>
     </div>
   </Slide>
 </template>
 
 <notes lang="md">
-先建立空表清单，让听众看到整个模型的组成。表名不是凭空出现，每一次拆分都引用 S2、S3、S5、S6、S7 的数量或历史要求。
+动作是写入规则，不是天然实体；需要保留每次发生的事实时才追加子记录。
 </notes>

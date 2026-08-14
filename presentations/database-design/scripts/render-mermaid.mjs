@@ -11,12 +11,7 @@ const deckRoot = resolve(scriptDir, "..");
 const mermaidScript = require.resolve("mermaid/dist/mermaid.min.js");
 const outputDir = resolve(deckRoot, "assets/er");
 
-const diagrams = [
-  ["organization", "er-organization.mmd"],
-  ["execution", "er-execution.mmd"],
-  ["run", "er-run.mmd"],
-  ["overview", "er-overview.mmd"],
-];
+const diagrams = [["overview", "er-overview.mmd"]];
 
 await mkdir(outputDir, { recursive: true });
 const browser = await chromium.launch({ headless: true });
