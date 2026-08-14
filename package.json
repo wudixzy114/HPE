@@ -16,7 +16,7 @@
     "boundaries": "dependency-cruiser packages/*/src app/src app/slides app/themes --config .dependency-cruiser.cjs",
     "check": "npm run format:check && npm run lint && npm run boundaries && npm run typecheck && npm test && npm run build",
     "clean": "rimraf packages/*/dist packages/*/*.tsbuildinfo app/dist app/*.tsbuildinfo coverage artifacts",
-    "dev": "node scripts/run-deck.mjs dev",
+    "dev": "node scripts/run-deck.mjs dev --deck-root ./presentations/database-design",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --max-warnings 0",
