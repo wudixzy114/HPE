@@ -25,14 +25,19 @@
       </section>
       <section>
         <div class="ac-prompt">
-          这段 Python 代码能跑。但请回答三层： ① 这门语言为什么这样设计？和 C++
-          的设计哲学冲突在哪？ ②
-          数据结构在底层内存中如何对齐？指令周期开销在哪？ ③
-          这是不是最优解？时间和空间的 trade-off 在哪？
+          这段 Python 代码能跑。但请回答三层： ①
+          <span class="mark">向上问设计哲学</span>：这门语言为什么这样设计？它的
+          Zen 是什么？和 C++ 的设计哲学冲突在哪？ ②
+          <span class="cue">向下问底层实现</span
+          >：这个数据结构在底层内存中如何对齐？翻译成汇编后，指令周期开销在哪？有没有缓存命中的损失？
+          ③
+          <span class="mark">横向问替代方案</span>：这是不是最优解？时间和空间的
+          trade-off 在哪？有没有异构算法？
         </div>
         <div class="ac-takeaway" style="margin-top: 18px">
           <strong>提问的深度，决定认知的边界。</strong>&nbsp;AI
-          从代码补全工具变成由你指挥的架构师研讨会。
+          不再只是一个“代码能跑就行”的 L2
+          补全工具，而会变成由你指挥的顶级系统架构师研讨会。
         </div>
       </section>
     </div>

@@ -3,7 +3,7 @@
     <div class="ac-kicker">二 · 第①②步</div>
     <h2 data-node="title">先把书读厚，再把书读薄：采样是加法，建模是升维</h2>
 
-    <div data-node="funnel" class="ac-funnel-stage">
+    <div data-node="funnel" class="ac-funnel-stage ac-funnel-stage--reviewed">
       <Step :at="1">
         <section class="ac-sample-cloud">
           <div class="ac-sample">常规案例</div>
@@ -29,9 +29,27 @@
       </Step>
     </div>
 
-    <div data-node="rules" class="ac-rule-strip">
+    <div data-node="classics" class="ac-classic-pair">
+      <Step :at="1">
+        <blockquote>
+          <b>为学日益</b
+          ><span
+            >学习知识要日日增加：广采样本、看案例、看差异、看极端情况，把书读厚。</span
+          >
+        </blockquote>
+      </Step>
+      <Step :at="2">
+        <blockquote>
+          <b>为道日损</b
+          ><span
+            >逼近规律要日日减损：放下枝节，保留决定现象的因果回路，把书读薄。</span
+          >
+        </blockquote>
+      </Step>
+    </div>
+    <div data-node="rules" class="ac-rule-strip ac-rule-strip--compact">
       <div><b>先后关系：</b>读厚是采样，读薄是升维</div>
-      <div><b>压缩目标：</b>抓本质，不停在表面</div>
+      <div><b>压缩目标：</b>抓住本质，而不是停在表面</div>
       <div><b>检验标准：</b>能回答从未背过的问题</div>
     </div>
     <div class="ac-footer">
@@ -41,5 +59,5 @@
 </template>
 
 <notes lang="md">
-左侧是为学日益，漏斗是为道日损。强调样本不够时，压缩没有来源。
+“为学日益 / 为道日损”的解释与两步同步出现，补回原稿中的文化语境和“做加法 / 做减法”含义。
 </notes>

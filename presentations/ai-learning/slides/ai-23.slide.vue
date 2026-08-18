@@ -28,9 +28,16 @@
     </div>
 
     <div class="ac-takeaway">
-      <strong>工业革命消灭熟练工，保留并放大顶尖者。</strong
-      >&nbsp;独特竞争力必须越过 AI 水位线。
+      <strong>“足够好”就是毁灭性的：</strong>&nbsp;企业不会持续为一个 90
+      分但昂贵、低并发的初级岗位买单； 当 AI 能以接近零成本瞬间交付 75–80
+      分，中低端人才市场会直接坍塌。
     </div>
+    <Step :at="4">
+      <div class="ac-waterline-verdict">
+        历次工业革命的共同规律：<b>消灭熟练工，保留并放大顶尖者。</b>如果独特竞争力达不到
+        AI 水位线以上，被威胁只是时间问题。
+      </div>
+    </Step>
     <div class="ac-footer">
       <span>五 · 中位数斩杀</span><span>24 / 28</span>
     </div>
@@ -38,5 +45,5 @@
 </template>
 
 <notes lang="md">
-由下向上揭示三层。制造紧迫感后立刻转向后三页的三条出路。
+由下向上揭示三层，再补回“足够好为何足以摧毁中低端市场”的成本论证，最后引出三条出路。
 </notes>

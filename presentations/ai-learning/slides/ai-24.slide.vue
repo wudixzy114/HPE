@@ -1,37 +1,63 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">五 · 出路一</div>
-    <h2 data-node="title">用 AI 学习 AI：借助指数工具，追赶指数变化</h2>
+    <h2 data-node="title">
+      用 AI 学习 AI：只有指数级的学习工具，才追得上指数级变化
+    </h2>
 
-    <div data-node="growth" class="ac-growth-stage">
-      <section class="ac-chart">
-        <div class="ac-curve" />
-        <div class="ac-chart-label">AI 能力指数曲线</div>
+    <div
+      data-node="growth"
+      class="ac-growth-stage ac-growth-stage--exponential"
+    >
+      <section class="ac-exp-chart">
+        <span class="ac-exp-axis-y">模型能力</span>
+        <span class="ac-exp-axis-x">时间</span>
+        <div class="ac-exp-grid" />
+        <div class="ac-exp-bars" aria-label="前期平缓、后期陡增的指数增长示意">
+          <i class="b1" /><i class="b2" /><i class="b3" /><i class="b4" />
+          <i class="b5" /><i class="b6" /><i class="b7" /><i class="b8" />
+          <i class="b9" /><i class="b10" /><i class="b11" /><i class="b12" />
+        </div>
+        <div class="ac-exp-early">早期：变化不显眼</div>
+        <div class="ac-exp-late">后期：增长越来越陡</div>
+        <div class="ac-exp-label">指数增长</div>
       </section>
+
       <section class="ac-growth-actions">
         <Step :at="1">
           <div class="ac-growth-action">
-            <b>读一手材料</b>
-            <p>最新架构论文，让 AI 帮你写代码拆解数学原理。</p>
+            <b>01 · 直接读一手材料</b>
+            <p>
+              最新模型架构论文——Attention、MoE、Mamba；让 AI
+              帮你写代码，拆解其中的数学原理。
+            </p>
           </div>
         </Step>
         <Step :at="2">
           <div class="ac-growth-action">
-            <b>直接动手测试</b>
-            <p>用 API 测上下文边界、温度系数和能力水位。</p>
+            <b>02 · 直接动手测试</b>
+            <p>
+              用 API
+              测不同模型的上下文边界、温度系数和能力水位，建立第一手体感，而不是第二手转述。
+            </p>
           </div>
         </Step>
         <Step :at="3">
           <div class="ac-growth-action">
-            <b>用本篇的方法学 AI</b>
-            <p>五步闭环、穿透式提问、私教模式全部适用。</p>
+            <b>03 · 用本篇的方法学 AI</b>
+            <p>
+              五步闭环、穿透式提问和私教模式，全部可以应用在“以 AI
+              为对象”的学习上。
+            </p>
           </div>
         </Step>
       </section>
     </div>
 
     <div class="ac-takeaway" style="margin-top: 18px">
-      不要等别人嚼碎后投喂二手信息；把学习工具本身变成学习对象。
+      靠“等别人嚼碎了再喂”的二手信息追赶指数曲线，注定越落越远——<strong
+        >把学习工具本身变成学习对象。</strong
+      >
     </div>
     <div class="ac-footer">
       <span>五 · 用 AI 学习 AI</span><span>25 / 28</span>
@@ -40,5 +66,5 @@
 </template>
 
 <notes lang="md">
-曲线表达“等待二手信息一定落后”。三个动作按投入从低到高出现。
+柱列高度按指数序列设计：前半段几乎贴近基线，后半段快速陡增。图表初始即展示，三种追赶方式依次出现。
 </notes>

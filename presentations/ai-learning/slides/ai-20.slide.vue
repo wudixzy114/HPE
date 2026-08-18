@@ -19,18 +19,33 @@
       <Step :at="2">
         <section class="ac-lossy-output ac-glass">
           <h3>输出 · 一千字</h3>
-          <p>逻辑自洽、四平八稳，却只剩“最大公约数式”的正确废话。</p>
-          <div class="ac-prompt" style="margin-top: 22px">
-            先给主干，再单独加一节<span class="mark">“留白清单”</span
-            >：列出省略因素、例外、特殊场景和简化之处。
-          </div>
+          <p>
+            模型把最反直觉、最微妙的细节当作“离群点”平滑掉；逻辑仍然自洽，
+            却只剩四平八稳、对你没有帮助的“正确废话”，还会造成认知过载。
+          </p>
         </section>
       </Step>
     </div>
     <Step :at="3">
+      <div class="ac-dialectic-band">
+        <b>对策不是拒绝压缩，而是同时保留“主干 + 留白”</b>
+        <span>
+          初学时只抓主要矛盾，能快速上手；但认识深入后，次要因素会升为主要。
+          所以可以暂时不展开，却必须知道自己省略了什么。
+        </span>
+      </div>
+    </Step>
+    <Step :at="4">
+      <div class="ac-prompt ac-lossy-prompt">
+        先给我主干：共识性的框架和结论，让我快速上手。然后单独加一节<span
+          class="mark"
+          >“留白清单”</span
+        >：
+        列出你省略了哪些次要因素、存在哪些例外和特殊场景、哪些地方做了简化——不需要展开讲，但必须标注出来。
+      </div>
       <div
         class="ac-takeaway"
-        style="margin-top: 16px; border-left-color: var(--ac-red)"
+        style="margin-top: 10px; border-left-color: var(--ac-red)"
       >
         AI 给得越完整、越干脆，越要追问：<strong>被省略掉的是什么？</strong>
       </div>
@@ -40,5 +55,5 @@
 </template>
 
 <notes lang="md">
-让观众看到离群点如何在漏斗中消失。对策不是不要压缩，而是显式保留留白清单。
+让观众看到离群点如何在漏斗中消失。补回主次矛盾的辩证解释，并保留完整的“主干 + 留白清单”提示词。
 </notes>
