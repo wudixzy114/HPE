@@ -18,6 +18,7 @@ export interface SlideEntry {
 
 export interface ThemeModuleRef {
   readonly entry: string;
+  readonly alternates?: readonly string[];
 }
 
 export type ThemeRef = string | ThemeModuleRef;

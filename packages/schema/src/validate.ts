@@ -34,7 +34,12 @@ export const deckManifestSchema = z
     }),
     theme: z.union([
       safeRelativePath,
-      z.object({ entry: safeRelativePath }).strict(),
+      z
+        .object({
+          entry: safeRelativePath,
+          alternates: z.array(safeRelativePath).min(1).optional(),
+        })
+        .strict(),
     ]),
     slides: z.array(slideEntrySchema).min(1),
   })
@@ -58,6 +63,17 @@ export const deckManifestSchema = z
         });
       }
       files.add(slide.file);
+    }
+    if (typeof deck.theme !== "string" && deck.theme.alternates) {
+      const themeEntries = [deck.theme.entry, ...deck.theme.alternates];
+      const uniqueThemeEntries = new Set(themeEntries);
+      if (uniqueThemeEntries.size !== themeEntries.length) {
+        context.addIssue({
+          code: "custom",
+          path: ["theme", "alternates"],
+          message: "theme entries must be unique",
+        });
+      }
     }
   });
 

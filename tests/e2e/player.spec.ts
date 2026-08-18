@@ -42,7 +42,7 @@ test("loads the active slide plus two forward slides and defers notes/source map
   ).toBeVisible();
   expect(
     await page.evaluate(() => document.documentElement.dataset.hpeTheme),
-  ).toBe("claude-code-architecture");
+  ).toBe("ink-wash");
   await expect
     .poll(() =>
       scripts
@@ -340,6 +340,26 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
   await expect
     .poll(() => page.evaluate(() => window.__HPE__.getState().slideId))
     .toBe("slide-00");
+});
+
+test("declared themes switch at runtime and update the shared control font", async ({
+  page,
+}) => {
+  await page.goto("/?theme=ink-wash#slide=slide-00&step=0&mode=present");
+  const toolbar = page.locator(".hpe-toolbar");
+  await toolbar.hover();
+  await page.getByRole("button", { name: "Theme" }).click();
+  await expect(page.locator(".hpe-toolbar__theme-option")).toHaveCount(3);
+  await page.getByRole("button", { name: /古典简约/u }).click();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-hpe-theme",
+    "classic-minimal",
+  );
+  await expect(toolbar).toHaveCSS(
+    "font-family",
+    /Songti SC.*STSong.*Noto Serif CJK SC/u,
+  );
+  await expect(page).toHaveURL(/\?theme=classic-minimal#/u);
 });
 
 test("source mapping and manifest-sized printing cover every migrated slide", async ({

@@ -28,19 +28,6 @@
   font-family: var(--hpe-font-sans);
 }
 
-.hpe-toolbar {
-  top: auto;
-  right: 24px;
-  bottom: 18px;
-  left: auto;
-  transform: none;
-}
-
-.hpe-page-number {
-  right: 24px;
-  bottom: 112px;
-}
-
 .hpe-speaker .hpe-slide.slide,
 .hpe-overview .hpe-slide.slide {
   width: 100%;

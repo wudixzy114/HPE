@@ -33,7 +33,14 @@ export default defineTheme({
     },
   },
   spacing: { edge: 72, top: 64, footer: 48, grid: 16, card: 20 },
-  layouts: [],
+  layouts: [
+    {
+      id: "content",
+      description: "One centered heading and supporting paragraph",
+      useFor: ["release fixture"],
+      capacity: { maxItems: 2, titleMaxChars: 48, bodyMaxChars: 120 },
+    },
+  ],
   ai: {
     visualObjective: "Prove deck-root isolation.",
     density: "low",

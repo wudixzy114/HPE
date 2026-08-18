@@ -33,6 +33,12 @@ export default defineTheme({
       minSizePx: 16,
       maxSizePx: 24,
     },
+    ui: {
+      family: "Songti SC",
+      fallback: ["STSong", "Noto Serif CJK SC", "PingFang SC", "serif"],
+      minSizePx: 12,
+      maxSizePx: 16,
+    },
     code: {
       family: "SF Mono",
       fallback: ["Consolas", "monospace"],

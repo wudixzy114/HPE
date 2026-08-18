@@ -8,7 +8,11 @@
     "height": 900
   },
   "theme": {
-    "entry": "themes/ink-wash/theme.ts"
+    "entry": "themes/ink-wash/theme.ts",
+    "alternates": [
+      "themes/classic-minimal/theme.ts",
+      "themes/claude-code/theme.ts"
+    ]
   },
   "slides": [
     {

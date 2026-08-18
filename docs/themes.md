@@ -20,16 +20,38 @@ Select a theme in `deck.json`:
 }
 ```
 
+To make several complete theme modules available at runtime, keep the default
+in `entry` and list the other modules in `alternates`:
+
+```json
+{
+  "theme": {
+    "entry": "themes/ink-wash/theme.ts",
+    "alternates": [
+      "themes/classic-minimal/theme.ts",
+      "themes/technical-color/theme.ts"
+    ]
+  }
+}
+```
+
+The player loads the declared modules, uses their typed metadata for the shared
+theme picker, and stores the selected theme per deck. Theme CSS should scope
+visual alternatives with
+`html[data-hpe-theme="<theme-id>"]`; shared player controls automatically adopt
+the selected theme's `typography.ui` font (falling back to `typography.body`)
+and `--hpe-toolbar-*` tokens.
+
 `theme.ts` calls `defineTheme(...)` from `@hpe/theme`. It records:
 
 - canvas and aspect ratio;
 - semantic color roles;
-- display/body/code typography;
+- display/body/code typography and optional UI typography;
 - spacing scale;
 - layout roles and approximate capacity;
 - a concise visual objective, motif, preferred patterns, avoided patterns and content rules for AI agents.
 
-The compiler verifies the module syntax, default export, relative CSS imports, CSS assets and deck-root boundaries. The player verifies the theme canvas matches `deck.json`. Vite imports the module as the only style entry.
+The compiler verifies every declared module's syntax, default export, relative CSS imports, CSS assets and deck-root boundaries. The player verifies every theme canvas matches `deck.json`. Vite imports only the explicitly declared theme modules.
 
 Legacy CSS-only theme strings remain supported for compatibility, but new themes should use the typed module form.
 

@@ -38,6 +38,7 @@ export interface CompiledSlide extends SlideSourceMap {
 export interface CompiledDeck {
   readonly root: string;
   readonly themeAbsoluteFile: string;
+  readonly themeAbsoluteFiles: readonly string[];
   readonly manifest: DeckManifest;
   readonly slides: readonly CompiledSlide[];
   readonly assets: readonly ResolvedAsset[];
@@ -61,10 +62,9 @@ function source(file: string, line = 1, column = 1): SourceLocation {
 
 async function compileTheme(
   root: string,
-  manifest: DeckManifest,
+  themeFile: string,
+  module: boolean,
 ): Promise<ThemeCompilationResult> {
-  const themeFile =
-    typeof manifest.theme === "string" ? manifest.theme : manifest.theme.entry;
   const absoluteFile = resolve(root, themeFile);
   const issues: CompilationIssue[] = [];
   let contents = "";
@@ -79,7 +79,7 @@ async function compileTheme(
     return { absoluteFile, module: false, assets: [], issues };
   }
 
-  if (typeof manifest.theme === "string") {
+  if (!module) {
     if (!themeFile.endsWith(".css")) {
       issues.push({
         code: "THEME_FILE_EXTENSION_INVALID",
@@ -451,8 +451,16 @@ export async function compileDeck(root: string): Promise<CompiledDeck> {
   const absoluteRoot = resolve(root);
   const manifest = await loadManifest(absoluteRoot);
   const issues: CompilationIssue[] = [];
-  const theme = await compileTheme(absoluteRoot, manifest);
-  issues.push(...theme.issues);
+  const themeEntries =
+    typeof manifest.theme === "string"
+      ? [manifest.theme]
+      : [manifest.theme.entry, ...(manifest.theme.alternates ?? [])];
+  const themes = await Promise.all(
+    themeEntries.map((entry) =>
+      compileTheme(absoluteRoot, entry, typeof manifest.theme !== "string"),
+    ),
+  );
+  issues.push(...themes.flatMap((theme) => theme.issues));
 
   const results = await Promise.all(
     manifest.slides.map((entry) => compileSlide(absoluteRoot, entry)),
@@ -464,9 +472,13 @@ export async function compileDeck(root: string): Promise<CompiledDeck> {
   );
   return {
     root: absoluteRoot,
-    themeAbsoluteFile: theme.absoluteFile,
+    themeAbsoluteFile: themes[0]!.absoluteFile,
+    themeAbsoluteFiles: themes.map((theme) => theme.absoluteFile),
     manifest,
     slides,
-    assets: [...theme.assets, ...slides.flatMap((slide) => slide.assets)],
+    assets: [
+      ...themes.flatMap((theme) => theme.assets),
+      ...slides.flatMap((slide) => slide.assets),
+    ],
   };
 }

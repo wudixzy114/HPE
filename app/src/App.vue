@@ -36,13 +36,9 @@ import type {
   TimelineDriver,
 } from "@hpe/runtime-core/timeline";
 import type { SlideSourceMap } from "@hpe/compiler";
-import { manifest, slideLoaders, theme } from "virtual:hpe-deck";
+import { manifest, slideLoaders, theme, themes } from "virtual:hpe-deck";
 
 import AnnotationCanvas from "./components/AnnotationCanvas.vue";
-import {
-  hasPresentationTheme,
-  presentationThemes,
-} from "./presentation-themes";
 
 const OverviewView = defineAsyncComponent(
   () => import("./components/OverviewView.vue"),
@@ -108,22 +104,24 @@ const annotationColor = ref("#ef4444");
 const annotationHasDrawing = ref(false);
 const annotationClearVersion = ref(0);
 const defaultThemeId = theme?.id ?? manifest.id;
-const themeOptions = computed(() =>
-  hasPresentationTheme(defaultThemeId) ? presentationThemes : [],
-);
+const themeOptions = computed(() => themes);
 const themeStorageKey = `hpe:${manifest.id}:theme`;
 const themePickerOpen = ref(false);
+
+function hasThemeOption(themeId: string): boolean {
+  return themeOptions.value.some((option) => option.id === themeId);
+}
 
 function initialThemeId(): string {
   const selectedFromUrl = new URLSearchParams(window.location.search).get(
     "theme",
   );
-  if (selectedFromUrl && hasPresentationTheme(selectedFromUrl)) {
+  if (selectedFromUrl && hasThemeOption(selectedFromUrl)) {
     return selectedFromUrl;
   }
   try {
     const storedTheme = window.localStorage.getItem(themeStorageKey);
-    if (storedTheme && hasPresentationTheme(storedTheme)) return storedTheme;
+    if (storedTheme && hasThemeOption(storedTheme)) return storedTheme;
   } catch {
     // Theme selection remains usable when browser storage is unavailable.
   }
@@ -133,10 +131,24 @@ function initialThemeId(): string {
 const activeThemeId = ref(initialThemeId());
 const activeTheme = computed(
   () =>
-    presentationThemes.find(
+    themeOptions.value.find(
       (themeOption) => themeOption.id === activeThemeId.value,
     ) ?? undefined,
 );
+
+function themeSwatches(themeOption: (typeof themes)[number]): string[] {
+  return Object.values(themeOption.colors)
+    .slice(0, 3)
+    .map((color) => color.value);
+}
+
+function themeFont(themeOption: (typeof themes)[number] | undefined): string {
+  const typography = themeOption?.typography.ui ?? themeOption?.typography.body;
+  if (!typography) return "Inter, ui-sans-serif, system-ui, sans-serif";
+  return [typography.family, ...typography.fallback]
+    .map((family) => (family.includes(" ") ? `"${family}"` : family))
+    .join(", ");
+}
 let controls: BrowserControls | undefined;
 let urlBinding: BrowserBinding | undefined;
 let sync: DeckSync | undefined;
@@ -273,7 +285,7 @@ function openOverview(): void {
 }
 
 function setTheme(themeId: string): void {
-  if (!hasPresentationTheme(themeId)) return;
+  if (!hasThemeOption(themeId)) return;
   activeThemeId.value = themeId;
   themePickerOpen.value = false;
   try {
@@ -450,6 +462,10 @@ watchEffect(() => {
   document.title = manifest.title;
   document.documentElement.dataset.hpeTheme = activeThemeId.value;
   document.documentElement.style.setProperty(
+    "--hpe-font-sans",
+    themeFont(activeTheme.value),
+  );
+  document.documentElement.style.setProperty(
     "--hpe-slide-width",
     `${manifest.size.width}px`,
   );
@@ -601,7 +617,7 @@ watchEffect(() => {
             >
               <span class="hpe-toolbar__theme-swatches" aria-hidden="true">
                 <i
-                  v-for="swatch in themeOption.swatches"
+                  v-for="swatch in themeSwatches(themeOption)"
                   :key="swatch"
                   :style="{ backgroundColor: swatch }"
                 />

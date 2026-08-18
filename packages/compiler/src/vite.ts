@@ -64,17 +64,26 @@ export function hpeDeck(options: HpeVitePluginOptions = {}): Plugin {
         const slidePath = `/@fs/${normalizePath(slide.absoluteFile)}`;
         return `${JSON.stringify(slide.id)}: () => import(${JSON.stringify(slidePath)})`;
       });
-      const themeImport = `/@fs/${normalizePath(deck.themeAbsoluteFile)}`;
       const themeLines =
         typeof deck.manifest.theme === "string"
           ? [
-              `import ${JSON.stringify(themeImport)};`,
+              `import ${JSON.stringify(`/@fs/${normalizePath(deck.themeAbsoluteFile)}`)};`,
               "export const theme = undefined;",
+              "export const themes = [];",
             ]
-          : [
-              `import themeDefinition from ${JSON.stringify(themeImport)};`,
-              "export const theme = themeDefinition;",
-            ];
+          : deck.themeAbsoluteFiles.map((themeFile, index) => {
+              const variable = `themeDefinition${index}`;
+              return `import ${variable} from ${JSON.stringify(`/@fs/${normalizePath(themeFile)}`)};`;
+            });
+      if (typeof deck.manifest.theme !== "string") {
+        const variables = deck.themeAbsoluteFiles.map(
+          (_themeFile, index) => `themeDefinition${index}`,
+        );
+        themeLines.push(
+          `export const theme = ${variables[0]};`,
+          `export const themes = [${variables.join(",")}];`,
+        );
+      }
       return [
         `import { defineAsyncComponent } from "vue";`,
         ...themeLines,
@@ -108,7 +117,8 @@ export function hpeDeck(options: HpeVitePluginOptions = {}): Plugin {
       if (
         !root ||
         (!context.file.endsWith(".slide.vue") &&
-          !context.file.endsWith("deck.json"))
+          !context.file.endsWith("deck.json") &&
+          !deckThemeFile(context.file, root))
       )
         return;
       const virtualModules = [
@@ -125,4 +135,13 @@ export function hpeDeck(options: HpeVitePluginOptions = {}): Plugin {
       return undefined;
     },
   };
+}
+
+function deckThemeFile(file: string, root: string): boolean {
+  const normalizedFile = normalizePath(file);
+  const normalizedThemeRoot = `${normalizePath(root)}/themes/`;
+  return (
+    normalizedFile.startsWith(normalizedThemeRoot) &&
+    (normalizedFile.endsWith(".ts") || normalizedFile.endsWith(".css"))
+  );
 }

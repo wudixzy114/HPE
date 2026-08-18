@@ -1,0 +1,53 @@
+html[data-hpe-theme="ai-cognition-blueprint"] {
+  --ac-ink: #102a43;
+  --ac-muted: #5f7182;
+  --ac-paper: #eef5f8;
+  --ac-surface: #ffffff;
+  --ac-line: #cad9e0;
+  --ac-teal: #087e8b;
+  --ac-teal-soft: #dceff0;
+  --ac-violet: #3d5a80;
+  --ac-violet-soft: #e2e8f0;
+  --ac-blue: #1f5f8b;
+  --ac-blue-soft: #dfeaf3;
+  --ac-orange: #bc6335;
+  --ac-orange-soft: #f5e4da;
+  --ac-yellow: #c58b20;
+  --ac-yellow-soft: #f6ebca;
+  --ac-red: #a94545;
+  --ac-red-soft: #f5e1e1;
+  --ac-code: #0b1f33;
+  --hpe-color-bg: #0b1f33;
+  --hpe-color-surface: var(--ac-surface);
+  --hpe-color-text: #f5fbff;
+  --hpe-color-muted: #bed0dd;
+  --hpe-color-accent: #20a4b5;
+  --hpe-toolbar-surface: rgb(11 31 51 / 84%);
+  --hpe-toolbar-text: #f5fbff;
+  --hpe-toolbar-muted: #bed0dd;
+  --hpe-toolbar-border: rgb(190 208 221 / 44%);
+  --hpe-toolbar-shadow: rgb(0 12 24 / 40%);
+  --hpe-toolbar-hover: #4cc4cf;
+  --hpe-toolbar-active-text: #0b1f33;
+}
+
+html[data-hpe-theme="ai-cognition-blueprint"],
+html[data-hpe-theme="ai-cognition-blueprint"] body {
+  background: #0b1f33;
+}
+
+html[data-hpe-theme="ai-cognition-blueprint"] .hpe-slide.ac-slide {
+  color: var(--ac-ink);
+  background: var(--ac-paper);
+}
+
+html[data-hpe-theme="ai-cognition-blueprint"] .hpe-slide.ac-cover {
+  color: #f5fbff;
+  background: #102a43;
+}
+
+html[data-hpe-theme="ai-cognition-blueprint"]
+  :is(.ac-card, .ac-flow-node, .ac-loop-node, .ac-rule, .ac-check) {
+  border-color: var(--ac-line);
+  background: var(--ac-surface);
+}

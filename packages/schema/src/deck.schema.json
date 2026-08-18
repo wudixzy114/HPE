@@ -26,7 +26,15 @@
           "type": "object",
           "additionalProperties": false,
           "required": ["entry"],
-          "properties": { "entry": { "$ref": "#/$defs/safePath" } }
+          "properties": {
+            "entry": { "$ref": "#/$defs/safePath" },
+            "alternates": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/safePath" }
+            }
+          }
         }
       ]
     },

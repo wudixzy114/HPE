@@ -1,0 +1,186 @@
+{
+  "$schema": "../../packages/schema/src/deck.schema.json",
+  "schemaVersion": 1,
+  "id": "ai-learning-cognition",
+  "title": "用 AI 学习：从知道到举一反三",
+  "size": {
+    "width": 1600,
+    "height": 900
+  },
+  "theme": {
+    "entry": "themes/ai-cognition/theme.ts",
+    "alternates": [
+      "themes/ai-cognition-warm/theme.ts",
+      "themes/ai-cognition-blueprint/theme.ts"
+    ]
+  },
+  "slides": [
+    {
+      "id": "ai-00",
+      "file": "slides/ai-00.slide.vue",
+      "title": "用 AI 学习：从知道到举一反三",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-01",
+      "file": "slides/ai-01.slide.vue",
+      "title": "开场：能力真的提升了吗",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-02",
+      "file": "slides/ai-02.slide.vue",
+      "title": "什么才算真正学到：三个检验标准",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-03",
+      "file": "slides/ai-03.slide.vue",
+      "title": "学习的四层金字塔：主战场必须上移",
+      "maxStep": 4
+    },
+    {
+      "id": "ai-04",
+      "file": "slides/ai-04.slide.vue",
+      "title": "学习的过程：五步闭环总览",
+      "maxStep": 5
+    },
+    {
+      "id": "ai-05",
+      "file": "slides/ai-05.slide.vue",
+      "title": "第①②步：采样输入与压缩建模",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-06",
+      "file": "slides/ai-06.slide.vue",
+      "title": "案例：同一句话的两种掌握——TCP 三次握手",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-07",
+      "file": "slides/ai-07.slide.vue",
+      "title": "第③步：迁移连接（举一反三）",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-08",
+      "file": "slides/ai-08.slide.vue",
+      "title": "第④步：实践检验（学而时习之）",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-09",
+      "file": "slides/ai-09.slide.vue",
+      "title": "第⑤步：复盘迭代（吾日三省吾身）",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-10",
+      "file": "slides/ai-10.slide.vue",
+      "title": "人机分工：每一步谁主导，以及两条铁律",
+      "maxStep": 5
+    },
+    {
+      "id": "ai-11",
+      "file": "slides/ai-11.slide.vue",
+      "title": "实战总原则：个性化——让 AI 知道你是谁",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-12",
+      "file": "slides/ai-12.slide.vue",
+      "title": "工具分工：流式 vs 批处理",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-13",
+      "file": "slides/ai-13.slide.vue",
+      "title": "生成模板①②：提炼模型与同构迁移",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-14",
+      "file": "slides/ai-14.slide.vue",
+      "title": "生成模板③：穿透式提问",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-15",
+      "file": "slides/ai-15.slide.vue",
+      "title": "生成模板④⑤：出题考官与卡点补课",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-16",
+      "file": "slides/ai-16.slide.vue",
+      "title": "已有资料时：从生成者到私教·快速问路",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-17",
+      "file": "slides/ai-17.slide.vue",
+      "title": "私教②卡点答疑与私教③出题考官",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-18",
+      "file": "slides/ai-18.slide.vue",
+      "title": "私教④压力测试",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-19",
+      "file": "slides/ai-19.slide.vue",
+      "title": "十个模板速查表"
+    },
+    {
+      "id": "ai-20",
+      "file": "slides/ai-20.slide.vue",
+      "title": "坑一：认知过载与压缩失真",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-21",
+      "file": "slides/ai-21.slide.vue",
+      "title": "坑二：中庸病——正确，但无用",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-22",
+      "file": "slides/ai-22.slide.vue",
+      "title": "坑三：谄媚与幻觉",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-23",
+      "file": "slides/ai-23.slide.vue",
+      "title": "为什么是现在：中位数斩杀",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-24",
+      "file": "slides/ai-24.slide.vue",
+      "title": "出路一：用 AI 学习 AI",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-25",
+      "file": "slides/ai-25.slide.vue",
+      "title": "出路二：在深度和广度上跟 AI 掰手腕",
+      "maxStep": 2
+    },
+    {
+      "id": "ai-26",
+      "file": "slides/ai-26.slide.vue",
+      "title": "出路三：在经验和实践上跟 AI 掐手腕",
+      "maxStep": 3
+    },
+    {
+      "id": "ai-27",
+      "file": "slides/ai-27.slide.vue",
+      "title": "行动清单与结语",
+      "maxStep": 3
+    }
+  ]
+}

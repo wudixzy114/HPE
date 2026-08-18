@@ -52,10 +52,32 @@ describe("compileDeck", () => {
       join(root, "themes", "custom", "theme.css"),
       ":root { --accent: #007c73; }\n",
     );
-    await writeFile(join(root, "deck.json"), JSON.stringify(themedManifest));
+    await mkdir(join(root, "themes", "alternate"), { recursive: true });
+    await writeFile(
+      join(root, "themes", "alternate", "theme.ts"),
+      `import { defineTheme } from "@hpe/theme";\nimport "./theme.css";\nexport default defineTheme({ id: "alternate", name: "Alternate", description: "Alternate", canvas: { width: 1280, height: 720, aspectRatio: "16:9" }, colors: {}, typography: {}, spacing: { edge: 64 }, layouts: [{ id: "content", description: "Content", useFor: ["content"] }], ai: { visualObjective: "Clear", density: "medium", motif: "Grid", prefer: [], avoid: [], contentRules: [] } });\n`,
+    );
+    await writeFile(
+      join(root, "themes", "alternate", "theme.css"),
+      ":root { --accent: #7657a6; }\n",
+    );
+    await writeFile(
+      join(root, "deck.json"),
+      JSON.stringify({
+        ...themedManifest,
+        theme: {
+          entry: "themes/custom/theme.ts",
+          alternates: ["themes/alternate/theme.ts"],
+        },
+      }),
+    );
     const deck = await compileDeck(root);
     expect(deck.themeAbsoluteFile.endsWith("themes/custom/theme.ts")).toBe(
       true,
+    );
+    expect(deck.themeAbsoluteFiles).toHaveLength(2);
+    expect(deck.themeAbsoluteFiles[1]).toMatch(
+      /themes\/alternate\/theme\.ts$/u,
     );
   });
 

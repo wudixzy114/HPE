@@ -1,0 +1,60 @@
+html[data-hpe-theme="ai-cognition-warm"] {
+  --ac-ink: #352d25;
+  --ac-muted: #71665a;
+  --ac-paper: #f4ecdc;
+  --ac-surface: #fffaf0;
+  --ac-line: #d8cbb8;
+  --ac-teal: #4f776c;
+  --ac-teal-soft: #e1ebe4;
+  --ac-violet: #805d6b;
+  --ac-violet-soft: #efe4e7;
+  --ac-blue: #536d82;
+  --ac-blue-soft: #e5ebee;
+  --ac-orange: #ad6337;
+  --ac-orange-soft: #f4e3d7;
+  --ac-yellow: #b47a2a;
+  --ac-yellow-soft: #f3e6c6;
+  --ac-red: #9e4c45;
+  --ac-red-soft: #f2dfdc;
+  --ac-code: #2d2926;
+  --hpe-color-bg: #2d2926;
+  --hpe-color-surface: var(--ac-surface);
+  --hpe-color-text: #fffaf0;
+  --hpe-color-muted: #ded3c2;
+  --hpe-color-accent: var(--ac-yellow);
+  --hpe-toolbar-surface: rgb(45 41 38 / 84%);
+  --hpe-toolbar-text: #fffaf0;
+  --hpe-toolbar-muted: #ded3c2;
+  --hpe-toolbar-border: rgb(222 211 194 / 45%);
+  --hpe-toolbar-shadow: rgb(32 25 20 / 38%);
+  --hpe-toolbar-hover: #d19a50;
+  --hpe-toolbar-active-text: #2d2926;
+}
+
+html[data-hpe-theme="ai-cognition-warm"],
+html[data-hpe-theme="ai-cognition-warm"] body {
+  background: #2d2926;
+}
+
+html[data-hpe-theme="ai-cognition-warm"] .hpe-slide.ac-slide {
+  color: var(--ac-ink);
+  background: var(--ac-paper);
+}
+
+html[data-hpe-theme="ai-cognition-warm"] .hpe-slide.ac-cover {
+  color: #fffaf0;
+  background: #352d25;
+}
+
+html[data-hpe-theme="ai-cognition-warm"]
+  :is(
+    .ac-card,
+    .ac-flow-node,
+    .ac-loop-node,
+    .ac-rule,
+    .ac-check,
+    .ac-table,
+    .ac-quote
+  ) {
+  background: var(--ac-surface);
+}

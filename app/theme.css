@@ -94,8 +94,8 @@
   .hpe-toolbar {
     position: fixed;
     z-index: 20;
-    top: 14px;
-    left: 50%;
+    right: 24px;
+    bottom: 18px;
     display: flex;
     align-items: center;
     max-width: 44px;
@@ -106,7 +106,6 @@
     opacity: 0.55;
     background: var(--hpe-toolbar-surface);
     box-shadow: 0 12px 36px var(--hpe-toolbar-shadow);
-    transform: translateX(-50%);
     transition:
       max-width 180ms ease,
       opacity 160ms ease;
@@ -291,8 +290,8 @@
 
   .hpe-page-number {
     position: fixed;
-    right: 18px;
-    bottom: 14px;
+    right: 24px;
+    bottom: 78px;
     color: var(--hpe-toolbar-muted);
     font-size: 12px;
   }

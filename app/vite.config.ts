@@ -13,11 +13,10 @@ import {
 import { hpeDeck } from "@hpe/compiler/vite";
 
 const appRoot = fileURLToPath(new URL(".", import.meta.url));
-const deckRoot = resolve(process.env.HPE_DECK_ROOT || appRoot);
 const PLAYER_STYLES_ID = "virtual:hpe-player-styles.css";
 const RESOLVED_PLAYER_STYLES_ID = `\0${PLAYER_STYLES_ID}`;
 
-function playerStyles(): Plugin {
+function playerStyles(deckRoot: string): Plugin {
   const playerCss = normalizePath(resolve(appRoot, "theme.css"));
   const playerSource = normalizePath(resolve(appRoot, "src"));
   const deckSource = normalizePath(deckRoot);
@@ -39,10 +38,18 @@ function playerStyles(): Plugin {
   };
 }
 
-export default defineConfig({
-  plugins: [hpeDeck({ root: deckRoot }), playerStyles(), vue(), tailwindcss()],
-  server: {
-    fs: { allow: [searchForWorkspaceRoot(appRoot), deckRoot] },
-  },
-  build: { target: "es2022", sourcemap: true },
+export default defineConfig(() => {
+  const deckRoot = resolve(process.env.HPE_DECK_ROOT || appRoot);
+  return {
+    plugins: [
+      hpeDeck({ root: deckRoot }),
+      playerStyles(deckRoot),
+      vue(),
+      tailwindcss(),
+    ],
+    server: {
+      fs: { allow: [searchForWorkspaceRoot(appRoot), deckRoot] },
+    },
+    build: { target: "es2022", sourcemap: true },
+  };
 });
