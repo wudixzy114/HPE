@@ -8,7 +8,7 @@
     "height": 900
   },
   "theme": {
-    "entry": "themes/claude-code/theme.ts"
+    "entry": "themes/classic-minimal/theme.ts"
   },
   "slides": [
     {

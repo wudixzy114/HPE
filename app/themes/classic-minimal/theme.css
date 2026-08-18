@@ -1,0 +1,282 @@
+:root {
+  --classic-ink: #29251f;
+  --classic-ink-soft: #383228;
+  --classic-paper: #f5f0e5;
+  --classic-paper-light: #fbf8f0;
+  --classic-line: #cbc1b0;
+  --classic-muted: #6d665b;
+  --classic-vermilion: #a44832;
+  --classic-vermilion-soft: #f1e2da;
+  --classic-jade: #536e68;
+  --classic-jade-soft: #e4ebe4;
+  --classic-indigo: #596173;
+  --classic-indigo-soft: #e8e8ed;
+
+  --ink: var(--classic-ink);
+  --muted: var(--classic-muted);
+  --paper: var(--classic-paper);
+  --line: var(--classic-line);
+  --teal: var(--classic-jade);
+  --teal-soft: var(--classic-jade-soft);
+  --orange: var(--classic-vermilion);
+  --orange-soft: var(--classic-vermilion-soft);
+  --yellow: var(--classic-vermilion);
+  --yellow-soft: var(--classic-vermilion-soft);
+  --purple: var(--classic-indigo);
+  --purple-soft: var(--classic-indigo-soft);
+  --red: var(--classic-vermilion);
+  --red-soft: var(--classic-vermilion-soft);
+  --white: var(--classic-paper-light);
+
+  --hpe-color-bg: var(--classic-paper);
+  --hpe-color-surface: var(--classic-paper-light);
+  --hpe-color-text: var(--classic-ink);
+  --hpe-color-muted: var(--classic-muted);
+  --hpe-color-accent: var(--classic-vermilion);
+  --hpe-font-sans: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+}
+
+html,
+body {
+  background: var(--classic-ink);
+  color: var(--classic-ink);
+}
+
+.hpe-slide.slide {
+  position: relative;
+  inset: auto;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: none;
+  transform-origin: center;
+  color: var(--classic-ink);
+  background-color: var(--classic-paper);
+  background-image: radial-gradient(
+    circle at 16% 12%,
+    rgb(41 37 31 / 2.4%) 0 0.7px,
+    transparent 0.9px
+  );
+  background-size: 11px 11px;
+  font-family: var(--hpe-font-sans);
+}
+
+.hpe-slide.slide .foot {
+  pointer-events: none;
+}
+
+.hpe-speaker .hpe-slide.slide,
+.hpe-overview .hpe-slide.slide {
+  width: 100%;
+  height: 100%;
+}
+
+.hpe-slide.slide h1,
+.hpe-slide.slide h2,
+.hpe-slide.slide .quote {
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", SimSun, serif;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+}
+
+.hpe-slide.slide .top {
+  align-items: flex-start;
+}
+
+.hpe-slide.slide .kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--classic-vermilion);
+  letter-spacing: 0.12em;
+}
+
+.hpe-slide.slide .kicker::before {
+  width: 9px;
+  height: 9px;
+  background: var(--classic-vermilion);
+  content: "";
+}
+
+.hpe-slide.slide .chapter,
+.hpe-slide.slide .foot,
+.hpe-slide.slide .muted,
+.hpe-slide.slide .subtitle,
+.hpe-slide.slide .note,
+.hpe-slide.slide .hint,
+.hpe-slide.slide .label {
+  color: var(--classic-muted);
+}
+
+.hpe-slide.slide .divider {
+  height: 1px;
+  background: var(--classic-line);
+}
+
+.hpe-slide.slide .card,
+.hpe-slide.slide .matrix,
+.hpe-slide.slide .code,
+.hpe-slide.slide .demo,
+.hpe-slide.slide .inject-card {
+  border-color: var(--classic-line);
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.hpe-slide.slide .card,
+.hpe-slide.slide .matrix,
+.hpe-slide.slide .inject-card {
+  background: rgb(251 248 240 / 74%);
+}
+
+.hpe-slide.slide .card p,
+.hpe-slide.slide .card li {
+  color: var(--classic-ink-soft);
+}
+
+.hpe-slide.slide .band {
+  border-left: 3px solid var(--classic-jade);
+  border-radius: 0;
+  background: var(--classic-jade-soft);
+}
+
+.hpe-slide.slide .band.orange-band,
+.hpe-slide.slide .band.yellow-band,
+.hpe-slide.slide .band.red-band {
+  border-left-color: var(--classic-vermilion);
+  background: var(--classic-vermilion-soft);
+}
+
+.hpe-slide.slide .band.purple-band {
+  border-left-color: var(--classic-indigo);
+  background: var(--classic-indigo-soft);
+}
+
+.hpe-slide.slide .num {
+  border-radius: 0;
+  background: var(--classic-ink);
+}
+
+.hpe-slide.slide .accent,
+.hpe-slide.slide .hint b {
+  color: var(--classic-jade);
+}
+
+.hpe-slide.slide .orange,
+.hpe-slide.slide .red {
+  color: var(--classic-vermilion);
+}
+
+.hpe-slide.slide .purple {
+  color: var(--classic-indigo);
+}
+
+.hpe-slide.slide.dark {
+  color: var(--classic-paper);
+  background-color: var(--classic-ink);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 91px,
+    rgb(245 240 229 / 9%) 91px,
+    rgb(245 240 229 / 9%) 92px,
+    transparent 92px
+  );
+}
+
+.hpe-slide.slide.dark .kicker {
+  color: #d8b8a9;
+}
+
+.hpe-slide.slide.dark .kicker::before {
+  background: var(--classic-vermilion);
+}
+
+.hpe-slide.slide.dark .chapter,
+.hpe-slide.slide.dark .foot,
+.hpe-slide.slide.dark .muted,
+.hpe-slide.slide.dark .subtitle {
+  color: #c9c0b2;
+}
+
+.hpe-slide.slide.dark .divider {
+  background: #6d655a;
+}
+
+.hpe-slide.slide.dark .card,
+.hpe-slide.slide.dark .key,
+.hpe-slide.slide.dark .code,
+.hpe-slide.slide.dark .demo {
+  border-color: #6d655a;
+  border-radius: 2px;
+  background: var(--classic-ink-soft);
+  box-shadow: none;
+}
+
+.hpe-slide.slide.dark .card p,
+.hpe-slide.slide.dark .card li,
+.hpe-slide.slide.dark .key span {
+  color: #e5ddd0;
+}
+
+.hpe-slide.slide.dark .card .label {
+  color: #c9c0b2;
+}
+
+.hpe-slide.slide.dark .num {
+  background: var(--classic-vermilion);
+  color: var(--classic-paper);
+}
+
+.hpe-slide.slide.dark .four-keys .key,
+.hpe-slide.slide.dark .four-keys .k1,
+.hpe-slide.slide.dark .four-keys .k2,
+.hpe-slide.slide.dark .four-keys .k3,
+.hpe-slide.slide.dark .four-keys .k4,
+.hpe-slide.slide.dark .four-keys .k5 {
+  border-top-color: var(--classic-vermilion);
+}
+
+.hpe-slide.slide.dark span[style*="color"] {
+  color: #d7ad97 !important;
+}
+
+.hpe-toolbar,
+.hpe-page-number,
+.hpe-progress {
+  color: var(--classic-paper);
+}
+
+.hpe-toolbar button {
+  border-color: rgb(245 240 229 / 45%);
+  border-radius: 2px;
+  background: rgb(41 37 31 / 88%);
+  color: var(--classic-paper);
+  box-shadow: none;
+}
+
+.hpe-progress > * {
+  background: var(--classic-vermilion);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hpe-slide.slide *,
+  .hpe-slide.slide *::before,
+  .hpe-slide.slide *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media print {
+  html,
+  body,
+  #app {
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+}
