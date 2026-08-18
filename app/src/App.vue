@@ -39,6 +39,10 @@ import type { SlideSourceMap } from "@hpe/compiler";
 import { manifest, slideLoaders, theme } from "virtual:hpe-deck";
 
 import AnnotationCanvas from "./components/AnnotationCanvas.vue";
+import {
+  hasPresentationTheme,
+  presentationThemes,
+} from "./presentation-themes";
 
 const OverviewView = defineAsyncComponent(
   () => import("./components/OverviewView.vue"),
@@ -103,6 +107,36 @@ const annotationTool = ref<"pen" | "highlighter">("pen");
 const annotationColor = ref("#ef4444");
 const annotationHasDrawing = ref(false);
 const annotationClearVersion = ref(0);
+const defaultThemeId = theme?.id ?? manifest.id;
+const themeOptions = computed(() =>
+  hasPresentationTheme(defaultThemeId) ? presentationThemes : [],
+);
+const themeStorageKey = `hpe:${manifest.id}:theme`;
+const themePickerOpen = ref(false);
+
+function initialThemeId(): string {
+  const selectedFromUrl = new URLSearchParams(window.location.search).get(
+    "theme",
+  );
+  if (selectedFromUrl && hasPresentationTheme(selectedFromUrl)) {
+    return selectedFromUrl;
+  }
+  try {
+    const storedTheme = window.localStorage.getItem(themeStorageKey);
+    if (storedTheme && hasPresentationTheme(storedTheme)) return storedTheme;
+  } catch {
+    // Theme selection remains usable when browser storage is unavailable.
+  }
+  return defaultThemeId;
+}
+
+const activeThemeId = ref(initialThemeId());
+const activeTheme = computed(
+  () =>
+    presentationThemes.find(
+      (themeOption) => themeOption.id === activeThemeId.value,
+    ) ?? undefined,
+);
 let controls: BrowserControls | undefined;
 let urlBinding: BrowserBinding | undefined;
 let sync: DeckSync | undefined;
@@ -238,6 +272,21 @@ function openOverview(): void {
   overview.value = true;
 }
 
+function setTheme(themeId: string): void {
+  if (!hasPresentationTheme(themeId)) return;
+  activeThemeId.value = themeId;
+  themePickerOpen.value = false;
+  try {
+    window.localStorage.setItem(themeStorageKey, themeId);
+  } catch {
+    // Theme selection remains usable when browser storage is unavailable.
+  }
+  const url = new URL(window.location.href);
+  if (themeId === defaultThemeId) url.searchParams.delete("theme");
+  else url.searchParams.set("theme", themeId);
+  window.history.replaceState({}, "", url);
+}
+
 function onApplicationKey(event: KeyboardEvent): void {
   if (
     event.defaultPrevented ||
@@ -286,6 +335,9 @@ function onApplicationKey(event: KeyboardEvent): void {
 
 function openSpeakerView(): void {
   const url = new URL(window.location.href);
+  if (activeThemeId.value !== defaultThemeId) {
+    url.searchParams.set("theme", activeThemeId.value);
+  }
   url.hash = new URLSearchParams({
     slide: state.value.slideId,
     step: String(state.value.step),
@@ -396,7 +448,7 @@ onBeforeUnmount(() => {
 
 watchEffect(() => {
   document.title = manifest.title;
-  document.documentElement.dataset.hpeTheme = theme?.id ?? manifest.id;
+  document.documentElement.dataset.hpeTheme = activeThemeId.value;
   document.documentElement.style.setProperty(
     "--hpe-slide-width",
     `${manifest.size.width}px`,
@@ -483,6 +535,7 @@ watchEffect(() => {
     <nav
       v-if="state.mode !== 'inspect'"
       class="hpe-toolbar"
+      :class="{ 'hpe-toolbar--theme-picker-open': themePickerOpen }"
       aria-label="Presentation tools"
       tabindex="0"
     >
@@ -518,6 +571,49 @@ watchEffect(() => {
         >
           Fullscreen
         </button>
+        <div v-if="themeOptions.length > 1" class="hpe-toolbar__theme">
+          <button
+            type="button"
+            :aria-expanded="themePickerOpen"
+            aria-controls="hpe-theme-picker"
+            :title="`Theme: ${activeTheme?.name ?? activeThemeId}`"
+            @click="themePickerOpen = !themePickerOpen"
+          >
+            Theme
+          </button>
+          <div
+            v-if="themePickerOpen"
+            id="hpe-theme-picker"
+            class="hpe-toolbar__theme-menu"
+            role="group"
+            aria-label="Presentation theme"
+          >
+            <button
+              v-for="themeOption in themeOptions"
+              :key="themeOption.id"
+              type="button"
+              class="hpe-toolbar__theme-option"
+              :class="{
+                'hpe-toolbar__theme-option--active':
+                  activeThemeId === themeOption.id,
+              }"
+              :aria-pressed="activeThemeId === themeOption.id"
+              @click="setTheme(themeOption.id)"
+            >
+              <span class="hpe-toolbar__theme-swatches" aria-hidden="true">
+                <i
+                  v-for="swatch in themeOption.swatches"
+                  :key="swatch"
+                  :style="{ backgroundColor: swatch }"
+                />
+              </span>
+              <span class="hpe-toolbar__theme-copy">
+                <b>{{ themeOption.name }}</b>
+                <small>{{ themeOption.description }}</small>
+              </span>
+            </button>
+          </div>
+        </div>
         <button type="button" title="Print all slides" @click="printDeck">
           Print
         </button>
