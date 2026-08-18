@@ -23,8 +23,13 @@
           </div>
         </section>
       </Step>
-      <div class="ac-gauge">
-        <div class="ac-gauge-label">必须<br />表态</div>
+      <div data-node="decision-selector" class="ac-decision-selector">
+        <small>决策输出</small>
+        <div class="ac-decision-selector__choices">
+          <span>A</span><i>或</i><span class="selected">B</span>
+        </div>
+        <b>选一个方向</b>
+        <p>给出推荐、置信度与推翻条件</p>
       </div>
       <Step :at="2">
         <section class="ac-choice ac-glass">
@@ -58,5 +63,5 @@
 </template>
 
 <notes lang="md">
-先澄清句式本身没有错，再用技术选型原话展示“不表态”的问题。表盘象征判断与承担风险，最后保留完整的强迫表态三件套。
+先澄清句式本身没有错，再用技术选型原话展示“不表态”的问题。中间的 A/B 选择器直接表示必须选定一个方向，最后保留完整的强迫表态三件套。
 </notes>

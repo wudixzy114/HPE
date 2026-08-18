@@ -1,7 +1,9 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">三 · 私教④</div>
-    <h2 data-node="title">压力测试：资料读厚靠原作者，读薄靠自己，AI 负责检查你压丢了什么</h2>
+    <h2 data-node="title">
+      压力测试：资料读厚靠原作者，读薄靠自己，AI 负责检查你压丢了什么
+    </h2>
 
     <div data-node="pressure" class="ac-pressure">
       <Step :at="1">
@@ -17,8 +19,21 @@
           </div>
         </section>
       </Step>
-      <div class="ac-pressure-meter">
-        <span>原文分辨率</span><span>你的压缩</span>
+      <div data-node="compression-audit" class="ac-compression-audit">
+        <small>压缩质检</small>
+        <div
+          class="ac-compression-audit__docs"
+          aria-label="对照原文检查摘要中的缺失信息"
+        >
+          <div class="ac-mini-doc source"><b>原文</b><i /><i /><i /><i /></div>
+          <span class="ac-audit-arrow">→</span>
+          <div class="ac-mini-doc summary">
+            <b>摘要</b><i /><i class="missing" /><i />
+          </div>
+          <div class="ac-audit-lens" aria-hidden="true" />
+        </div>
+        <strong>找出压丢的变量</strong>
+        <span>逐项对照，而不是重新总结</span>
       </div>
       <Step :at="2">
         <section class="ac-pressure-copy ac-glass">
@@ -48,5 +63,5 @@
 </template>
 
 <notes lang="md">
-这是第②步压缩建模的质量检查。资料读厚靠原作者，读薄靠自己，AI 负责检查你压丢了什么；无资料时也保留同样的压力测试问法。
+这是第②步压缩建模的质量检查。中间的“原文—摘要—放大镜”图标表示逐项对照并定位缺失信息。资料读厚靠原作者，读薄靠自己，AI 负责检查你压丢了什么；无资料时也保留同样的压力测试问法。
 </notes>

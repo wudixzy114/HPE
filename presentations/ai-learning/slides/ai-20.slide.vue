@@ -15,7 +15,14 @@
           </div>
         </section>
       </Step>
-      <div class="ac-lossy-filter" />
+      <div data-node="lossy-channel" class="ac-lossy-channel">
+        <small>有损压缩</small>
+        <div class="ac-lossy-channel__stream" aria-hidden="true">
+          <i /><i /><i class="lost" /><i /><i class="lost" />
+        </div>
+        <b>细节被过滤</b>
+        <span>例外与反直觉信息最先消失</span>
+      </div>
       <Step :at="2">
         <section class="ac-lossy-output ac-glass">
           <h3>输出 · 一千字</h3>
@@ -58,5 +65,5 @@
 </template>
 
 <notes lang="md">
-让观众看到离群点如何在漏斗中消失。补回主次矛盾的辩证解释，并保留完整的“主干 + 留白清单”提示词。
+让观众看到细节和离群点如何在有损压缩通道中被过滤。补回主次矛盾的辩证解释，并保留完整的“主干 + 留白清单”提示词。
 </notes>

@@ -6,20 +6,30 @@
     </h2>
 
     <div data-node="drill" class="ac-drill">
-      <section class="ac-drill-core">
-        <Step :at="1">
-          <div class="ac-drill-ring up">
-            <b>向上 · 设计哲学</b><span>为什么这样设计？Zen 是什么？</span>
+      <section data-node="question-ladder" class="ac-question-ladder">
+        <div class="ac-question-ladder__axis" aria-hidden="true" />
+        <Step :at="1" class="ac-question-level level-up">
+          <div class="ac-question-level__marker">↑</div>
+          <div class="ac-question-level__copy">
+            <small>抽象一层</small>
+            <b>向上 · 追问设计哲学</b>
+            <span>为什么这样设计？它的 Zen 与价值取舍是什么？</span>
           </div>
         </Step>
-        <Step :at="2">
-          <div class="ac-drill-ring down">
-            <b>向下 · 底层实现</b><span>内存对齐、指令周期、缓存损失</span>
+        <Step :at="2" class="ac-question-level level-down">
+          <div class="ac-question-level__marker">↓</div>
+          <div class="ac-question-level__copy">
+            <small>深入一层</small>
+            <b>向下 · 拆到底层实现</b>
+            <span>内存对齐、指令周期与缓存损失在哪里？</span>
           </div>
         </Step>
-        <Step :at="3">
-          <div class="ac-drill-ring cross">
-            <b>横向 · 替代方案</b><span>trade-off 与异构算法</span>
+        <Step :at="3" class="ac-question-level level-cross">
+          <div class="ac-question-level__marker">↔</div>
+          <div class="ac-question-level__copy">
+            <small>换一条路</small>
+            <b>横向 · 比较替代方案</b>
+            <span>还有哪些解法？trade-off 与适用边界是什么？</span>
           </div>
         </Step>
       </section>
@@ -47,5 +57,5 @@
 </template>
 
 <notes lang="md">
-三个同心层依次出现。中心越小，问题越接近可执行选择；外圈负责扩展认知边界。
+三层提问阶梯依次出现：先向上追问设计哲学，再向下拆解底层实现，最后横向比较替代方案。三个层级始终占据固定位置，动画只改变显隐，不改变布局。
 </notes>

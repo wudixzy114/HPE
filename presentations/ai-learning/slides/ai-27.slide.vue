@@ -46,7 +46,9 @@
     </div>
 
     <blockquote data-node="closing" class="ac-closing">
-      AI 拥有世界上所有的答案，<br />但只有人类拥有<strong>提出伟大问题</strong>的好奇心，和<strong>承担实践后果</strong>的生命力。
+      AI 能快速汇集海量知识与已有答案，<br />而真正有价值的学习，仍需要人以<strong
+        >好奇心提出关键问题</strong
+      >，并用<strong>行动承担真实后果</strong>。
     </blockquote>
     <div
       class="ac-takeaway"
