@@ -1,7 +1,7 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">三 · 实战总原则</div>
-    <h2 data-node="title">先让 AI 知道“你是谁”，再让知识适应你的认知结构</h2>
+    <h2 data-node="title">个性化：声明“你是谁”，让知识来适应你，而不是你去适应它</h2>
     <p class="ac-context-line">
       过去一本教材要服务一万个背景不同的人，只能取平均；现在，个性化第一次变得没有成本。
     </p>
@@ -44,9 +44,8 @@
     </div>
     <Step :at="3">
       <div class="ac-takeaway" style="margin-top: 17px">
-        <strong>直觉先行，严谨随后。</strong
-        >&nbsp;先建立“它像什么”的图景，再补“它为什么如此”的推导； 不声明背景，AI
-        默认服务的只能是“一个平均水平的陌生人”。
+        <strong>直觉先行，严谨随后</strong>——先建立“它像什么”的图景，再补“它为什么是这样”的推导。
+        不声明的代价：AI 默认在服务“一个平均水平的陌生人”。
       </div>
     </Step>
     <div class="ac-footer">

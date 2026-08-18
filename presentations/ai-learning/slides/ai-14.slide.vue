@@ -35,9 +35,8 @@
           trade-off 在哪？有没有异构算法？
         </div>
         <div class="ac-takeaway" style="margin-top: 18px">
-          <strong>提问的深度，决定认知的边界。</strong>&nbsp;AI
-          不再只是一个“代码能跑就行”的 L2
-          补全工具，而会变成由你指挥的顶级系统架构师研讨会。
+          <strong>提问的深度，决定认知的边界。</strong>&nbsp;普通提问停在“代码能跑就行”（L2）；
+          把三个维度拉满，AI 就成了由你指挥的“顶级系统架构师研讨会”。
         </div>
       </section>
     </div>

@@ -41,26 +41,25 @@
 
       <section class="ac-command-copy">
         <div class="ac-command-question">
-          <b>工具它比你强，但战场日志不在任何通用语料里。</b>
+          <b>这里的“经验”不是“知道多少”，而是工作流：快速判断、直觉思考。</b>
           <span
-            >真正稀缺的不是“知道多少”，而是长期浸泡在一条战线后形成的工作流与判断力。</span
+            >GPT 找漏洞的能力已经远比选手强，但引导 GPT 的是人——这些信息不在任何语料里。</span
           >
         </div>
         <Step :at="5">
           <div class="ac-command-principle">
             <b>经验 = 稀缺上下文 + 直觉</b>
             <p>
-              哪里不对劲、先打哪、什么可以放弃；AI
+              长期浸泡在某条战线里积累的判断力：哪里不对劲、先打哪、什么可以放弃。AI
               有通用语料，没有你的战场日志。
             </p>
           </div>
           <div class="ac-command-principle">
             <b>实践 = 承担后果</b>
-            <p>下场的肉身、承担的风险、撞墙后的顿悟，永远属于人。</p>
+            <p>五步闭环里唯一 AI 无法代劳的一步：下场的肉身、承担的风险、撞墙后的顿悟，永远属于人。</p>
           </div>
           <div class="ac-takeaway">
-            <strong>成为 AI 的指挥官。</strong
-            >&nbsp;往哪打、何时打、为什么打，你说了算。
+            <strong>最强的人不是跟 AI 比工具能力，而是成为 AI 的指挥官</strong>——往哪打、何时打、为什么打，你说了算。
           </div>
         </Step>
       </section>

@@ -1,12 +1,14 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">五 · 行动与结语</div>
-    <h2 data-node="title">今天回去就能做的三件事</h2>
+    <h2 data-node="title">AI 永远无法闭环的两件事，和今天回去就能做的三件事</h2>
 
     <div data-node="human-premium" class="ac-final-principles">
-      <span><i /><b>Taste</b> 决定做什么：挑出真正值得做的事</span>
       <span
-        ><i /><b>Accountability</b> 为结果负全责：承担法律、风险与伦理后果</span
+        ><i /><b>Taste · 审美</b> 当产出的门槛降为零，挑出值得做的事成为最稀缺的能力</span
+      >
+      <span
+        ><i /><b>Accountability · 担当</b> AI 无法承担法律责任、破产风险和伦理后果——这份重量，就是人的溢价</span
       >
     </div>
 
@@ -16,9 +18,9 @@
           <div class="ac-action-no">01</div>
           <h3>对比三次输出</h3>
           <p>
-            挑最近问过 AI
-            的一个问题：先原样问，再加上“我是谁”的声明，再用穿透式提问；
-            最后挑一个结论亲自验证，看它到底对不对。
+            把最近问过 AI
+            的一个问题：先原样问一遍，加上“我是谁”的声明再问一遍，再用穿透式提问问一遍——
+            然后挑一个结论亲自验证，看它到底对不对。
           </p>
         </section>
       </Step>
@@ -59,5 +61,5 @@
 </template>
 
 <notes lang="md">
-三个动作分别对应个性化原则、私教模式与对抗中庸。最后回收 Taste、Accountability、提出问题与承担实践后果四个核心点。
+三个动作分别对应个性化原则、私教模式与对抗中庸，都是当天就能见效的。最后回收 Taste、Accountability、提出问题与承担实践后果四个核心点。
 </notes>

@@ -2,7 +2,7 @@
   <Slide class="ac-slide">
     <div class="ac-kicker">五 · 出路一</div>
     <h2 data-node="title">
-      用 AI 学习 AI：只有指数级的学习工具，才追得上指数级变化
+      OpenAI 说：当今最有价值的竞争力，就是用 AI 学习 AI
     </h2>
 
     <div
@@ -55,9 +55,9 @@
     </div>
 
     <div class="ac-takeaway" style="margin-top: 18px">
-      靠“等别人嚼碎了再喂”的二手信息追赶指数曲线，注定越落越远——<strong
-        >把学习工具本身变成学习对象。</strong
-      >
+      AI 的能力呈指数级增长，靠“等人嚼碎了喂”的二手信息追赶，注定越落越远——<strong
+        >把学习工具本身，变成学习对象。</strong
+      >你对 AI 的运作方式理解越深，前面所有模板的威力就越大。
     </div>
     <div class="ac-footer">
       <span>五 · 用 AI 学习 AI</span><span>25 / 28</span>

@@ -2,7 +2,7 @@
   <Slide class="ac-slide">
     <div class="ac-kicker">二 · 第③步</div>
     <h2 data-node="title">
-      举一反三：三个看似无关的案例，底层都能找到同一套结构
+      举一反三的本质：识别出两个看似无关的事物，底层有相同的结构
     </h2>
 
     <div data-node="analogy-cases" class="ac-analogy-board">
@@ -68,7 +68,10 @@
     <Step :at="10">
       <div data-node="isomorphism" class="ac-isomorphism-reveal">
         <b>同构性</b
-        ><span>表象不同，但变量之间的关系、反馈路径与约束结构相同</span>
+        ><span>深度决定理解的穿透力，广度决定创新的可能性</span>
+      </div>
+      <div data-node="drill" class="ac-drill-question">
+        日常训练很土但有效：每学到一个深刻原理，强迫自己问一句——“除了这个领域，这个规律还能解释我生活里的什么现象？”
       </div>
     </Step>
     <div class="ac-footer"><span>二 · 迁移连接</span><span>08 / 28</span></div>
@@ -76,5 +79,5 @@
 </template>
 
 <notes lang="md">
-每组严格按“左侧案例 → 右侧案例 → 中间联系”揭示；三组完成后才给出“同构性”的抽象定义。深度决定穿透力，广度决定创新可能性。
+每组严格按“左侧案例 → 右侧案例 → 中间联系”揭示；三组完成后给出结论。②的深度是这一步的前提：看穿了三次握手的本质，才会发现心跳检测和共识机制是同一根树干上的叶子。
 </notes>

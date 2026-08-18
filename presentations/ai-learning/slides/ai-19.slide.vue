@@ -1,7 +1,7 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">三 · 十个模板速查</div>
-    <h2 data-node="title">十个模板分三类：生成、私教、复盘</h2>
+    <h2 data-node="title">十个模板：生成类①–⑤，私教类⑥–⑨，复盘⑩贯穿始终</h2>
 
     <div data-node="template-grid" class="ac-template-grid">
       <div class="ac-template-tile">
@@ -57,7 +57,7 @@
     </div>
 
     <div class="ac-takeaway" style="margin-top: 18px">
-      ①–⑤ 从零生成；⑥–⑨ 锚定高质量资料；⑩ 贯穿每一轮学习。
+      ①–⑤ 用于没有资料的从零学习；⑥–⑨ 用于手头已有高质量资料；⑩ 每轮学习结束都用一次。
     </div>
     <div class="ac-footer"><span>三 · 十个模板</span><span>20 / 28</span></div>
   </Slide>

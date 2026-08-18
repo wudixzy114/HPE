@@ -3206,6 +3206,15 @@ html[data-hpe-step="5"] .ac-cycle-explanations .s5 {
   font-size: 16px;
 }
 
+.ac-drill-question {
+  max-width: 1040px;
+  margin: 10px auto 0;
+  color: #b9c7d5;
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .ac-practice-stage {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;

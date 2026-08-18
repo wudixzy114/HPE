@@ -23,7 +23,7 @@
         <section class="ac-model-output">
           <div>
             <b>极简模型</b>
-            <p>用最少的变量解释最多的现象，并能回答从来没背过的问题。</p>
+            <p>正如无法从两个点里看出趋势，你也无法从一两个例子里提炼出规律。</p>
           </div>
         </section>
       </Step>
@@ -34,7 +34,7 @@
         <blockquote>
           <b>为学日益</b
           ><span
-            >学习知识要日日增加：广采样本、看案例、看差异、看极端情况，把书读厚。</span
+            >① 采样输入，做加法：广采实例、看差异、看极端情况，把书读厚——越学越多。</span
           >
         </blockquote>
       </Step>
@@ -42,15 +42,15 @@
         <blockquote>
           <b>为道日损</b
           ><span
-            >逼近规律要日日减损：放下枝节，保留决定现象的因果回路，把书读薄。</span
+            >② 压缩建模，做减法：蒸发细节，只留决定现象的因果回路，把书读薄——越学越少。</span
           >
         </blockquote>
       </Step>
     </div>
     <div data-node="rules" class="ac-rule-strip ac-rule-strip--compact">
-      <div><b>先后关系：</b>读厚是采样，读薄是升维</div>
-      <div><b>压缩目标：</b>抓住本质，而不是停在表面</div>
-      <div><b>检验标准：</b>能回答从未背过的问题</div>
+      <div><b>先后两步：</b>读厚和读薄不是反义词</div>
+      <div><b>压缩核心：</b>抓住本质，而不是停在表面</div>
+      <div><b>检验标准：</b>能回答从来没背过的问题</div>
     </div>
     <div class="ac-footer">
       <span>二 · 采样与压缩</span><span>06 / 28</span>

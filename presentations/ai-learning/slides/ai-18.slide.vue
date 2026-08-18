@@ -1,15 +1,14 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">三 · 私教④</div>
-    <h2 data-node="title">压力测试：读薄靠自己，AI 只负责检查你压丢了什么</h2>
+    <h2 data-node="title">压力测试：资料读厚靠原作者，读薄靠自己，AI 负责检查你压丢了什么</h2>
 
     <div data-node="pressure" class="ac-pressure">
       <Step :at="1">
         <section class="ac-pressure-copy ac-glass">
           <h3>原始资料 · 把书读厚</h3>
           <p>
-            资料中的变量、例外、边缘条件和原作者的细微限定都完整存在。
-            资料负责把书读厚，也提供检查压缩质量所需的原始分辨率。
+            变量、例外、边缘条件和原作者的细微限定都完整存在——这是检查压缩质量的“原始分辨率”。
           </p>
           <div class="ac-outliers">
             <span>主干</span><span class="hot">例外</span><span>前提</span
@@ -25,8 +24,8 @@
         <section class="ac-pressure-copy ac-glass">
           <h3>你的总结 · 把书读薄</h3>
           <p>
-            读薄必须由自己完成；AI
-            不替你总结，而是把你的总结与原文逐项对照，寻找丢失变量和理解偏差。
+            这个用法和五步闭环的第②步正好是一对：AI 不替你总结，
+            而是把你的总结与原文对照，检查你丢了哪些关键变量、理解有哪些偏差。
           </p>
           <div class="ac-prompt" style="margin-top: 22px">
             我读完资料，把它压缩成这几句话：【贴入总结】。<span class="mark"

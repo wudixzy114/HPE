@@ -2,7 +2,7 @@
   <Slide class="ac-slide">
     <div class="ac-kicker">开场 · 一个问题</div>
     <h2 data-node="title">
-      过去一年查过的问题更多了——<span class="ac-teal-text"
+      过去一年问 AI 的问题，比前十年的搜索加起来还多——<span class="ac-teal-text"
         >能力真的提升了吗？</span
       >
     </h2>
@@ -26,16 +26,15 @@
 
     <Step :at="1">
       <p data-node="illusion" class="ac-opening-explanation">
-        很多人把“信息的输入量”误当成“能力的提升量”。AI
-        让任何事实、概念和文档都随问随得，
-        “知道”因此变成最不值钱的事，但“知道”从来不等于“学到”。
+        很多人终其一生都在“假装学习”——把信息的输入量，误当成了能力的提升量。AI
+        让你每天“知道”得更多，但“知道”从来不等于“学到”。
       </p>
     </Step>
     <Step :at="2">
       <section data-node="thesis" class="ac-opening-thesis">
-        <small>真正值钱的，变成另外两件事</small>
-        <b>把知识压缩成分辨率更高的思维模型</b>
-        <span>并用 AI 加速这个过程</span>
+        <small>“知道”变成最不值钱的事，真正值钱的变成另外两件</small>
+        <b>怎么把知识压缩成分辨率更高的思维模型</b>
+        <span>怎么用 AI 把这个过程加速</span>
       </section>
     </Step>
     <div class="ac-footer">

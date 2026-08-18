@@ -2,7 +2,7 @@
   <Slide class="ac-slide">
     <div class="ac-kicker">五 · 为什么是现在</div>
     <h2 data-node="title">
-      中位数斩杀：AI 不必成为顶尖，只要“足够好且近乎免费”
+      每次工业革命消灭的都是熟练工，不是顶尖手艺人——这次叫“中位数斩杀”
     </h2>
 
     <div data-node="waterline" class="ac-waterline-stage">
@@ -28,14 +28,15 @@
     </div>
 
     <div class="ac-takeaway">
-      <strong>“足够好”就是毁灭性的：</strong>&nbsp;企业不会持续为一个 90
-      分但昂贵、低并发的初级岗位买单； 当 AI 能以接近零成本瞬间交付 75–80
-      分，中低端人才市场会直接坍塌。
+      <strong>“足够好”就是毁灭性的：</strong>&nbsp;企业不需要一个 90
+      分但月薪两万、会闹情绪的初级程序员 / 文案 / 分析师；当 AI
+      能以接近零成本瞬间交付 75–80 分，整个中低端人才市场就会直接坍塌。
     </div>
     <Step :at="4">
       <div class="ac-waterline-verdict">
-        历次工业革命的共同规律：<b>消灭熟练工，保留并放大顶尖者。</b>如果独特竞争力达不到
-        AI 水位线以上，被威胁只是时间问题。
+        如果你的独特竞争力达不到 AI 水位线以上、没有自己独特的优势和擅长，<b
+          >被威胁是迟早的事。</b
+        >
       </div>
     </Step>
     <div class="ac-footer">

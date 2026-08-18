@@ -1,7 +1,7 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">一 · 学到什么程度</div>
-    <h2 data-node="title">AI 打掉 L1/L2 的价格，学习的主战场必须上移</h2>
+    <h2 data-node="title">AI 把 L1 的成本打到零、L2 的价格打到很低，主战场必须上移</h2>
 
     <div data-node="pyramid" class="ac-flat-pyramid-stage">
       <section class="ac-flat-pyramid">
@@ -33,21 +33,21 @@
 
       <section class="ac-flat-pyramid-copy ac-glass">
         <div class="ac-ai-price-line">
-          <b>AI 价格线</b><span>L1 成本趋近于零，L2 价格快速下降</span>
+          <b>AI 价格线</b><span>L1 成本打到零（事实随问随得），L2 价格打到很低（套路、模板即时生成）</span>
         </div>
         <p>
-          绝大多数人停留在 L1、L2，误以为“知道”和“会按套路做”就是学习的全部。
-          但这两层恰恰是 AI 最容易覆盖的部分。
+          绝大多数人——包括天天用 AI 的人——停留在 L1、L2，误以为那就是学习的全部。
+          而这两层恰恰是 AI 最容易覆盖的部分。
         </p>
         <p>
-          懂了物理学的“熵增”，就能同时理解房间为什么总会变乱、组织为什么容易走向官僚化——
-          <strong>底层规律可以跨学科复用。</strong>
+          懂了物理学的“熵增”，就能理解为什么公司一定会走向官僚化、为什么房间总会变乱——
+          <strong>底层规律是跨学科通用的。</strong>
         </p>
       </section>
     </div>
     <div class="ac-takeaway">
-      四层回答“学到什么程度”：<strong
-        >学习的主战场必须从信息和套路，上移到模型与元认知。</strong
+      只在 L1、L2 打转的人，正处在被替代的危险区——<strong
+        >学习的主战场必须上移到 L3 和 L4。</strong
       >
     </div>
     <div class="ac-footer">

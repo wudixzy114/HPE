@@ -2,7 +2,7 @@
   <Slide class="ac-slide">
     <div class="ac-kicker">二 · 案例</div>
     <h2 data-node="title">
-      TCP 建立连接为什么是三次握手，不是两次，也不是四次？
+      同一句“TCP 需要三次握手”：背下它的人，答不出“为什么恰好是三次”
     </h2>
 
     <div data-node="sequence" class="ac-sequence ac-glass">
@@ -38,8 +38,8 @@
         <span class="ac-chip">四次浪费：三次已完成最小双向确认</span>
       </div>
       <div class="ac-takeaway" style="margin-top: 14px">
-        抓住这个本质，分布式心跳、Web3
-        共识、陌生人互道“你好”，都会显现出同一根树干。
+        抓到本质的直接回报是横向通道自动打开：心跳检测、共识机制、陌生人互道“你好”，
+        都是同一根树干上长出的叶子。
       </div>
     </Step>
     <div class="ac-footer">

@@ -1,7 +1,7 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">四 · 坑一</div>
-    <h2 data-node="title">认知过载与压缩失真：最值钱的“离群点”被平滑掉了</h2>
+    <h2 data-node="title">认知过载与压缩失真：最值钱的洞见，被当作“离群点”平滑掉了</h2>
 
     <div data-node="lossy" class="ac-lossy-stage">
       <Step :at="1">
@@ -20,18 +20,19 @@
         <section class="ac-lossy-output ac-glass">
           <h3>输出 · 一千字</h3>
           <p>
-            模型把最反直觉、最微妙的细节当作“离群点”平滑掉；逻辑仍然自洽，
-            却只剩四平八稳、对你没有帮助的“正确废话”，还会造成认知过载。
+            “最大公约数式”的有损压缩：把最反直觉、最微妙的细节平滑掉，
+            吐出一堆逻辑自洽但空洞的“正确的废话”。输入越多，输出越不成比例——
+            到最后，它给你的是它自己的理解，还会造成认知过载。
           </p>
         </section>
       </Step>
     </div>
     <Step :at="3">
       <div class="ac-dialectic-band">
-        <b>对策不是拒绝压缩，而是同时保留“主干 + 留白”</b>
+        <b>对策：要求“主干 + 留白”，而不是二选一</b>
         <span>
-          初学时只抓主要矛盾，能快速上手；但认识深入后，次要因素会升为主要。
-          所以可以暂时不展开，却必须知道自己省略了什么。
+          初学只抓主要矛盾、暂时放下次要，可以快速上手；但认识深入后，次要会上升为主要——
+          主干和留白，二者都不可失。
         </span>
       </div>
     </Step>
@@ -47,7 +48,9 @@
         class="ac-takeaway"
         style="margin-top: 10px; border-left-color: var(--ac-red)"
       >
-        AI 给得越完整、越干脆，越要追问：<strong>被省略掉的是什么？</strong>
+        当 AI 给你正面的东西时，你必须思考它没有给你的东西——<strong
+          >它给得越干脆、越完整，越要追问：被省略掉的，是什么？</strong
+        >
       </div>
     </Step>
     <div class="ac-footer"><span>四 · 压缩失真</span><span>21 / 28</span></div>
