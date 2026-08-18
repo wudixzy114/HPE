@@ -1,14 +1,16 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">五 · 行动与结语</div>
-    <h2 data-node="title">AI 永远无法闭环的两件事，和今天回去就能做的三件事</h2>
+    <h2 data-node="title">今天开始，建立三种不能外包给 AI 的思考习惯</h2>
 
     <div data-node="human-premium" class="ac-final-principles">
       <span
-        ><i /><b>Taste · 审美</b> 当产出的门槛降为零，挑出值得做的事成为最稀缺的能力</span
+        ><i /><b>不外包问题定义</b> AI
+        可以提供信息，但“真正要解决什么”必须由你决定</span
       >
       <span
-        ><i /><b>Accountability · 担当</b> AI 无法承担法律责任、破产风险和伦理后果——这份重量，就是人的溢价</span
+        ><i /><b>不外包最终判断</b> AI
+        可以生成选项，但选择方向与承担后果必须由你完成</span
       >
     </div>
 
@@ -16,45 +18,43 @@
       <Step :at="1">
         <section class="ac-action">
           <div class="ac-action-no">01</div>
-          <h3>对比三次输出</h3>
+          <h3>先写下自己的判断</h3>
           <p>
-            把最近问过 AI
-            的一个问题：先原样问一遍，加上“我是谁”的声明再问一遍，再用穿透式提问问一遍——
-            然后挑一个结论亲自验证，看它到底对不对。
+            打开 AI
+            前，先写四句话：我真正要解决什么？当前判断是什么？判断依赖哪些假设？出现什么证据，我会承认自己错了？
           </p>
         </section>
       </Step>
       <Step :at="2">
         <section class="ac-action">
           <div class="ac-action-no">02</div>
-          <h3>给文档画地图</h3>
+          <h3>把答案压缩成模型</h3>
           <p>
-            随便挑一份工作文档，用私教①让 AI
-            画一张阅读地图：结构、核心、阅读顺序、重点与可跳过部分。
+            不收藏“看起来很对”的答案。追问它的因果、边界与反例；然后关掉
+            AI，用自己的话写出一条能解释新问题的模型。
           </p>
         </section>
       </Step>
       <Step :at="3">
         <section class="ac-action">
           <div class="ac-action-no">03</div>
-          <h3>逼 AI 表态</h3>
+          <h3>让现实更新模型</h3>
           <p>
-            把一个悬而未决的选型问题重新提问：必须二选一，同时给出理由、置信度和应该推翻决定的信号。
+            把判断改写成可证伪的假设，设计一个最小实验；记录结果与预期的偏差，再决定保留、修正还是推翻原来的模型。
           </p>
         </section>
       </Step>
     </div>
 
     <blockquote data-node="closing" class="ac-closing">
-      AI 能快速汇集海量知识与已有答案，<br />而真正有价值的学习，仍需要人以<strong
-        >好奇心提出关键问题</strong
-      >，并用<strong>行动承担真实后果</strong>。
+      把<strong>问题定义</strong>留给自己，把探索空间交给 AI，<br />把<strong>最终判断</strong>交给现实。
     </blockquote>
     <div
       class="ac-takeaway"
       style="margin: 22px auto 0; max-width: 1120px; justify-content: center"
     >
-      让 AI 帮你把书读厚，自己把书读薄，然后放回现实检验——学而时习之，不亦乐乎。
+      AI
+      可以加速学习；真正的能力来自提出问题、形成判断、付诸行动，再根据反馈持续修正。
     </div>
     <div class="ac-footer">
       <span>用 AI 学习 · 行动清单</span><span>28 / 28</span>
@@ -63,5 +63,5 @@
 </template>
 
 <notes lang="md">
-三个动作分别对应个性化原则、私教模式与对抗中庸，都是当天就能见效的。最后回收 Taste、Accountability、提出问题与承担实践后果四个核心点。
+最后一页不再给零散的工具技巧，而是回收整套演讲的思考闭环：先独立定义问题和可证伪条件，再把答案压缩成自己的模型，最后让现实反馈更新模型。收束句强调人、AI 与现实三者的清晰分工。
 </notes>

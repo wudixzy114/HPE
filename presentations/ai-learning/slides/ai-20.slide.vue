@@ -1,7 +1,9 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">四 · 坑一</div>
-    <h2 data-node="title">认知过载与压缩失真：最值钱的洞见，被当作“离群点”平滑掉了</h2>
+    <h2 data-node="title">
+      认知过载与压缩失真：最值钱的洞见，被当作“离群点”平滑掉了
+    </h2>
 
     <div data-node="lossy" class="ac-lossy-stage">
       <Step :at="1">

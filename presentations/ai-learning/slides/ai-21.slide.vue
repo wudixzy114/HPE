@@ -1,7 +1,9 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">四 · 坑二</div>
-    <h2 data-node="title">中庸病——正确，但无用：“各有优劣”永远不会错，所以也永远没用</h2>
+    <h2 data-node="title">
+      中庸病——正确，但无用：“各有优劣”永远不会错，所以也永远没用
+    </h2>
 
     <div class="ac-middle-fairness">
       <b>先给“不是……而是……”句式说句公道话：</b>
@@ -56,7 +58,8 @@
       </div>
     </Step>
     <div class="ac-takeaway" style="margin-top: 10px">
-      <strong>强迫表态三件套：推荐 + 置信度 + 推翻条件</strong>——把 AI 从“陈述正确的事实”，逼到“做出可执行的判断”。
+      <strong>强迫表态三件套：推荐 + 置信度 + 推翻条件</strong>——把 AI
+      从“陈述正确的事实”，逼到“做出可执行的判断”。
     </div>
     <div class="ac-footer"><span>四 · 对抗中庸</span><span>22 / 28</span></div>
   </Slide>
