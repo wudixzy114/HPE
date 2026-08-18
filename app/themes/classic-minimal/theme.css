@@ -34,7 +34,7 @@ html[data-hpe-theme="classic-minimal"] {
   --hpe-color-muted: var(--classic-muted);
   --hpe-color-accent: var(--classic-vermilion);
   --hpe-font-sans: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-  --hpe-toolbar-surface: rgb(41 37 31 / 94%);
+  --hpe-toolbar-surface: rgb(41 37 31 / 76%);
   --hpe-toolbar-text: var(--classic-paper);
   --hpe-toolbar-muted: #d3cabd;
   --hpe-toolbar-border: rgb(245 240 229 / 45%);

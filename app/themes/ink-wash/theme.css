@@ -21,7 +21,7 @@ html[data-hpe-theme="ink-wash"] {
   --hpe-color-muted: var(--muted);
   --hpe-color-accent: var(--orange);
   --hpe-font-sans: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-  --hpe-toolbar-surface: rgb(23 30 26 / 95%);
+  --hpe-toolbar-surface: rgb(23 30 26 / 76%);
   --hpe-toolbar-text: #f0f1eb;
   --hpe-toolbar-muted: #c1c9bf;
   --hpe-toolbar-border: rgb(174 192 179 / 58%);

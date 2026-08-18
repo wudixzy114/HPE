@@ -539,7 +539,6 @@ watchEffect(() => {
       aria-label="Presentation tools"
       tabindex="0"
     >
-      <span class="hpe-toolbar__handle" aria-hidden="true">•••</span>
       <div class="hpe-toolbar__actions">
         <button
           type="button"
@@ -626,6 +625,7 @@ watchEffect(() => {
           {{ timelinePlaying ? "Pause" : "Play" }}
         </button>
       </div>
+      <span class="hpe-toolbar__handle" aria-hidden="true">•••</span>
     </nav>
     <aside
       v-if="state.mode !== 'inspect'"

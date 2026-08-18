@@ -6,7 +6,7 @@
     --hpe-color-muted: #9ba8bc;
     --hpe-color-accent: #54f1b8;
     --hpe-font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-    --hpe-toolbar-surface: rgb(9 11 16 / 88%);
+    --hpe-toolbar-surface: rgb(9 11 16 / 76%);
     --hpe-toolbar-text: var(--hpe-color-text);
     --hpe-toolbar-muted: var(--hpe-color-muted);
     --hpe-toolbar-border: rgb(71 85 105 / 55%);
@@ -596,8 +596,9 @@
     position: fixed;
     z-index: 24;
     left: 24px;
-    bottom: 64px;
+    bottom: 18px;
     display: flex;
+    min-height: 52px;
     gap: 5px;
     align-items: center;
     padding: 5px;
@@ -606,7 +607,14 @@
     color: var(--hpe-toolbar-text);
     background: var(--hpe-toolbar-surface);
     box-shadow: 0 12px 36px var(--hpe-toolbar-shadow);
+    opacity: 0.55;
     backdrop-filter: blur(12px);
+    transition: opacity 160ms ease;
+  }
+
+  .hpe-annotation-dock:hover,
+  .hpe-annotation-dock:focus-within {
+    opacity: 1;
   }
 
   .hpe-annotation-dock button {
