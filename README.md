@@ -11,6 +11,13 @@ npm run check
 npm run verify
 ```
 
+根目录的 `npm run dev`、`npm run build` 与 `npm run preview` 默认使用
+`presentations/ai-learning`。可通过 `--deck-root` 临时切换：
+
+```bash
+npm run dev -- --deck-root app
+```
+
 CLI 在 workspace 安装后可通过 `npm exec deck -- ...` 使用：
 
 ```bash

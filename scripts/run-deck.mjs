@@ -3,6 +3,8 @@ import { resolve } from "node:path";
 import { spawn } from "node:child_process";
 import process from "node:process";
 
+const DEFAULT_DECK_ROOT = "presentations/ai-learning";
+
 const [mode, ...inputArguments] = process.argv.slice(2);
 if (!mode || !["dev", "build", "preview"].includes(mode)) {
   throw new Error(
@@ -10,7 +12,7 @@ if (!mode || !["dev", "build", "preview"].includes(mode)) {
   );
 }
 
-let deckRoot = process.env.HPE_DECK_ROOT || "app";
+let deckRoot = process.env.HPE_DECK_ROOT || DEFAULT_DECK_ROOT;
 const forwardedArguments = [];
 for (let index = 0; index < inputArguments.length; index += 1) {
   const argument = inputArguments[index];

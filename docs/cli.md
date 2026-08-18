@@ -19,7 +19,7 @@ npm run build -- --deck-root ./presentations/product-launch
 npm run preview -- --deck-root ./presentations/product-launch
 ```
 
-When omitted, `--deck-root` defaults to `app`, the bundled example deck. A selected deck owns only `deck.json`, `slides/`, `themes/` and `assets/`; it does not copy or modify the player shell. The compiler and dev server allow source files from that root while keeping manifest, theme, asset and slide validation scoped to it.
+When omitted from the repository-level player commands, `--deck-root` defaults to `presentations/ai-learning`. The `deck` CLI's separate `--root` option still defaults to `app`, so structural edits do not silently target the presentation shown by the player. A selected deck owns only `deck.json`, `slides/`, `themes` and `assets`; it does not copy or modify the player shell. The compiler and dev server allow source files from that root while keeping manifest, theme, asset and slide validation scoped to it.
 
 `--json` may appear before or after a subcommand. Successful JSON responses include `ok: true` where the command has a natural response envelope. Errors always use:
 
