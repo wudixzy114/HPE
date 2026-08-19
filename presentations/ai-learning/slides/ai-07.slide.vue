@@ -67,8 +67,7 @@
 
     <Step :at="10">
       <div data-node="isomorphism" class="ac-isomorphism-reveal">
-        <b>同构性</b
-        ><span>深度决定理解的穿透力，广度决定创新的可能性</span>
+        <b>同构性</b><span>深度决定理解的穿透力，广度决定创新的可能性</span>
       </div>
       <div data-node="drill" class="ac-drill-question">
         日常训练很土但有效：每学到一个深刻原理，强迫自己问一句——“除了这个领域，这个规律还能解释我生活里的什么现象？”

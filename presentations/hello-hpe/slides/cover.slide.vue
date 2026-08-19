@@ -7,13 +7,11 @@
     <div class="hello-body">
       <p class="hello-lede" data-node="lede">
         This is the demo deck that ships with the HPE runtime shell. Replace
-        everything in <code>presentations/hello-hpe/</code> with your own
-        slides — the engine, player, checker, and CLI stay untouched.
+        everything in <code>presentations/hello-hpe/</code> with your own slides
+        — the engine, player, checker, and CLI stay untouched.
       </p>
     </div>
-    <div class="hello-footer">
-      <span>Hello HPE</span><span>1 / 4</span>
-    </div>
+    <div class="hello-footer"><span>Hello HPE</span><span>1 / 4</span></div>
   </Slide>
 </template>
 

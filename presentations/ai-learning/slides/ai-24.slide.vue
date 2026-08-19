@@ -55,9 +55,9 @@
     </div>
 
     <div class="ac-takeaway" style="margin-top: 18px">
-      AI 的能力呈指数级增长，靠“等人嚼碎了喂”的二手信息追赶，注定越落越远——<strong
-        >把学习工具本身，变成学习对象。</strong
-      >你对 AI 的运作方式理解越深，前面所有模板的威力就越大。
+      AI
+      的能力呈指数级增长，靠“等人嚼碎了喂”的二手信息追赶，注定越落越远——<strong>把学习工具本身，变成学习对象。</strong>你对
+      AI 的运作方式理解越深，前面所有模板的威力就越大。
     </div>
     <div class="ac-footer">
       <span>五 · 用 AI 学习 AI</span><span>25 / 28</span>

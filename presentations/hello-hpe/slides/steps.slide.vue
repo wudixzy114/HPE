@@ -11,8 +11,8 @@
           <p>
             A &lt;Step :at="n"&gt; block stays hidden until the slide reaches
             step <code>n</code>. Declare the highest step as
-            <code>maxStep</code> in <code>deck.json</code> so navigation and
-            the checker both know the full range.
+            <code>maxStep</code> in <code>deck.json</code> so navigation and the
+            checker both know the full range.
           </p>
         </div>
       </Step>

@@ -57,7 +57,8 @@
     </div>
 
     <div class="ac-takeaway" style="margin-top: 18px">
-      ①–⑤ 用于没有资料的从零学习；⑥–⑨ 用于手头已有高质量资料；⑩ 每轮学习结束都用一次。
+      ①–⑤ 用于没有资料的从零学习；⑥–⑨ 用于手头已有高质量资料；⑩
+      每轮学习结束都用一次。
     </div>
     <div class="ac-footer"><span>三 · 十个模板</span><span>20 / 28</span></div>
   </Slide>

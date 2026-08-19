@@ -67,16 +67,16 @@ node scripts/verify-offline.mjs artifacts/releases/my-deck/my-deck.html presenta
 
 ## 模块边界
 
-| 包                     | 唯一职责                       | 可替换边界               |
-| ---------------------- | ------------------------------ | ------------------------ |
-| `@hpe/schema`          | 持久化契约与校验               | JSON Schema / validator  |
+| 包                     | 唯一职责                         | 可替换边界               |
+| ---------------------- | -------------------------------- | ------------------------ |
+| `@hpe/schema`          | 持久化契约与校验                 | JSON Schema / validator  |
 | `@hpe/theme`           | 类型安全主题元数据与 AI 设计约束 | Theme contract           |
-| `@hpe/runtime-core`    | 纯状态机与 `DeckEngine` port   | 任意兼容状态机实现       |
-| `@hpe/runtime-browser` | 键盘、全屏、跨窗口同步         | Browser adapter          |
-| `@hpe/renderer-vue`    | Vue 渲染组件和响应式桥接       | Renderer adapter         |
-| `@hpe/compiler`        | SFC、notes、Vite、Shiki        | Compiler adapter/subpath |
-| `@hpe/checker`         | 诊断协议、Playwright 检查      | Checker adapter/subpath  |
-| `@hpe/cli`             | 稳定自动化入口                 | Application service      |
+| `@hpe/runtime-core`    | 纯状态机与 `DeckEngine` port     | 任意兼容状态机实现       |
+| `@hpe/runtime-browser` | 键盘、全屏、跨窗口同步           | Browser adapter          |
+| `@hpe/renderer-vue`    | Vue 渲染组件和响应式桥接         | Renderer adapter         |
+| `@hpe/compiler`        | SFC、notes、Vite、Shiki          | Compiler adapter/subpath |
+| `@hpe/checker`         | 诊断协议、Playwright 检查        | Checker adapter/subpath  |
+| `@hpe/cli`             | 稳定自动化入口                   | Application service      |
 
 跨模块调用只走包的公开 `exports`；依赖规则由 dependency-cruiser 在 `npm run check` 里强制。Shiki 高亮、浏览器同步、Playwright 都是独立子路径，未引用就不进 bundle。
 

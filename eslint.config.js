@@ -57,14 +57,16 @@ export default tseslint.config(
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       parserOptions: {
-        projectService: { allowDefaultProject: ["vitest.config.ts"] },
+        projectService: {
+          allowDefaultProject: ["vitest.config.ts", "scripts/*.config.ts"],
+        },
         tsconfigRootDir: import.meta.dirname,
       },
     },
   },
   {
     ...tseslint.configs.disableTypeChecked,
-    files: ["vitest.config.ts"],
+    files: ["vitest.config.ts", "scripts/*.config.ts"],
   },
   {
     files: ["packages/**/*.test.ts"],
@@ -119,7 +121,11 @@ export default tseslint.config(
     },
   },
   {
-    files: ["app/slides/**/*.vue"],
+    files: [
+      "app/slides/**/*.vue",
+      "presentations/*/slides/**/*.vue",
+      "tests/fixtures/*/slides/**/*.vue",
+    ],
     rules: {
       "no-irregular-whitespace": "off",
       "vue/multiline-html-element-content-newline": "off",
@@ -228,8 +234,17 @@ export default tseslint.config(
     rules: { "no-restricted-imports": restrictedImports([]) },
   },
   {
-    files: ["*.config.{js,cjs,ts}", "eslint.config.js"],
-    languageOptions: { globals: { module: "readonly" } },
+    files: ["scripts/*.mjs", "*.config.{js,cjs,ts}", "eslint.config.js"],
+    languageOptions: {
+      globals: {
+        module: "readonly",
+        console: "readonly",
+        process: "readonly",
+        URL: "readonly",
+        window: "readonly",
+        location: "readonly",
+      },
+    },
     rules: { "@typescript-eslint/no-require-imports": "off" },
   },
 );

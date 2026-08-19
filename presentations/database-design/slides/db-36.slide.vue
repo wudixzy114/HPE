@@ -1,8 +1,6 @@
 <template>
   <Slide class="db-slide db-cover">
-    <h2 data-node="title" style="color: #fff; font-size: 46px">
-      谢谢观看
-    </h2>
+    <h2 data-node="title" style="color: #fff; font-size: 46px">谢谢观看</h2>
     <div
       data-node="final-summary"
       class="db-cover-topics"

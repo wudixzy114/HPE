@@ -4,8 +4,13 @@
       数据库规范化 · 第一范式（1NF / First Normal Form）
     </div>
     <h2 data-node="title">一个任务有多个输入时，用 task_input 保存多行</h2>
-    <div data-node="first-normal-form-definition" class="db-note" style="margin-top: 10px; padding: 9px 13px">
-      <strong>范式原话（简）：</strong>每个属性的取值域只包含原子值；每个属性在一行中只有一个值。
+    <div
+      data-node="first-normal-form-definition"
+      class="db-note"
+      style="margin-top: 10px; padding: 9px 13px"
+    >
+      <strong>范式原话（简）：</strong
+      >每个属性的取值域只包含原子值；每个属性在一行中只有一个值。
     </div>
     <div
       data-node="first-normal-form"

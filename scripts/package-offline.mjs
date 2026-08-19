@@ -5,10 +5,10 @@
 // 4. 用 deck.json 的 title 替换占位 <title>，防止发出去的包显示错误标题
 //
 // 用法：node scripts/package-offline.mjs <deck-dir> <output-html>
-// 例如：node scripts/package-offline.mjs presentations/ai-learning artifacts/releases/ai-learning-offline/ai-learning.html
+// 例如：node scripts/package-offline.mjs presentations/hello-hpe artifacts/releases/hello-hpe/hello-hpe.html
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
-import { basename, dirname, resolve } from "node:path";
+import { dirname, resolve } from "node:path";
 import process from "node:process";
 
 const repoRoot = resolve(dirname(new URL(import.meta.url).pathname), "..");
@@ -78,7 +78,7 @@ const stylesheetMatch = html.match(
 );
 if (!scriptMatch || !stylesheetMatch) {
   throw new Error(
-    `Could not find script/stylesheet references in ${basename(String(html.slice(0, 0)))}index.html`,
+    "Could not find script/stylesheet references in dist-offline/index.html",
   );
 }
 const [scriptTag, scriptPath] = scriptMatch;

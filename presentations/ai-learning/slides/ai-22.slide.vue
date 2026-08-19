@@ -11,7 +11,8 @@
           <div>
             <b>谄媚 + 幻觉</b>
             <p>
-              RLHF 把模型训练得“友好、有帮助”，导致它永远倾向于赞同你，缺乏真正的学术冒犯性；
+              RLHF
+              把模型训练得“友好、有帮助”，导致它永远倾向于赞同你，缺乏真正的学术冒犯性；
               它是“基于概率的语言编织者”，不是“物理定律的裁判员”。
             </p>
             <small
@@ -50,8 +51,8 @@
       class="ac-takeaway"
       style="margin-top: 30px; border-left-color: var(--ac-yellow)"
     >
-      <strong>AI 负责提出假说，物理世界负责审判。</strong
-      >&nbsp;与坑二同根：RLHF 把模型训得“永远不出错”，而承担错误风险，恰恰是判断的价值所在。
+      <strong>AI 负责提出假说，物理世界负责审判。</strong>&nbsp;与坑二同根：RLHF
+      把模型训得“永远不出错”，而承担错误风险，恰恰是判断的价值所在。
     </div>
     <div class="ac-footer">
       <span>四 · 谄媚与幻觉</span><span>23 / 28</span>

@@ -7,7 +7,7 @@ export default defineTheme({
   name: "HPE Minimal",
   description:
     "Clean light starter theme for the demo deck: generous whitespace, one accent color, no decorative noise.",
-  canvas: { width: 1600, "height": 900, aspectRatio: "16:9" },
+  canvas: { width: 1600, height: 900, aspectRatio: "16:9" },
   colors: {
     ink: { value: "#172026", usage: "Primary text" },
     paper: { value: "#FFFFFF", usage: "Canvas background" },
@@ -40,13 +40,15 @@ export default defineTheme({
   layouts: [
     {
       id: "cover",
-      description: "Full-bleed cover with kicker, large title, and one-line lede",
+      description:
+        "Full-bleed cover with kicker, large title, and one-line lede",
       useFor: ["opening page"],
       capacity: { maxItems: 3, titleMaxChars: 32 },
     },
     {
       id: "content",
-      description: "Conclusion-style heading with one supporting visual structure",
+      description:
+        "Conclusion-style heading with one supporting visual structure",
       useFor: ["explanation", "feature tour"],
       capacity: { maxItems: 5, titleMaxChars: 40, bodyMaxChars: 280 },
     },
@@ -55,7 +57,11 @@ export default defineTheme({
     visualObjective: "Make the single message per page impossible to miss.",
     density: "low",
     motif: "Left accent rule anchoring every content block",
-    prefer: ["one primary claim per slide", "system font stack", "high contrast text"],
+    prefer: [
+      "one primary claim per slide",
+      "system font stack",
+      "high contrast text",
+    ],
     avoid: ["decorative filler", "card grids without meaning"],
     contentRules: ["write conclusions as titles, not topic labels"],
   },

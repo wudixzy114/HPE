@@ -4,8 +4,13 @@
       数据库规范化 · 第二范式（2NF / Second Normal Form）
     </div>
     <h2 data-node="title">项目成员表只保存“用户在这个项目中的信息”</h2>
-    <div data-node="second-normal-form-definition" class="db-note" style="margin-top: 10px; padding: 9px 13px">
-      <strong>范式原话（简）：</strong>在 1NF 基础上，每个非主属性都完全函数依赖于整个候选键。
+    <div
+      data-node="second-normal-form-definition"
+      class="db-note"
+      style="margin-top: 10px; padding: 9px 13px"
+    >
+      <strong>范式原话（简）：</strong>在 1NF
+      基础上，每个非主属性都完全函数依赖于整个候选键。
     </div>
     <div
       data-node="second-normal-form"

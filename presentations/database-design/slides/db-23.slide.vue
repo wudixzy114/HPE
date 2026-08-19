@@ -4,8 +4,13 @@
       数据库规范化 · 第三范式（3NF / Third Normal Form）
     </div>
     <h2 data-node="title">任务保存 project_id，项目名称只在 project 中维护</h2>
-    <div data-node="third-normal-form-definition" class="db-note" style="margin-top: 10px; padding: 9px 13px">
-      <strong>范式原话（简）：</strong>在 2NF 基础上，非主属性不传递函数依赖于候选键。
+    <div
+      data-node="third-normal-form-definition"
+      class="db-note"
+      style="margin-top: 10px; padding: 9px 13px"
+    >
+      <strong>范式原话（简）：</strong>在 2NF
+      基础上，非主属性不传递函数依赖于候选键。
     </div>
     <div
       data-node="third-normal-form"

@@ -2,7 +2,8 @@
 // 用法：node scripts/verify-offline.mjs <offline-html> <deck-dir>
 import { chromium } from "@playwright/test";
 import { readFile } from "node:fs/promises";
-import { resolve, dirname } from "node:path";
+import { resolve } from "node:path";
+import process from "node:process";
 
 const [htmlArg, deckDirArg] = process.argv.slice(2);
 if (!htmlArg || !deckDirArg) {
@@ -53,7 +54,7 @@ if (!hasProbe) {
 
 // 3) 翻页：一路按到最后一页，hash 应出现最后一页 id；Home 回到第一页。
 // 每页有多个 step，按键次数按 (slides × steps) 上限放宽，间隔 15ms。
-const hash = () => page.evaluate(() => location.hash);
+const hash = () => page.evaluate(() => window.location.hash);
 const maxSteps = manifest.slides.reduce(
   (max, slide) => Math.max(max, slide.maxStep ?? 0),
   0,
@@ -83,8 +84,8 @@ for (const key of ["o", "o", "n", "n", "s", "s"]) {
   await page.waitForTimeout(200);
 }
 
-console.log(
-  JSON.stringify(
+process.stdout.write(
+  `${JSON.stringify(
     {
       ok: errors.length === 0,
       title,
@@ -95,7 +96,7 @@ console.log(
     },
     null,
     2,
-  ),
+  )}\n`,
 );
 await browser.close();
 if (errors.length > 0) {

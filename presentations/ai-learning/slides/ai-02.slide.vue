@@ -7,7 +7,9 @@
       <Step :at="1" class="ac-ability-slot slot-left">
         <section class="ac-ability-criterion">
           <b>01 · 认知重塑</b><strong>预测世界的模型变了</strong>
-          <p>以前看不懂的局，现在一眼看清结构；以前会激怒你的事，现在看得懂它的运转逻辑。</p>
+          <p>
+            以前看不懂的局，现在一眼看清结构；以前会激怒你的事，现在看得懂它的运转逻辑。
+          </p>
         </section>
       </Step>
       <Step :at="2" class="ac-ability-slot slot-top">
@@ -22,16 +24,16 @@
       <Step :at="3" class="ac-ability-slot slot-right">
         <section class="ac-ability-criterion">
           <b>03 · 知识迁移</b><strong>没见过的场景也能解决</strong>
-          <p>没有现成答案时，仍能调用过往的底层逻辑拆解新问题——这才是“能力”。</p>
+          <p>
+            没有现成答案时，仍能调用过往的底层逻辑拆解新问题——这才是“能力”。
+          </p>
         </section>
       </Step>
     </div>
 
     <Step :at="4">
       <div data-node="dimensions" class="ac-ability-dimensions">
-        <div>
-          <b>更高的概率</b><span>判断质量：在不确定中更常押对</span>
-        </div>
+        <div><b>更高的概率</b><span>判断质量：在不确定中更常押对</span></div>
         <div><b>更低的成本</b><span>少走弯路，用更少资源达成目标</span></div>
         <div><b>更快的速度</b><span>更快识别结构、形成判断并行动</span></div>
         <div>

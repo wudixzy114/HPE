@@ -1,7 +1,9 @@
 <template>
   <Slide class="ac-slide">
     <div class="ac-kicker">一 · 学到什么程度</div>
-    <h2 data-node="title">AI 把 L1 的成本打到零、L2 的价格打到很低，主战场必须上移</h2>
+    <h2 data-node="title">
+      AI 把 L1 的成本打到零、L2 的价格打到很低，主战场必须上移
+    </h2>
 
     <div data-node="pyramid" class="ac-flat-pyramid-stage">
       <section class="ac-flat-pyramid">
@@ -33,11 +35,15 @@
 
       <section class="ac-flat-pyramid-copy ac-glass">
         <div class="ac-ai-price-line">
-          <b>AI 价格线</b><span>L1 成本打到零（事实随问随得），L2 价格打到很低（套路、模板即时生成）</span>
+          <b>AI 价格线</b
+          ><span
+            >L1 成本打到零（事实随问随得），L2
+            价格打到很低（套路、模板即时生成）</span
+          >
         </div>
         <p>
-          绝大多数人——包括天天用 AI 的人——停留在 L1、L2，误以为那就是学习的全部。
-          而这两层恰恰是 AI 最容易覆盖的部分。
+          绝大多数人——包括天天用 AI 的人——停留在
+          L1、L2，误以为那就是学习的全部。 而这两层恰恰是 AI 最容易覆盖的部分。
         </p>
         <p>
           懂了物理学的“熵增”，就能理解为什么公司一定会走向官僚化、为什么房间总会变乱——

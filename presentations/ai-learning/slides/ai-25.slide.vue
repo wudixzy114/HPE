@@ -39,8 +39,8 @@
 
     <div class="ac-takeaway" style="margin-top: 18px">
       AI 的水位线是“平均”：对每个领域都懂 80 分，但对每个领域都不超过它的语料——
-      <strong>深度给你护城河，广度给你杠杆。</strong>广度是提问的燃料，而提问是 AI
-      时代的第一生产力。
+      <strong>深度给你护城河，广度给你杠杆。</strong>广度是提问的燃料，而提问是
+      AI 时代的第一生产力。
     </div>
     <div class="ac-footer">
       <span>五 · 深度与广度</span><span>26 / 28</span>

@@ -33,7 +33,10 @@
           </div>
           <p class="ac-template-note">
             前半句“解释”检验 AI 能否迁移，后半句“应用”检验你能否落地。
-            句式可泛化：<strong>用 A 领域的 X 原理，解释 B 领域的 Y 现象，并给出一个利用它的方案。</strong>
+            句式可泛化：<strong
+              >用 A 领域的 X 原理，解释 B 领域的 Y
+              现象，并给出一个利用它的方案。</strong
+            >
           </p>
         </section>
       </Step>

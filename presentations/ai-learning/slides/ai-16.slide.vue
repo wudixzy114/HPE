@@ -37,7 +37,8 @@
           <div class="ac-route-step">
             <b>04</b
             ><span
-              ><strong>声明基础：</strong>同一份资料，零基础和老兵的阅读地图应该完全不同。</span
+              ><strong>声明基础：</strong
+              >同一份资料，零基础和老兵的阅读地图应该完全不同。</span
             >
           </div>
         </section>

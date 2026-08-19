@@ -25,8 +25,7 @@
             ><span>它会坚持自己，沿着原来的路径继续自洽。</span>
           </div>
           <div>
-            <b>换另一个模型</b
-            ><span>你拿到的只是另一份“最大公约数”。</span>
+            <b>换另一个模型</b><span>你拿到的只是另一份“最大公约数”。</span>
           </div>
           <div>
             <b>大家用的就是同几个 AI</b
@@ -40,7 +39,9 @@
       <div data-node="practice-examples" class="ac-practice-examples">
         <div>
           <b>代码</b
-          ><span>答案对不对，再问问不出来；跑一遍测试和 Benchmark 才知道。</span>
+          ><span
+            >答案对不对，再问问不出来；跑一遍测试和 Benchmark 才知道。</span
+          >
         </div>
         <div>
           <b>决策</b
