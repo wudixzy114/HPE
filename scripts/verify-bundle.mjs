@@ -50,12 +50,12 @@ if (cssGzip > 16 * 1024) {
 const slideChunks = javascript.filter((file) =>
   /^slide-\d+\.slide-/u.test(file),
 );
-if (slideChunks.length !== 50) {
+if (slideChunks.length !== 12) {
   throw new Error(
-    `Expected 50 lazy slide chunks, received ${slideChunks.length}`,
+    `Expected 12 lazy slide chunks, received ${slideChunks.length}`,
   );
 }
-if (entry.includes("全场地基") || entry.includes('"nodes":{')) {
+if (entry.includes("interactive sync target") || entry.includes('"nodes":{')) {
   throw new Error("Initial entry eagerly embeds speaker notes or source maps");
 }
 if (!javascript.some((file) => file.startsWith("notes-"))) {
@@ -96,7 +96,7 @@ const sourceMaps = files
   .map((file) => JSON.parse(readFileSync(resolve(assets, file), "utf8")));
 for (const expected of [
   "slides/slide-00.slide.vue",
-  "slides/slide-49.slide.vue",
+  "slides/slide-11.slide.vue",
 ]) {
   if (
     !sourceMaps.some((sourceMap) =>

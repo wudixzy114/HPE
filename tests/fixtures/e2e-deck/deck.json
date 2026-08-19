@@ -1,0 +1,76 @@
+{
+  "$schema": "../../../packages/schema/src/deck.schema.json",
+  "schemaVersion": 1,
+  "id": "e2e-suite",
+  "title": "E2E Suite Deck",
+  "size": {
+    "width": 1600,
+    "height": 900
+  },
+  "theme": {
+    "entry": "themes/e2e-suite/theme.ts"
+  },
+  "slides": [
+    {
+      "id": "slide-00",
+      "file": "slides/slide-00.slide.vue",
+      "title": "Page 0"
+    },
+    {
+      "id": "slide-01",
+      "file": "slides/slide-01.slide.vue",
+      "title": "Page 1"
+    },
+    {
+      "id": "slide-02",
+      "file": "slides/slide-02.slide.vue",
+      "title": "Page 2"
+    },
+    {
+      "id": "slide-03",
+      "file": "slides/slide-03.slide.vue",
+      "title": "Page 3"
+    },
+    {
+      "id": "slide-04",
+      "file": "slides/slide-04.slide.vue",
+      "title": "Page 4"
+    },
+    {
+      "id": "slide-05",
+      "file": "slides/slide-05.slide.vue",
+      "title": "Page 5",
+      "maxStep": 2
+    },
+    {
+      "id": "slide-06",
+      "file": "slides/slide-06.slide.vue",
+      "title": "Page 6"
+    },
+    {
+      "id": "slide-07",
+      "file": "slides/slide-07.slide.vue",
+      "title": "Page 7"
+    },
+    {
+      "id": "slide-08",
+      "file": "slides/slide-08.slide.vue",
+      "title": "Page 8"
+    },
+    {
+      "id": "slide-09",
+      "file": "slides/slide-09.slide.vue",
+      "title": "Page 9"
+    },
+    {
+      "id": "slide-10",
+      "file": "slides/slide-10.slide.vue",
+      "title": "Page 10"
+    },
+    {
+      "id": "slide-11",
+      "file": "slides/slide-11.slide.vue",
+      "title": "Page 11"
+    }
+  ]
+}

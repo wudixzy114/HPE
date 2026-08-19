@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "npm run build:packages && node scripts/run-deck.mjs build",
-    "build:example": "npm run build:packages && node scripts/run-deck.mjs build --deck-root app",
+    "build:example": "npm run build:packages && node scripts/run-deck.mjs build --deck-root tests/fixtures/e2e-deck",
     "build:packages": "tsc -b && npm run assets -w @hpe/schema && npm run bin:chmod -w @hpe/cli",
     "boundaries": "dependency-cruiser packages/*/src app/src app/slides app/themes --config .dependency-cruiser.cjs",
     "check": "npm run format:check && npm run lint && npm run boundaries && npm run typecheck && npm test && npm run build",

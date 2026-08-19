@@ -19,7 +19,7 @@ test("managed CLI inspection emits isolated JSON and closes its private server",
     [
       "packages/cli/dist/bin.js",
       "--root",
-      "app",
+      "tests/fixtures/e2e-deck",
       "inspect",
       "--slide",
       "slide-00",

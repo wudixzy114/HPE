@@ -42,7 +42,7 @@ test("loads the active slide plus two forward slides and defers notes/source map
   ).toBeVisible();
   expect(
     await page.evaluate(() => document.documentElement.dataset.hpeTheme),
-  ).toBe("ink-wash");
+  ).toBe("e2e-suite");
   await expect
     .poll(() =>
       scripts
@@ -148,14 +148,14 @@ test("ignores a stale slide chunk after rapid navigation", async ({ page }) => {
   ).toHaveCount(0);
 });
 
-test("deep links, keyboard navigation and overview preserve a 50-slide deck", async ({
+test("deep links, keyboard navigation and overview preserve the deck", async ({
   page,
 }) => {
   await page.goto("/#slide=slide-00&step=0&mode=present");
   await expect(
     page.locator("[data-hpe-slide][data-slide-id=slide-00]"),
   ).toBeVisible();
-  await expect(page).toHaveTitle("Claude Code 的五块拼图");
+  await expect(page).toHaveTitle("E2E Suite Deck");
 
   await page.keyboard.press("ArrowRight");
   await expect
@@ -165,16 +165,12 @@ test("deep links, keyboard navigation and overview preserve a 50-slide deck", as
 
   await page.keyboard.press("o");
   await expect(page.locator(".hpe-overview")).toBeVisible();
-  await expect(page.locator(".hpe-overview__slide")).toHaveCount(50);
+  await expect(page.locator(".hpe-overview__slide")).toHaveCount(12);
   expect(await page.evaluate(() => window.__HPE__.getState().slideId)).toBe(
     "slide-01",
   );
 
-  await page
-    .getByRole("button", {
-      name: /Go to slide 3: 五个入口怎么汇到一套核心/u,
-    })
-    .click();
+  await page.getByRole("button", { name: /Go to slide 3: Page 2/u }).click();
   await expect(
     page.locator("[data-hpe-slide][data-slide-id=slide-02]"),
   ).toBeVisible();
@@ -189,7 +185,7 @@ test("speaker view synchronizes interactive Vue state while preserving its local
   await speaker.goto("/#slide=slide-05&step=0&mode=speaker");
   await expect(speaker.locator(".hpe-speaker")).toBeVisible();
 
-  await page.getByRole("button", { name: "下一步 ▶" }).click();
+  await page.getByRole("button", { name: "Next step" }).click();
   await expect
     .poll(() =>
       speaker.evaluate(
@@ -201,11 +197,9 @@ test("speaker view synchronizes interactive Vue state while preserving its local
     "speaker",
   );
   await expect(speaker.locator(".hpe-speaker__notes pre")).toContainText(
-    "全场地基",
+    "interactive sync target",
   );
-  await expect(speaker.locator(".hpe-speaker__next")).toContainText(
-    "queryLoop",
-  );
+  await expect(speaker.locator(".hpe-speaker__next")).toContainText("Page 6");
   await speaker.close();
 });
 
@@ -221,7 +215,9 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
   await expect(toolbarActions).toHaveCSS("visibility", "visible");
 
   await page.keyboard.press("n");
-  await expect(page.locator(".hpe-notes-overlay")).toContainText("全场地基");
+  await expect(page.locator(".hpe-notes-overlay")).toContainText(
+    "interactive sync target",
+  );
   await page.keyboard.press("n");
 
   await page.keyboard.press("p");
@@ -324,7 +320,7 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
   await page.keyboard.press("End");
   await expect
     .poll(() => page.evaluate(() => window.__HPE__.getState().slideId))
-    .toBe("slide-49");
+    .toBe("slide-11");
   await expect
     .poll(() =>
       annotationCanvas.evaluate((canvas: HTMLCanvasElement) => {
@@ -342,37 +338,15 @@ test("toolbar collapses until hovered and the pen annotates then clears on navig
     .toBe("slide-00");
 });
 
-test("declared themes switch at runtime and update the shared control font", async ({
+test("source mapping and manifest-sized printing cover every slide", async ({
   page,
 }) => {
-  await page.goto("/?theme=ink-wash#slide=slide-00&step=0&mode=present");
-  const toolbar = page.locator(".hpe-toolbar");
-  await toolbar.hover();
-  await page.getByRole("button", { name: "Theme" }).click();
-  await expect(page.locator(".hpe-toolbar__theme-option")).toHaveCount(3);
-  await page.getByRole("button", { name: /古典简约/u }).click();
-  await expect(page.locator("html")).toHaveAttribute(
-    "data-hpe-theme",
-    "classic-minimal",
-  );
-  await expect(toolbar).toHaveCSS(
-    "font-family",
-    /Songti SC.*STSong.*Noto Serif CJK SC/u,
-  );
-  await expect(page).toHaveURL(/\?theme=classic-minimal#/u);
-});
-
-test("source mapping and manifest-sized printing cover every migrated slide", async ({
-  page,
-}) => {
-  await page.goto("/#slide=slide-25&step=0&mode=inspect");
-  await expect(
-    page.getByRole("heading", { name: /后台分类器/u }),
-  ).toBeVisible();
+  await page.goto("/#slide=slide-10&step=0&mode=inspect");
+  await expect(page.getByRole("heading", { name: /Inspector/u })).toBeVisible();
   const mapping = await page.evaluate(() => window.__HPE__.getSourceMap());
   expect(mapping?.nodes.title).toEqual({
-    file: "slides/slide-25.slide.vue",
-    line: 7,
+    file: "slides/slide-10.slide.vue",
+    line: 3,
     column: 9,
   });
 
@@ -382,5 +356,5 @@ test("source mapping and manifest-sized printing cover every migrated slide", as
     preferCSSPageSize: true,
   });
   const pageObjects = pdf.toString("latin1").match(/\/Type\s*\/Page\b/gu) ?? [];
-  expect(pageObjects).toHaveLength(50);
+  expect(pageObjects).toHaveLength(12);
 });

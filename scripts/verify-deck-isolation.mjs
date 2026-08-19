@@ -39,14 +39,14 @@ try {
   if (!text.includes("Independent deck root")) {
     throw new Error("The selected deck content was not emitted");
   }
-  if (text.includes("Claude Code")) {
-    throw new Error("The bundled example leaked into the selected deck build");
+  if (text.includes("Hello HPE")) {
+    throw new Error("The default deck leaked into the selected deck build");
   }
   if (!text.includes(".text-7xl")) {
     throw new Error("Tailwind did not scan the selected deck root");
   }
-  if (outputFiles.some((path) => /slide-00\.slide/u.test(path))) {
-    throw new Error("The bundled example slide chunks leaked into the build");
+  if (outputFiles.some((path) => /cover\.slide/u.test(path))) {
+    throw new Error("The default deck slide chunks leaked into the build");
   }
   process.stdout.write("deck-root isolation verified\n");
 } finally {
