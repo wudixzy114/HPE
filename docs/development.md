@@ -52,6 +52,17 @@ npm audit              # known dependency vulnerabilities
 
 `npm run verify` executes the complete sequence above for release candidates.
 
+## Runtime-only source release
+
+The distributable Runtime archive is a separate boundary from deck delivery:
+
+```bash
+npm run release:runtime
+npm run release:runtime:verify -- artifacts/releases/hpe-runtime-shell-YYYYMMDD.zip --full
+```
+
+The packager uses an allowlist, materializes the Claude-compatible Skill directory instead of shipping a symlink, and excludes `app/deck.json`, `app/slides`, `app/themes`, `app/content`, and all of `presentations`. Test fixtures remain in the archive solely so a clean extraction can run the same build, package, browser, license, and audit gates. See [`runtime-release.md`](runtime-release.md) for the release contract.
+
 `npm run test:packages` verifies every declared export exists in the packed artifact, authoring TypeScript is not leaked, and the CLI binary retains its executable bit. Packages remain `private` and `UNLICENSED` until an explicit release and licensing decision.
 
 ## Git discipline

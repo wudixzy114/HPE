@@ -38,10 +38,32 @@ function playerStyles(deckRoot: string): Plugin {
   };
 }
 
+function deckBareImports(deckRoot: string): Plugin {
+  const deckSource = `${normalizePath(deckRoot)}/`;
+  const appImporter = resolve(appRoot, "src/main.ts");
+  return {
+    name: "hpe-deck-bare-imports",
+    enforce: "pre",
+    async resolveId(id, importer, options) {
+      if (
+        !importer ||
+        id.startsWith(".") ||
+        id.startsWith("/") ||
+        id.startsWith("\0") ||
+        !normalizePath(importer).startsWith(deckSource)
+      ) {
+        return null;
+      }
+      return this.resolve(id, appImporter, { ...options, skipSelf: true });
+    },
+  };
+}
+
 export default defineConfig(() => {
   const deckRoot = resolve(process.env.HPE_DECK_ROOT || appRoot);
   return {
     plugins: [
+      deckBareImports(deckRoot),
       hpeDeck({ root: deckRoot }),
       playerStyles(deckRoot),
       vue(),

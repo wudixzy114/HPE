@@ -16,7 +16,7 @@ export default defineConfig({
     ...base.build,
     sourcemap: false,
     rollupOptions: {
-      output: { inlineDynamicImports: true },
+      output: { codeSplitting: false },
     },
   },
 });

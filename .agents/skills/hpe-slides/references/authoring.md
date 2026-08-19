@@ -55,8 +55,8 @@ Write notes in the slide's `<notes lang="md">` block. Notes should explain deliv
 ## Verification loop
 
 ```bash
-npm exec -- deck validate --json --root <deck-dir>
-npm exec -- deck screenshot --slide slide-id --states all --annotate --json --root <deck-dir>
+npm run deck -- validate --json --root <deck-dir>
+npm run deck -- screenshot --slide slide-id --states all --annotate --json --root <deck-dir>
 ```
 
 Always pass `--root` when the deck is not `app/`. Review raw images before annotated images. Annotation boxes explain geometry; they are not the design itself.

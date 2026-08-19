@@ -39,6 +39,7 @@ export default tseslint.config(
       "**/.hpe/**",
       ".playwright-cli/**",
       ".agents/skills/**/assets/**",
+      ".claude/skills/**",
       "artifacts/**",
       "node_modules/**",
       "tests/fixtures/**",

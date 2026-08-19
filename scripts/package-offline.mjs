@@ -9,9 +9,10 @@
 import { spawnSync } from "node:child_process";
 import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import process from "node:process";
 
-const repoRoot = resolve(dirname(new URL(import.meta.url).pathname), "..");
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const [deckDirArg, outputArg] = process.argv.slice(2);
 
 if (!deckDirArg || !outputArg) {
@@ -39,25 +40,43 @@ function run(command, args, env = {}) {
   }
 }
 
+function escapeHtmlText(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
 // 0. 从 deck.json 读取标题与页数，作为后续断言的地面真值
 const manifest = JSON.parse(
   await readFile(resolve(deckRoot, "deck.json"), "utf8"),
 );
 const slideCount = manifest.slides.length;
+const escapedTitle = escapeHtmlText(manifest.title);
 
 // 1. 单 chunk 构建（deck root 通过环境变量钉死，防止打包到别的 deck）
-run(
-  "npx",
-  [
-    "vite",
-    "build",
-    "--config",
-    "scripts/vite.offline.config.ts",
-    "--outDir",
-    "dist-offline",
-  ],
-  { HPE_DECK_ROOT: deckRoot },
-);
+await rm(distDir, { recursive: true, force: true });
+const npm = process.platform === "win32" ? "npm.cmd" : "npm";
+try {
+  run(npm, ["run", "build:packages"]);
+  run(
+    npm,
+    [
+      "exec",
+      "--",
+      "vite",
+      "build",
+      "--config",
+      "scripts/vite.offline.config.ts",
+      "--outDir",
+      "dist-offline",
+    ],
+    { HPE_DECK_ROOT: deckRoot },
+  );
+} catch (error) {
+  await rm(distDir, { recursive: true, force: true });
+  throw error;
+}
 
 // 2. 校验产物只有一个 JS chunk
 const assets = await readdir(resolve(distDir, "assets"));
@@ -98,9 +117,9 @@ let standalone = html
 // 4. 替换占位标题
 standalone = standalone.replace(
   /<title>[^<]*<\/title>/,
-  `<title>${manifest.title}</title>`,
+  `<title>${escapedTitle}</title>`,
 );
-if (!standalone.includes(`<title>${manifest.title}</title>`)) {
+if (!standalone.includes(`<title>${escapedTitle}</title>`)) {
   throw new Error("Failed to set deck title in standalone HTML");
 }
 

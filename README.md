@@ -1,12 +1,12 @@
 # HPE · HTML Presentation Runtime
 
-TypeScript 驱动、AI 友好、模块可替换的 HTML 演示引擎。这份分享包是**纯 Runtime 壳**：引擎、播放器、检查器、CLI、Agent Skill 全部就位，内容只有一套 4 页的演示 deck（`presentations/hello-hpe`），用来证明跑得通——把它换成你自己的内容即可。
+TypeScript 驱动、AI 友好、模块可替换的 HTML 演示引擎。源码仓库可以同时保存多套 deck；`npm run release:runtime` 生成的发布包只包含引擎、播放器、检查器、CLI、Agent Skill 和测试夹具，明确排除 `app` 文稿与整个 `presentations/`，不会把业务演示内容带进 Runtime 发布物。
 
 ## 快速开始
 
 ```bash
 npm install        # 会自动下载 Playwright Chromium
-npm run dev        # 打开默认 deck（presentations/hello-hpe）的开发服务器
+npm run dev        # 源码仓库默认打开 presentations/hello-hpe
 ```
 
 播放器快捷键：`→`/`←`/空格 翻页与步进，`O` 总览，`S` 演讲者视图，`N` 讲稿，`F` 全屏，`P`/`H`/`C` 画笔/荧光笔/清除，右上角工具栏可切换主题。深链接格式：`#slide=<id>&step=<n>&mode=<mode>`。
@@ -43,11 +43,11 @@ presentations/my-deck/
 
 ```bash
 npm run dev -- --deck-root presentations/my-deck
-npm exec deck -- list --json --root presentations/my-deck
-npm exec deck -- validate --json --root presentations/my-deck
-npm exec deck -- slide create summary --after intro --root presentations/my-deck
-npm exec deck -- notes set intro --file notes.md --root presentations/my-deck
-npm exec deck -- screenshot --slide all --states all --annotate --json --root presentations/my-deck
+npm run deck -- list --json --root presentations/my-deck
+npm run deck -- validate --json --root presentations/my-deck
+npm run deck -- slide create summary --after intro --root presentations/my-deck
+npm run deck -- notes set intro --file notes.md --root presentations/my-deck
+npm run deck -- screenshot --slide all --states all --annotate --json --root presentations/my-deck
 ```
 
 结构命令（create/move/rename/delete）受文件锁保护，改动后自动全量编译，失败回滚；删除的页面进 `.hpe/trash`。截图检查会遍历 slide × step × 交互状态 的组合，报告越界、文本裁切、最小字号、对比度等问题，产出 raw/annotated 图、contact sheet、HTML 与 JSON 报告。
@@ -61,9 +61,18 @@ node scripts/verify-offline.mjs artifacts/releases/my-deck/my-deck.html presenta
 
 产物是一个双击即开、完全离线的 HTML（JS/CSS 全内联，规避 `file://` 的模块 CORS 限制）。verify 脚本会用真实浏览器断言：零控制台错误、标题与 `deck.json` 一致、内容探针命中、能翻到最后一页——防止把错误的 deck 打进包里。
 
+## 发布纯 Runtime
+
+```bash
+npm run release:runtime
+npm run release:runtime:verify -- artifacts/releases/hpe-runtime-shell-20260819.zip --full
+```
+
+发布包不包含仓库中的任何正式 deck：`app/deck.json`、`app/slides/`、`app/themes/` 和 `presentations/` 都会被验包脚本拒绝。包内仅保留 `tests/fixtures/` 作为安装、构建和 E2E 自检输入；发布包中的 `npm run dev` 默认打开该测试夹具，实际使用时通过 `--deck-root <目录>` 指向自己的 deck。
+
 ## 给 AI 用：内置 hpe-slides Skill
 
-`.agents/skills/hpe-slides/`（`.claude/skills/` 下有软链）是给 Claude Code / 兼容 Agent 的技能：建稿、改页、迁移既有 PPT/HTML、做主题、离线打包，以及一整套纪律（页脚页码与 manifest 同步、不许用省略号截断文字、绿色构建不算视觉完成等）。让 Agent「用 hpe-slides 建一个 20 页的 deck」即可。
+`.agents/skills/hpe-slides/`（源码仓库的 `.claude/skills/` 下有软链，Runtime ZIP 内会实体化为普通目录）是给 Claude Code / 兼容 Agent 的技能：建稿、改页、迁移既有 PPT/HTML、做主题、离线打包、Runtime 发布，以及一整套纪律（页脚页码与 manifest 同步、不许用省略号截断文字、绿色构建不算视觉完成等）。让 Agent「用 hpe-slides 建一个 20 页的 deck」即可。
 
 ## 模块边界
 
@@ -96,5 +105,6 @@ npm run verify   # check + 覆盖率 + 包完整性 + bundle + 隔离 + e2e + li
 - [已采纳的架构方案](docs/architecture.md)
 - [CLI 命令与事务协议](docs/cli.md)
 - [开发、模块替换与发布门禁](docs/development.md)
+- [纯 Runtime 发布说明](docs/runtime-release.md)
 - [AI 友好的主题系统](docs/themes.md)
 - [开源项目调研与技术建议](docs/open-source-landscape.md)
