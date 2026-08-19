@@ -1,4 +1,4 @@
 interface:
   display_name: "HPE Slides"
-  short_description: "Create, migrate, theme, and verify HPE presentations"
-  default_prompt: "Use $hpe-slides to create or migrate a presentation with standard Vue slides, an HPE theme, and deterministic visual QA."
+  short_description: "Create, migrate, theme, verify, and package HPE presentations"
+  default_prompt: "Use $hpe-slides to create or migrate a presentation with standard Vue slides, an HPE theme, deterministic visual QA, and optional single-file offline packaging."

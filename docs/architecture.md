@@ -52,7 +52,7 @@ app/
   assets/          图片、字体、音视频等资源
 ```
 
-播放器壳与文稿根目录可独立选择。`--deck-root` 指向任意包含 `deck.json`、`slides/`、`themes/` 和 `assets/` 的目录；根目录播放器命令默认展示 `presentations/ai-learning`，`app` 保留为仓库自带的 Claude Code 示例与回归测试文稿。切换文稿不修改播放器源码，也不共享 manifest、页面状态、主题或资源命名空间。
+播放器壳与文稿根目录可独立选择。`--deck-root` 指向任意包含 `deck.json`、`slides/`、`themes/` 和 `assets/` 的目录；根目录播放器命令默认展示 `presentations/hello-hpe`（内置演示文稿），`app` 保留为播放器壳自带的回归测试文稿。切换文稿不修改播放器源码，也不共享 manifest、页面状态、主题或资源命名空间。
 
 依赖方向保持单向：
 

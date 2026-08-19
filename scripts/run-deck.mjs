@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { spawn } from "node:child_process";
 import process from "node:process";
 
-const DEFAULT_DECK_ROOT = "presentations/ai-learning";
+const DEFAULT_DECK_ROOT = "presentations/hello-hpe";
 
 const [mode, ...inputArguments] = process.argv.slice(2);
 if (!mode || !["dev", "build", "preview"].includes(mode)) {

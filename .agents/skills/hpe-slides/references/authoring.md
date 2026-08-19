@@ -55,8 +55,10 @@ Write notes in the slide's `<notes lang="md">` block. Notes should explain deliv
 ## Verification loop
 
 ```bash
-npm exec -- deck validate --json
-npm exec -- deck screenshot --slide slide-id --states all --annotate --json
+npm exec -- deck validate --json --root <deck-dir>
+npm exec -- deck screenshot --slide slide-id --states all --annotate --json --root <deck-dir>
 ```
 
-Review raw images before annotated images. Annotation boxes explain geometry; they are not the design itself.
+Always pass `--root` when the deck is not `app/`. Review raw images before annotated images. Annotation boxes explain geometry; they are not the design itself.
+
+After adding, removing, or reordering slides, update every slide's footer page number (`<span>N / total</span>`) and keep footer section labels consistent with the deck's chapter structure — these are hand-authored, not generated, so the CLI will not catch drift.

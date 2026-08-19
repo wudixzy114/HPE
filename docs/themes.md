@@ -16,7 +16,7 @@ Select a theme in `deck.json`:
 
 ```json
 {
-  "theme": { "entry": "themes/claude-code/theme.ts" }
+  "theme": { "entry": "themes/hpe-minimal/theme.ts" }
 }
 ```
 
@@ -72,7 +72,7 @@ Public presentation skills commonly succeed when they provide:
 
 HPE adopts those principles but not their SVG or `edits.json` authoring pipelines. Slides remain ordinary Vue SFCs, layouts are CSS/Vue, and theme definitions are TypeScript.
 
-The reviewed public projects have materially different licenses. Anthropic's PPTX skill is proprietary; GordenPPTSkill explicitly prohibits commercial use of its bundled templates; AIPMAndy/PPTskill is MIT but targets SVG-to-PPTX generation. HPE therefore uses no copied template/code/assets from them. The `claude-code` theme in this repository is derived solely from the user-owned source presentation migrated in this project.
+The reviewed public projects have materially different licenses. Anthropic's PPTX skill is proprietary; GordenPPTSkill explicitly prohibits commercial use of its bundled templates; AIPMAndy/PPTskill is MIT but targets SVG-to-PPTX generation. HPE therefore uses no copied template/code/assets from them. The bundled themes in this repository are original works created for it.
 
 ## AI authoring
 
