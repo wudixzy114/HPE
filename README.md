@@ -1,110 +1,99 @@
-# HPE · HTML Presentation Runtime
+# HPE — HTML Presentation Runtime
 
-TypeScript 驱动、AI 友好、模块可替换的 HTML 演示引擎。源码仓库可以同时保存多套 deck；`npm run release:runtime` 生成的发布包只包含引擎、播放器、检查器、CLI、Agent Skill 和测试夹具，明确排除 `app` 文稿与整个 `presentations/`，不会把业务演示内容带进 Runtime 发布物。
+> **TypeScript 驱动、AI 友好、模块可替换的 HTML 演示引擎。**
+> 一个源码仓库同时存多个 deck；`npm run release:runtime` 出的发布包**只**含引擎、播放器、检查器、CLI、Agent Skill 和测试套件，业务演示内容被明确排除。
 
 ## 快速开始
 
 ```bash
 npm install        # 会自动下载 Playwright Chromium
-npm run dev        # 源码仓库默认打开 presentations/hello-hpe
+npm run dev        # 默认打开 presentations/hello-hpe
 ```
 
-播放器快捷键：`→`/`←`/空格 翻页与步进，`O` 总览，`S` 演讲者视图，`N` 讲稿，`F` 全屏，`P`/`H`/`C` 画笔/荧光笔/清除，右上角工具栏可切换主题。深链接格式：`#slide=<id>&step=<n>&mode=<mode>`。
+播放器快捷键：
 
-## 你的第一份 deck
+- `→` / `Space` / `↓` 下一页与步进
+- `O` 概览，`S` 演讲者视图，`N` 草稿
+- `F` 全屏，`P` / `H` / `C` 笔 / 激光笔 / 清除
+- 右上角工具栏切换主题
+- 深链：`#slide=<id>&step=<n>&mode=<mode>`
 
-一个 deck 就是一个自包含目录：
+## 你的第一个 deck
+
+每个 deck 是自包含目录：
 
 ```text
 presentations/my-deck/
   deck.json          # 清单：尺寸、主题、页面列表（稳定 id）
-  slides/*.slide.vue # 一页一个标准 Vue SFC
+  slides/*.slide.vue # 一页一个标记的 Vue SFC
   themes/<slug>/     # theme.ts（类型化元数据）+ theme.css
 ```
 
-最小的一页：
+最小一页：
 
 ```vue
 <template>
   <Slide>
     <h1 data-node="title">一个结论式的标题，而不是话题标签</h1>
-    <div data-node="evidence" class="grid grid-cols-2 gap-6">...</div>
   </Slide>
 </template>
-
-<notes lang="md">
-讲稿写在这里：怎么讲、怎么过渡、有什么注意事项。
-</notes>
 ```
 
-交互能力从弱到强：静态模板 → `<Step :at="n">` 分步揭示（配 manifest `maxStep`）→ `<Timeline>` 确定性动画 → `useSlideState(key, { initial, inspect })` 可检查的有限交互。每一步都保持标准 Vue/TS/CSS，没有自创 DSL。
+## 仓库结构
 
-常用命令（deck 不在默认位置时记得带 `--root`）：
-
-```bash
-npm run dev -- --deck-root presentations/my-deck
-npm run deck -- list --json --root presentations/my-deck
-npm run deck -- validate --json --root presentations/my-deck
-npm run deck -- slide create summary --after intro --root presentations/my-deck
-npm run deck -- notes set intro --file notes.md --root presentations/my-deck
-npm run deck -- screenshot --slide all --states all --annotate --json --root presentations/my-deck
+```
+HPE/
+├─ app/                      # 引擎 + 播放器 + 检查器（dev 时跑这些）
+├─ data/                     # 内置 deck 数据 / 配置
+├─ docs/                     # 设计文档、迁移指南
+├─ packages/                 # 独立可发布的子包
+├─ presentations/            # 业务 deck 集合（不在 runtime 发布包内）
+├─ scripts/                  # CLI 入口、构建脚本
+├─ tests/                    # Playwright E2E + Vitest 单测
+├─ .agents/                  # 给 AI 协作者的指引
+├─ .claude/                  # Claude skill
+├─ .github/                  # CI 配置
+├─ eslint.config.js
+├─ playwright.config.ts
+└─ vitest.config.ts
 ```
 
-结构命令（create/move/rename/delete）受文件锁保护，改动后自动全量编译，失败回滚；删除的页面进 `.hpe/trash`。截图检查会遍历 slide × step × 交互状态 的组合，报告越界、文本裁切、最小字号、对比度等问题，产出 raw/annotated 图、contact sheet、HTML 与 JSON 报告。
+## 技术栈
 
-## 把 deck 打成单文件离线 HTML
+- **前端**：Vue 3 + TypeScript + Vite
+- **样式**：CSS 变量 + 主题系统（type-safe theme.ts）
+- **渲染**：声明式 SFC + `data-node` 标识
+- **测试**：Playwright（E2E）+ Vitest（单元）
+- **AI 集成**：`.agents/` + `.claude/` skill
+- **构建**：ESLint + Prettier + pnpm（隐式）
 
-```bash
-node scripts/package-offline.mjs presentations/my-deck artifacts/releases/my-deck/my-deck.html
-node scripts/verify-offline.mjs artifacts/releases/my-deck/my-deck.html presentations/my-deck
-```
+## 关键设计
 
-产物是一个双击即开、完全离线的 HTML（JS/CSS 全内联，规避 `file://` 的模块 CORS 限制）。verify 脚本会用真实浏览器断言：零控制台错误、标题与 `deck.json` 一致、内容探针命中、能翻到最后一页——防止把错误的 deck 打进包里。
+| 设计点 | 说明 |
+|---|---|
+| **多 deck 单仓** | 演示是数据，引擎是代码，两者解耦 |
+| **类型化主题** | `theme.ts` 是元数据，`theme.css` 是表现，编译期对齐 |
+| **AI 友好** | 引擎有 `.agents/` 和 `.claude/` skill，AI 可以直接读懂并写新 deck |
+| **稳定的 slide id** | 用于深链、跨 deck 引用、增量更新 |
+| **发布包边界** | `release:runtime` 显式排除 `app` 和 `presentations/`，发布只含引擎 |
 
-## 发布纯 Runtime
+## 已完成
 
-```bash
-npm run release:runtime
-npm run release:runtime:verify -- artifacts/releases/hpe-runtime-shell-20260819.zip --full
-```
+- ✅ Vue 3 + TS 引擎（Slide / 主题 / 步进）
+- ✅ 播放器（键盘、笔、激光笔、概览、演讲者视图）
+- ✅ 检查器（dev 时打开）
+- ✅ CLI（构建 / 校验 / 导出）
+- ✅ Playwright + Vitest 测试套件
+- ✅ 多个内置 deck 演示
 
-发布包不包含仓库中的任何正式 deck：`app/deck.json`、`app/slides/`、`app/themes/` 和 `presentations/` 都会被验包脚本拒绝。包内仅保留 `tests/fixtures/` 作为安装、构建和 E2E 自检输入；发布包中的 `npm run dev` 默认打开该测试夹具，实际使用时通过 `--deck-root <目录>` 指向自己的 deck。
+## 与其他演示工具的差异
 
-## 给 AI 用：内置 hpe-slides Skill
+| 工具 | 范式 | HPE 的差异 |
+|---|---|---|
+| reveal.js | HTML 静态 | HPE 的 slide 是 Vue SFC，逻辑可复用 |
+| Slidev | Markdown + Vue | HPE 把引擎和 deck 完全分离，多 deck 单仓 |
+| Keynote | 二进制 | HPE 一切都是文本，AI 可写、可 diff、可 review |
 
-`.agents/skills/hpe-slides/`（源码仓库的 `.claude/skills/` 下有软链，Runtime ZIP 内会实体化为普通目录）是给 Claude Code / 兼容 Agent 的技能：建稿、改页、迁移既有 PPT/HTML、做主题、离线打包、Runtime 发布，以及一整套纪律（页脚页码与 manifest 同步、不许用省略号截断文字、绿色构建不算视觉完成等）。让 Agent「用 hpe-slides 建一个 20 页的 deck」即可。
+## License
 
-## 模块边界
-
-| 包                     | 唯一职责                         | 可替换边界               |
-| ---------------------- | -------------------------------- | ------------------------ |
-| `@hpe/schema`          | 持久化契约与校验                 | JSON Schema / validator  |
-| `@hpe/theme`           | 类型安全主题元数据与 AI 设计约束 | Theme contract           |
-| `@hpe/runtime-core`    | 纯状态机与 `DeckEngine` port     | 任意兼容状态机实现       |
-| `@hpe/runtime-browser` | 键盘、全屏、跨窗口同步           | Browser adapter          |
-| `@hpe/renderer-vue`    | Vue 渲染组件和响应式桥接         | Renderer adapter         |
-| `@hpe/compiler`        | SFC、notes、Vite、Shiki          | Compiler adapter/subpath |
-| `@hpe/checker`         | 诊断协议、Playwright 检查        | Checker adapter/subpath  |
-| `@hpe/cli`             | 稳定自动化入口                   | Application service      |
-
-跨模块调用只走包的公开 `exports`；依赖规则由 dependency-cruiser 在 `npm run check` 里强制。Shiki 高亮、浏览器同步、Playwright 都是独立子路径，未引用就不进 bundle。
-
-## 质量门禁
-
-```bash
-npm run check    # format + lint + 边界 + typecheck + test + build
-npm run verify   # check + 覆盖率 + 包完整性 + bundle + 隔离 + e2e + license
-```
-
-## 范围边界
-
-可视化拖拽编辑、多人协作、PowerPoint 导入、高保真可编辑 PPTX 导出不在当前承诺内，也不会以空接口或隐藏运行时成本预埋。
-
-## 文档
-
-- [已采纳的架构方案](docs/architecture.md)
-- [CLI 命令与事务协议](docs/cli.md)
-- [开发、模块替换与发布门禁](docs/development.md)
-- [纯 Runtime 发布说明](docs/runtime-release.md)
-- [AI 友好的主题系统](docs/themes.md)
-- [开源项目调研与技术建议](docs/open-source-landscape.md)
+MIT
